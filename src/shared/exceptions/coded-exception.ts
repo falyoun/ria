@@ -1,12 +1,11 @@
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { ExceptionCode } from '../index';
 
 export class CodedException extends HttpException {
-  code: ExceptionCode;
+  code: string;
   args: any;
 
   constructor(
-    code: ExceptionCode,
+    code: string,
     statusCode: HttpStatus,
     message: string,
     args?: any,

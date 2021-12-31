@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  dev:
+    env_file:
+      - config/development.yaml
+      - .env
+    container_name: ria_development_api_docker_container
+    image: ria_development_api_docker_container:1.0.0
+    build:
+      context: .
+      target: riaDevelopmentEnv
+      dockerfile: ./Dockerfile
+    command: npm run start:debug
+    ports:
+      - target: 3000 # inside container
+        published: 3432 # outside world
+        protocol: tcp
+        mode: host
+    networks:
+      - ria_network
+    volumes:
+      - .:/Users/falyoun/dev/ite/ria
+      - /Users/falyoun/dev/ite/ria/node_modules
+    restart: unless-stopped
+
+networks:
+  ria_network:

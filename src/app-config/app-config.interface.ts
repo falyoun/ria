@@ -1,14 +1,17 @@
-import { Dialect } from 'sequelize/types';
+import { CreateDatabaseOptions } from 'sequelize/types';
 import { ISwagger } from '@app/app-swagger';
 
-export interface IDatabase {
-  name: string;
-  dialect: Dialect;
-  username: string;
-  password: string;
-  pool?: {
-    min: number;
-    max: number;
+export interface IAuth {
+  useCookies: {
+    expiration: number;
+  };
+  useAccessToken: {
+    secretKey: string;
+    expiration: string;
+  };
+  useRefreshToken?: {
+    secretKey: string;
+    expiration: string;
   };
 }
 export interface IServer {
@@ -16,7 +19,9 @@ export interface IServer {
   apiPrefix: string;
   swagger: ISwagger;
 }
+
 export interface IAppConfig {
-  database: IDatabase;
+  database: CreateDatabaseOptions;
   server: IServer;
+  useAuth: IAuth;
 }

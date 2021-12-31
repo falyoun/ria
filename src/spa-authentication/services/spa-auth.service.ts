@@ -1,9 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import {
   AlphaCookiesOptions,
   CookieObject,
   IPayload,
-  NotEnoughDataException,
   SpaAuthConstants,
   SpaAuthOptions,
 } from '../shared';
@@ -16,12 +15,13 @@ export class SpaAuthService {
     @Inject(SpaAuthConstants.SPA_AUTH_MODULE_OPTIONS)
     private readonly spaAuthOptions: SpaAuthOptions,
     private jwtService: JwtService,
-
   ) {}
   async generateAccessToken(payload: IPayload): Promise<string> {
     const { useAccessToken } = this.spaAuthOptions;
     if (!useAccessToken.jwtAccessSecretKey) {
-      throw new NotEnoughDataException();
+      throw new BadRequestException({
+        message: '(jwtAccessSecretKey) field is required',
+      });
     }
     return this.jwtService.sign(payload, {
       secret: useAccessToken.jwtAccessSecretKey,
@@ -61,7 +61,9 @@ export class SpaAuthService {
   async generateRefreshToken(payload: IPayload): Promise<string> {
     const { useRefreshToken } = this.spaAuthOptions;
     if (!useRefreshToken.jwtRefreshSecretKey) {
-      throw new NotEnoughDataException();
+      throw new BadRequestException({
+        message: '(jwtRefreshSecretKey) field is required',
+      });
     }
     return this.jwtService.sign(payload, {
       secret: useRefreshToken.jwtRefreshSecretKey,

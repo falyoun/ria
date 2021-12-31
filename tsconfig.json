@@ -6,6 +6,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "target": "es2017",
     "sourceMap": true,
     "outDir": "./dist",
@@ -19,7 +20,8 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@app/app-config": ["src/app-config"],
-      "@app/app-swagger": ["src/app-swagger"]
+      "@app/app-swagger": ["src/app-swagger"],
+      "@app/spa": ["src/spa-authentication"]
     }
   }
 }
