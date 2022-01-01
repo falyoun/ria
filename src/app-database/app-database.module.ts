@@ -19,6 +19,8 @@ import { SequelizeModuleOptions } from '@nestjs/sequelize/dist/interfaces/sequel
                 database: process.env.DATABASE_URL,
               }
             : sequelizeModuleOptions;
+
+        console.log(config);
         return {
           ...config,
           models: [],
