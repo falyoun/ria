@@ -15,7 +15,6 @@ import { SequelizeModuleOptions } from '@nestjs/sequelize/dist/interfaces/sequel
         console.log({ sequelizeModuleOptions });
         return {
           ...sequelizeModuleOptions,
-          models: [],
         };
       },
       inject: [ConfigService],

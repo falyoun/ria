@@ -6,10 +6,12 @@ import { JwtModule } from '@nestjs/jwt';
 import { AppDatabaseModule } from '@app/app-database';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UserModule } from '@app/user';
 @Module({
   imports: [
     AppDatabaseModule,
     AppConfigModule,
+    UserModule,
     SpaAuthenticationModule.registerAsync({
       imports: [
         JwtModule.registerAsync({

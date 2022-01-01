@@ -1,5 +1,21 @@
+import { CodedException, ResourceNotFoundException } from '../../shared';
 import { HttpStatus } from '@nestjs/common';
-import { CodedException, ResourceNotFoundException } from './coded-exception';
+
+export class AccountNotFoundException extends ResourceNotFoundException {
+  constructor() {
+    super('USER');
+  }
+}
+
+export class AccountIsNotActiveException extends CodedException {
+  constructor() {
+    super(
+      'ACCOUNT_NOT_ACTIVE',
+      HttpStatus.BAD_REQUEST,
+      'Account is not active, kindly activate your account or contact support center',
+    );
+  }
+}
 
 export class NotEnoughDataException extends CodedException {
   constructor() {
@@ -40,11 +56,5 @@ export class InCorrectActivationTokenException extends CodedException {
       HttpStatus.BAD_REQUEST,
       'Token supplied does not match the token stored',
     );
-  }
-}
-
-export class AccountNotFoundException extends ResourceNotFoundException {
-  constructor() {
-    super('USER');
   }
 }

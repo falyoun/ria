@@ -22,7 +22,9 @@
       "@app/app-config": ["src/app-config"],
       "@app/app-swagger": ["src/app-swagger"],
       "@app/spa": ["src/spa-authentication"],
-      "@app/app-database": ["src/app-database"]
+      "@app/app-database": ["src/app-database"],
+      "@app/shared": ["src/shared"],
+      "@app/user": ["src/user"]
     }
   }
 }
