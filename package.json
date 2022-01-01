@@ -2,14 +2,14 @@
   "name": "ria",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Abdulrahman Falyoun",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prebuild": "rimraf dist && npm i",
+    "prebuild": "rimraf dist && yarn",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "npm run build && nest start",
+    "start": "yarn build && yarn start:production",
     "start:dev": "export NODE_ENV=development; nest start --watch",
     "start:demo": "export NODE_ENV=demo; nest start",
     "start:production": "export NODE_ENV=production; nest start",
@@ -51,7 +51,8 @@
     "sequelize": "^6.12.4",
     "sequelize-typescript": "^2.1.1",
     "socket.io": "^4.4.0",
-    "swagger-ui-express": "^4.3.0"
+    "swagger-ui-express": "^4.3.0",
+    "yarn": "^1.22.17"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.1.6",
