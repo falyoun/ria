@@ -20,6 +20,8 @@ sequelizeOptions:
   autoLoadModels: true
   synchronize: true
   dialect: postgres
+  dialectOptions:
+    ssl: true
   username: pnbodutggrkvav
   password: cce9abb16e5630dd06ee0cd0a306fc3e133cc932b4406972537110853af1c00f
   host: ec2-34-230-133-163.compute-1.amazonaws.com
