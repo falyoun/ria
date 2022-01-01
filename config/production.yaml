@@ -16,7 +16,7 @@ server:
       username: ria
       password: ria
 sequelizeOptions:
-  name: d25oiofqa43g2f
+  database: d25oiofqa43g2f
   autoLoadModels: true
   synchronize: true
   dialect: postgres
