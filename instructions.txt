@@ -10,3 +10,7 @@ CREATE EXTENSION CITEXT;
 heroku pg:psql postgresql-adjacent-64283 --app ite-ria # to open database
 heroku pg:wait -a ite-ria
 heroku logs --tail -a ite-ria
+
+
+# Git
+git push git@ria:lynx-falyoun/ria.git
