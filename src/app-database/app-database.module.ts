@@ -12,8 +12,15 @@ import { SequelizeModuleOptions } from '@nestjs/sequelize/dist/interfaces/sequel
       useFactory: (configService: ConfigService<IAppConfig>) => {
         const sequelizeModuleOptions: SequelizeModuleOptions =
           configService.get<SequelizeModuleOptions>('sequelizeOptions');
+        const config: SequelizeModuleOptions =
+          process.env.NODE_ENV === 'production'
+            ? {
+                ...sequelizeModuleOptions,
+                database: process.env.DATABASE_URL,
+              }
+            : sequelizeModuleOptions;
         return {
-          ...sequelizeModuleOptions,
+          ...config,
           models: [],
         };
       },
