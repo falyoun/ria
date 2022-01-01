@@ -3,8 +3,10 @@ import { SpaAuthenticationModule } from '@app/spa';
 import { ConfigService } from '@nestjs/config';
 import { AppConfigModule, IAppConfig, IAuth } from '@app/app-config';
 import { JwtModule } from '@nestjs/jwt';
+import { AppDatabaseModule } from '@app/app-database';
 @Module({
   imports: [
+    AppDatabaseModule,
     AppConfigModule,
     SpaAuthenticationModule.registerAsync({
       imports: [

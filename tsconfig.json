@@ -21,7 +21,8 @@
     "paths": {
       "@app/app-config": ["src/app-config"],
       "@app/app-swagger": ["src/app-swagger"],
-      "@app/spa": ["src/spa-authentication"]
+      "@app/spa": ["src/spa-authentication"],
+      "@app/app-database": ["src/app-database"]
     }
   }
 }

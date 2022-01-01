@@ -18,12 +18,12 @@ server:
 database:
   name: ria
   autoLoadModels: true
-  synchronize: false
+  synchronize: true
   dialect: postgres
   username: ite_ria
   password: iteria
   sync:
-    force: false
+    force: true
   define:
     underscored: true
     paranoid: true

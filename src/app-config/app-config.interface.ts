@@ -1,5 +1,5 @@
-import { CreateDatabaseOptions } from 'sequelize/types';
 import { ISwagger } from '@app/app-swagger';
+import { SequelizeModuleOptions } from '@nestjs/sequelize/dist/interfaces/sequelize-options.interface';
 
 export interface IAuth {
   useCookies: {
@@ -21,7 +21,7 @@ export interface IServer {
 }
 
 export interface IAppConfig {
-  database: CreateDatabaseOptions;
+  sequelizeOptions: SequelizeModuleOptions;
   server: IServer;
   useAuth: IAuth;
 }
