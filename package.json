@@ -6,10 +6,10 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prebuild": "rimraf dist && yarn",
+    "prebuild": "rimraf dist && npm i --force",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "yarn build && yarn start:production",
+    "start": "npm run build && npm run start:production",
     "start:dev": "export NODE_ENV=development; nest start --watch",
     "start:demo": "export NODE_ENV=demo; nest start",
     "start:production": "export NODE_ENV=production; nest start",
