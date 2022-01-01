@@ -4,6 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import { AppConfigModule, IAppConfig, IAuth } from '@app/app-config';
 import { JwtModule } from '@nestjs/jwt';
 import { AppDatabaseModule } from '@app/app-database';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 @Module({
   imports: [
     AppDatabaseModule,
@@ -32,7 +34,7 @@ import { AppDatabaseModule } from '@app/app-database';
       inject: [ConfigService],
     }),
   ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

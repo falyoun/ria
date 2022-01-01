@@ -2,7 +2,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { generateAppConfigFactory } from './app-config-factory';
 import { JoiSchema } from './joi-schema';
-
 @Module({
   imports: [
     ConfigModule.forRoot({

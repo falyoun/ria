@@ -12,7 +12,7 @@ import { SequelizeModuleOptions } from '@nestjs/sequelize/dist/interfaces/sequel
       useFactory: (configService: ConfigService<IAppConfig>) => {
         const sequelizeModuleOptions: SequelizeModuleOptions =
           configService.get<SequelizeModuleOptions>('sequelizeOptions');
-        console.log(sequelizeModuleOptions);
+        console.log({ sequelizeModuleOptions });
         return {
           ...sequelizeModuleOptions,
           models: [],

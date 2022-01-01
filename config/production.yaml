@@ -15,7 +15,7 @@ server:
     useAuth:
       username: ria
       password: ria
-database:
+sequelizeOptions:
   name: d25oiofqa43g2f
   autoLoadModels: true
   synchronize: true
