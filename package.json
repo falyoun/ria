@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prebuild": "rimraf dist && npm install --legacy-peer-deps",
+    "prebuild": "rimraf dist && npm ci --legacy-peer-deps",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "npm run build && npm run start:production",
