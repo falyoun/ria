@@ -1,5 +1,12 @@
+
+# Postgres
 CREATE DATABASE ria;
 CREATE USER ite_ria WITH ENCRYPTED PASSWORD 'iteria';
 GRANT ALL PRIVILEGES ON DATABASE ria TO ite_ria;
 \c ria;
 CREATE EXTENSION CITEXT;
+
+# Heroku
+heroku pg:psql postgresql-adjacent-64283 --app ite-ria # to open database
+heroku pg:wait -a ite-ria
+heroku logs --tail -a ite-ria
