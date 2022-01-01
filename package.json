@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prebuild": "rimraf dist && npm i --force",
+    "prebuild": "rimraf dist && npm install --legacy-peer-deps",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "npm run build && npm run start:production",
@@ -24,6 +24,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs/cli": "^8.1.6",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^1.1.5",
     "@nestjs/core": "^8.0.0",
@@ -55,7 +56,6 @@
     "yarn": "^1.22.17"
   },
   "devDependencies": {
-    "@nestjs/cli": "^8.1.6",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",
     "@types/cookie-parser": "^1.4.2",
