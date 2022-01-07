@@ -13,7 +13,6 @@ export class WsJwtAuthGuard extends AuthGuard(StrategiesNames.ALPHA_WS_JWT) {
   }
 
   handleRequest(err: any, user: any, _info: any) {
-    console.log({ user, err, _info });
     // You can throw an exception based on either "info" or "err" arguments
     if (err || !user) {
       throw err || new WsException('Cookies required');
