@@ -21,7 +21,6 @@ export class JwtExceptionFilter implements ExceptionFilter {
         statusCode = HttpStatus.BAD_REQUEST;
         break;
       default:
-        console.log(exception);
         statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
         message = 'Internal server error';
         break;

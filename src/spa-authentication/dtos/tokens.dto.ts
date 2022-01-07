@@ -1,4 +1,8 @@
+import { IsString } from 'class-validator';
+
 export class TokensDto {
-  access: string;
-  refresh: string;
+  @IsString()
+  accessToken: string;
+  @IsString()
+  refreshToken: string;
 }

@@ -4,7 +4,7 @@ import { UserModel } from '../models';
 import { CreateUserDto, UpdateUserDto } from '../dtos';
 import { FindOptions } from 'sequelize';
 import { AccountNotFoundException } from '../exceptions';
-import { RiaUtils, SequelizePaginationDto } from '../../shared';
+import { RiaUtils, SequelizePaginationDto } from '@app/shared';
 
 @Injectable()
 export class UserService {

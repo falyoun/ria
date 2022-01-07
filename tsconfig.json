@@ -24,7 +24,12 @@
       "@app/spa": ["src/spa-authentication"],
       "@app/app-database": ["src/app-database"],
       "@app/shared": ["src/shared"],
-      "@app/user": ["src/user"]
+      "@app/user": ["src/user"],
+      "@app/database": ["src/database"],
+      "@app/role": ["src/role"],
+      "@app/user-auth": ["src/user-auth"],
+      "@app/invoice": ["src/invoice"],
+      "@app/app-shared": ["src/shared"]
     }
   }
 }

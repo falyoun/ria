@@ -73,8 +73,8 @@ export class SpaAuthService {
 
   async generateTokens(payload: IPayload): Promise<TokensDto> {
     return {
-      access: await this.generateAccessToken(payload),
-      refresh: await this.generateRefreshToken(payload),
+      accessToken: await this.generateAccessToken(payload),
+      refreshToken: await this.generateRefreshToken(payload),
     };
   }
 

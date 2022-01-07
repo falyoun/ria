@@ -15,8 +15,9 @@ import {
   ApiRiaDto,
   SequelizePaginationDto,
 } from '@app/shared';
-import { ApiExtraModels } from '@nestjs/swagger';
+import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 @ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto)
+@ApiTags('User')
 @Controller('/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}

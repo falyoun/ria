@@ -2,9 +2,6 @@ version: '3.8'
 
 services:
   dev:
-    env_file:
-      - config/development.yaml
-      - .env
     container_name: ria_development_api_docker_container
     image: ria_development_api_docker_container:1.0.0
     build:

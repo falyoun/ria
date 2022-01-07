@@ -1,4 +1,4 @@
-import { CodedException, ResourceNotFoundException } from '../../shared';
+import { CodedException, ResourceNotFoundException } from '@app/shared';
 import { HttpStatus } from '@nestjs/common';
 
 export class AccountNotFoundException extends ResourceNotFoundException {
@@ -14,6 +14,12 @@ export class AccountIsNotActiveException extends CodedException {
       HttpStatus.BAD_REQUEST,
       'Account is not active, kindly activate your account or contact support center',
     );
+  }
+}
+
+export class UserAlreadyExistsException extends CodedException {
+  constructor() {
+    super('USER_ALREADY_EXISTS', HttpStatus.BAD_REQUEST, 'User already exists');
   }
 }
 
