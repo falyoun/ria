@@ -82,7 +82,7 @@ async function bootstrap() {
   const { swagger, port, apiPrefix } = serverConfig;
   const swaggerGenerator = new SwaggerGenerator(
     swagger,
-    ['development', 'staging'],
+    ['development', 'production'],
     false,
   );
   swaggerGenerator.load(app);
