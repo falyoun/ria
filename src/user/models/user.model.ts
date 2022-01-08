@@ -12,6 +12,7 @@ import {
 import { Optional } from 'sequelize';
 import bcrypt from 'bcrypt';
 import { AppRole, UserRole } from '@app/role';
+import { Receipt } from '@app/departments';
 export interface UserAttributes {
   id: number;
   email: string;
@@ -24,6 +25,7 @@ export interface UserAttributes {
   isVerified?: boolean;
   roles?: AppRole[];
   associatedRoles?: UserRole[];
+  receipts?: Receipt[];
 }
 
 export type UserCreationAttributes = Optional<UserAttributes, 'id'>;
@@ -127,6 +129,11 @@ export class User
     as: UserModelAliases.USER_ROLE,
   })
   associatedRoles: UserRole[];
+
+  @HasMany(() => Receipt, {
+    foreignKey: 'userId',
+  })
+  receipts: Receipt[];
 
   @BeforeSave({})
   static async hashPassword(user: User) {

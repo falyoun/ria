@@ -25,6 +25,7 @@ sequelizeOptions:
   password: iteria
   sync:
     force: false
+    alter: true
   define:
     underscored: true
     paranoid: true

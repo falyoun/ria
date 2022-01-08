@@ -1,5 +1,6 @@
 import { Allow, IsBoolean, IsEmail, IsString } from 'class-validator';
 import { AppRole, UserRoleDto } from '@app/role';
+import { ReceiptDto } from '@app/departments';
 
 export class UserDto {
   @IsEmail()
@@ -20,4 +21,6 @@ export class UserDto {
   associatedRoles: UserRoleDto[];
   @Allow()
   roles: AppRole[];
+  @Allow()
+  receipts: ReceiptDto[];
 }

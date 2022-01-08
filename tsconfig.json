@@ -29,7 +29,8 @@
       "@app/role": ["src/role"],
       "@app/user-auth": ["src/user-auth"],
       "@app/invoice": ["src/invoice"],
-      "@app/app-shared": ["src/shared"]
+      "@app/app-shared": ["src/shared"],
+      "@app/departments": ["src/departments"]
     }
   }
 }
