@@ -1,21 +1,123 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Receipt } from '../models';
-import { CreateReceiptDto } from '../dtos';
-import { FindOptions } from 'sequelize';
+import { Deduction, Receipt, ReceiptModelScopes, Salary } from '../models';
+import { CreateReceiptDto, FindAllReceiptDto } from '../dtos';
+import { FindOptions, Op, WhereOptions } from 'sequelize';
+import { SalaryService } from './salary.service';
+import { DeductionService } from './deduction.service';
+import { Sequelize } from 'sequelize-typescript';
+import { RiaUtils } from '@app/shared';
+import { User } from '@app/user';
+import { ReceiptNotFoundException } from '../exceptions';
 
 @Injectable()
 export class ReceiptService {
   constructor(
     @InjectModel(Receipt) private readonly receiptModel: typeof Receipt,
+    private readonly salaryService: SalaryService,
+    private readonly deductionService: DeductionService,
+    private readonly sequelize: Sequelize,
   ) {}
-  createOne(createReceiptDto: CreateReceiptDto) {
-    return this.receiptModel.create(createReceiptDto);
+  async createOne(user: User, createReceiptDto: CreateReceiptDto) {
+    return await this.sequelize.transaction(async (transaction) => {
+      const createdReceipt = await this.receiptModel.create({
+        userId: user.id,
+      });
+      const { salary } = createReceiptDto;
+      await this.salaryService.createOne({
+        ...salary,
+        receiptId: createdReceipt.id,
+      });
+      if (createReceiptDto.deductions) {
+        const { deductions } = createReceiptDto;
+        await this.deductionService.bulkCreate(
+          deductions.map((aDeduction) => ({
+            ...aDeduction,
+            receiptId: createdReceipt.id,
+          })),
+        );
+      }
+      return this.findOne({
+        where: {
+          id: createdReceipt.id,
+        },
+      });
+    });
   }
-  findAll() {
-    return this.receiptModel.findAll();
+  async findAllReceipts(findAllReceiptDto: FindAllReceiptDto) {
+    let whereSalaryOptions: WhereOptions<Salary> = {};
+    let whereUserOptions: WhereOptions<User> = {};
+    if (findAllReceiptDto.email) {
+      whereUserOptions = {
+        ...whereUserOptions,
+        email: {
+          [Op.like]: `%${findAllReceiptDto.email}%`,
+        },
+      };
+    }
+    if (findAllReceiptDto.salaryLow && !findAllReceiptDto.salaryHigh) {
+      whereSalaryOptions = {
+        ...whereSalaryOptions,
+        amount: {
+          [Op.gte]: findAllReceiptDto.salaryLow,
+        },
+      };
+    }
+    if (findAllReceiptDto.salaryHigh && !findAllReceiptDto.salaryLow) {
+      whereSalaryOptions = {
+        ...whereSalaryOptions,
+        amount: {
+          [Op.lte]: findAllReceiptDto.salaryHigh,
+        },
+      };
+    }
+    if (findAllReceiptDto.salaryLow && findAllReceiptDto.salaryHigh) {
+      whereSalaryOptions = {
+        ...whereSalaryOptions,
+        amount: {
+          [Op.and]: [
+            {
+              [Op.gte]: findAllReceiptDto.salaryLow,
+              [Op.lte]: findAllReceiptDto.salaryHigh,
+            },
+          ],
+        },
+      };
+    }
+    const findOptions: FindOptions<Receipt> = {
+      include: [
+        {
+          model: User,
+          where: whereUserOptions,
+        },
+        {
+          model: Salary,
+          where: whereSalaryOptions,
+        },
+        {
+          model: Deduction,
+        },
+      ],
+    };
+    if (findAllReceiptDto.page || findAllReceiptDto.limit) {
+      RiaUtils.applyPagination(findOptions, {
+        page: findAllReceiptDto.page,
+        limit: findAllReceiptDto.limit,
+      });
+    }
+    return {
+      data: await this.receiptModel.findAll(findOptions),
+      count: await this.receiptModel.count(findOptions),
+    };
   }
-  findOne(findOptions?: FindOptions<Receipt>) {
-    return this.receiptModel.findOne(findOptions);
+  async findOne(findOptions?: FindOptions<Receipt>) {
+    const receipt = await this.receiptModel
+      .scope(ReceiptModelScopes.JOIN_USER_SALARY_AND_DEDUCTIONS_TABLES)
+      .findOne(findOptions);
+
+    if (!receipt) {
+      throw new ReceiptNotFoundException();
+    }
+    return receipt;
   }
 }

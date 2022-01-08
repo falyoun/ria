@@ -1,12 +1,12 @@
 import { IsDate, IsNumber, IsOptional, IsPositive } from 'class-validator';
+import { Transform } from 'class-transformer';
 
-export class CreateSalaryDto {
-  @IsPositive()
-  receiptId: number;
-
+export class CreateReceiptSalaryDto {
+  @Transform(({ value }) => new Date(value))
   @IsDate()
   workStartDate: Date;
 
+  @Transform(({ value }) => new Date(value))
   @IsDate()
   workEndDate: Date;
 
@@ -20,4 +20,8 @@ export class CreateSalaryDto {
   @IsNumber()
   @IsOptional()
   allowance?: number;
+}
+export class CreateSalaryDto extends CreateReceiptSalaryDto {
+  @IsPositive()
+  receiptId: number;
 }

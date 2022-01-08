@@ -12,6 +12,9 @@ export class DeductionService {
   createOne(createDeductionDto: CreateDeductionDto) {
     return this.deductionModel.create(createDeductionDto);
   }
+  bulkCreate(createDeductionDtos: CreateDeductionDto[]) {
+    return this.deductionModel.bulkCreate(createDeductionDtos);
+  }
   findAll() {
     return this.deductionModel.findAll();
   }

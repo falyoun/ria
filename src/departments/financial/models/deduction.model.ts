@@ -1,16 +1,20 @@
 import {
   AutoIncrement,
+  BelongsTo,
   Column,
   DataType,
+  ForeignKey,
   Model,
   PrimaryKey,
   Table,
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import { DeductionTypeEnum } from '../enums';
+import { Receipt } from './receipt.model';
 
 export interface DeductionAttributes {
   id: number;
+  receiptId: number;
   amount: number;
   type: DeductionTypeEnum;
   reason: string;
@@ -27,6 +31,15 @@ export class Deduction
     type: DataType.INTEGER,
   })
   id: number;
+
+  @ForeignKey(() => Receipt)
+  @Column({
+    type: DataType.INTEGER,
+  })
+  receiptId: number;
+
+  @BelongsTo(() => Receipt, 'receiptId')
+  receipt: Receipt;
 
   @Column({
     type: DataType.ENUM(...Object.values(DeductionTypeEnum)),

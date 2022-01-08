@@ -20,16 +20,31 @@ import { JwtAuthGuard, RequestUser } from '@app/spa';
 import { User } from '@app/user';
 import { UserService, UserForAdminService } from '../services';
 import { AppRole, RoleGuard } from '@app/role';
+import {
+  FindAllReceiptDto,
+  ReceiptDto,
+  ReceiptService,
+} from '@app/departments';
 
-@UseGuards(JwtAuthGuard, RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN))
-@ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto)
+@ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto, ReceiptDto)
 @ApiTags(`Users' endpoints for admin`)
+@UseGuards(JwtAuthGuard, RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN))
 @Controller('user/for-admin')
 export class UserForAdminController {
   constructor(
     private readonly userService: UserService,
     private readonly userForAdminService: UserForAdminService,
+    private readonly receiptService: ReceiptService,
   ) {}
+
+  @ApiPaginatedDto(ReceiptDto)
+  @Get('all-receipts')
+  getUsersReceipts(
+    @RequestUser() admin: User,
+    @Query() findAllReceiptDto: FindAllReceiptDto,
+  ) {
+    return this.receiptService.findAllReceipts(findAllReceiptDto);
+  }
 
   @ApiPaginatedDto(UserDto)
   @Get()

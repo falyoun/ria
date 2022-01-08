@@ -1,12 +1,19 @@
-import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Put, Query, UseGuards } from '@nestjs/common';
 import { UserService } from '../services';
 import { CreateUserDto, UpdateUserDto, UserDto } from '../dtos';
-import { ApiRiaDto } from '@app/shared';
+import { ApiPaginatedDto, ApiRiaDto } from '@app/shared';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { User } from '@app/user';
 import { JwtAuthGuard, RequestUser } from '@app/spa';
 import { AppRole, RoleGuard } from '@app/role';
+import {
+  FindAllReceiptDto,
+  ReceiptDto,
+  ReceiptService,
+} from '@app/departments';
 
+@ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto, ReceiptDto)
+@ApiTags('User')
 @UseGuards(
   JwtAuthGuard,
   RoleGuard(
@@ -17,15 +24,28 @@ import { AppRole, RoleGuard } from '@app/role';
     AppRole.USER,
   ),
 )
-@ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto)
-@ApiTags('User')
 @Controller('/user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly receiptService: ReceiptService,
+  ) {}
   @ApiRiaDto(UserDto)
   @Get('me')
   getMe(@RequestUser() user: User) {
     return user;
+  }
+
+  @ApiPaginatedDto(ReceiptDto)
+  @Get('my-receipts')
+  getUsersReceipts(
+    @RequestUser() user: User,
+    @Query() findAllReceiptDto: FindAllReceiptDto,
+  ) {
+    return this.receiptService.findAllReceipts({
+      ...findAllReceiptDto,
+      email: user.email,
+    });
   }
   @ApiRiaDto(UserDto)
   @Put('me')

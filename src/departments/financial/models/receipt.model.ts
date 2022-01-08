@@ -22,7 +22,28 @@ export interface ReceiptAttributes {
   deductions?: Deduction[];
 }
 export type ReceiptCreationAttributes = Optional<ReceiptAttributes, 'id'>;
-@Table
+
+export const ReceiptModelScopes = {
+  JOIN_USER_SALARY_AND_DEDUCTIONS_TABLES:
+    'join_user_salary_and_deductions_tables',
+};
+@Table({
+  scopes: {
+    [ReceiptModelScopes.JOIN_USER_SALARY_AND_DEDUCTIONS_TABLES]: {
+      include: [
+        {
+          association: 'user',
+        },
+        {
+          association: 'salary',
+        },
+        {
+          association: 'deductions',
+        },
+      ],
+    },
+  },
+})
 export class Receipt
   extends Model<ReceiptAttributes, ReceiptCreationAttributes>
   implements ReceiptAttributes

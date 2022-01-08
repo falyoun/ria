@@ -71,6 +71,6 @@ export class Salary
   })
   receiptId: number;
 
-  @BelongsTo(() => Receipt, { foreignKey: 'receiptId' })
+  @BelongsTo(() => Receipt, 'receiptId')
   receipt: Receipt;
 }
