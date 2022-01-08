@@ -18,6 +18,7 @@ import {
   CreateUserDto,
   User,
   UserAlreadyExistsException,
+  UserModelScopes,
 } from '@app/user';
 import { LoginDto } from '../dtos/login.dto';
 import { SpaAuthService } from '@app/spa';
@@ -65,7 +66,9 @@ export class UserAuthService implements OnApplicationBootstrap {
     return this.userModel.create(createUserDto);
   }
   async findUser(findOptions: FindOptions<User>): Promise<User> {
-    const user = await this.userModel.findOne(findOptions);
+    const user = await this.userModel
+      .scope(UserModelScopes.JOIN_USER_ROLE_TABLES)
+      .findOne(findOptions);
     if (!user) {
       throw new AccountNotFoundException();
     }
