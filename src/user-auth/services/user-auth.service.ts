@@ -6,11 +6,7 @@ import {
   SamePasswordException,
   UnverifiedUserException,
 } from '../exceptions';
-import {
-  ChangePasswordDto,
-  ForgotPasswordRequestDto,
-  LoginResponseDto,
-} from '../dtos';
+import { ChangePasswordDto, ForgotPasswordRequestDto } from '../dtos';
 import { ConfigService } from '@nestjs/config';
 import {
   AccountNotFoundException,
@@ -129,10 +125,8 @@ export class UserAuthService implements OnApplicationBootstrap {
       email: user.email,
     });
     return {
-      data: {
-        ...user.toJSON(),
-        ...tokensDto,
-      },
+      ...user.toJSON(),
+      ...tokensDto,
     };
   }
 

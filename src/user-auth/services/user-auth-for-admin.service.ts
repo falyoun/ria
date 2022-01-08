@@ -19,11 +19,9 @@ export class UserAuthForAdminService {
         id: userId,
       },
     });
-    return {
-      data: await user.update({
-        isVerified: true,
-        isActive: true,
-      }),
-    };
+    return user.update({
+      isVerified: true,
+      isActive: true,
+    });
   }
 }

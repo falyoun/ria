@@ -25,7 +25,7 @@ export class UserController {
   @ApiRiaDto(UserDto)
   @Get('me')
   getMe(@RequestUser() user: User) {
-    return { data: user };
+    return user;
   }
   @ApiRiaDto(UserDto)
   @Put('me')

@@ -5,7 +5,11 @@ import { ConfigService } from '@nestjs/config';
 import { IAppConfig, IServer } from '@app/app-config';
 import { CrudConfigService } from '@nestjsx/crud';
 import { json, urlencoded } from 'body-parser';
-import { CodedExceptionFilter, SequelizeExceptionFilter } from './shared';
+import {
+  CodedExceptionFilter,
+  DataResponseInterceptor,
+  SequelizeExceptionFilter,
+} from './shared';
 import { createNamespace } from 'cls-hooked';
 import { Sequelize } from 'sequelize';
 import cookieParser from 'cookie-parser';
@@ -91,6 +95,7 @@ async function bootstrap() {
     new CodedExceptionFilter(),
     new SequelizeExceptionFilter(),
   );
+  app.useGlobalInterceptors(new DataResponseInterceptor());
   // app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
   app.useGlobalPipes(
     new ValidationPipe({
