@@ -8,7 +8,6 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { UserService } from '../services';
 import {
   CreateUserDto,
   FindSystemUsersDto,
@@ -19,7 +18,7 @@ import { ApiPaginatedDto, ApiRiaDto } from '@app/shared';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard, RequestUser } from '@app/spa';
 import { User } from '@app/user';
-import { UserForAdminService } from '../services/user-for-admin.service';
+import { UserService, UserForAdminService } from '../services';
 import { AppRole, RoleGuard } from '@app/role';
 
 @UseGuards(JwtAuthGuard, RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN))

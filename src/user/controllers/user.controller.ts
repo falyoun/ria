@@ -1,10 +1,22 @@
-import { Body, Controller, Get, Put } from '@nestjs/common';
+import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common';
 import { UserService } from '../services';
 import { CreateUserDto, UpdateUserDto, UserDto } from '../dtos';
 import { ApiRiaDto } from '@app/shared';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { User } from '@app/user';
-import { RequestUser } from '@app/spa';
+import { JwtAuthGuard, RequestUser } from '@app/spa';
+import { AppRole, RoleGuard } from '@app/role';
+
+@UseGuards(
+  JwtAuthGuard,
+  RoleGuard(
+    AppRole.SUPER_ADMIN,
+    AppRole.ADMIN,
+    AppRole.HR_MANAGER,
+    AppRole.MANAGER,
+    AppRole.USER,
+  ),
+)
 @ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto)
 @ApiTags('User')
 @Controller('/user')

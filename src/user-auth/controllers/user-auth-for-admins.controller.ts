@@ -18,7 +18,7 @@ import { UserDto } from '@app/user';
 
 @ApiExtraModels(ApiRiaDto, UserDto)
 @UseGuards(JwtAuthGuard, RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN))
-@ApiTags('Auth For Admin')
+@ApiTags('Auth endpoints for admin')
 @Controller('auth-for-admin')
 export class UserAuthForAdminsController {
   constructor(
