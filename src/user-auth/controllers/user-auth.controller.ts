@@ -10,14 +10,16 @@ import {
 import { UserAuthService } from '../services';
 import { CreateUserDto } from '@app/user';
 import { SpaAuthService, TokensDto } from '@app/spa';
-import { MessageResponseDto } from '@app/shared';
+import { ApiRiaDto, MessageResponseDto } from '@app/shared';
 import {
   ChangePasswordDto,
   ForgotPasswordRequestDto,
   LoginResponseDto,
 } from '../dtos';
 import { LoginDto } from '../dtos/login.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
+
+@ApiExtraModels(LoginResponseDto)
 @ApiTags('Auth')
 @Controller('auth')
 export class UserAuthController {
@@ -26,8 +28,9 @@ export class UserAuthController {
     private readonly spaAuthService: SpaAuthService,
   ) {}
 
+  @ApiRiaDto(LoginResponseDto)
   @Post('/login')
-  async login(@Body() loginDto: LoginDto): Promise<LoginResponseDto> {
+  async login(@Body() loginDto: LoginDto) {
     return this.userAuthService.login(loginDto);
   }
 

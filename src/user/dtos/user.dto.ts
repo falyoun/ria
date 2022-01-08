@@ -1,4 +1,5 @@
-import { IsBoolean, IsEmail, IsString } from 'class-validator';
+import { Allow, IsBoolean, IsEmail, IsString } from 'class-validator';
+import { AppRole, UserRoleDto } from '@app/role';
 
 export class UserDto {
   @IsEmail()
@@ -17,4 +18,8 @@ export class UserDto {
   isActive: boolean;
   @IsBoolean()
   isVerified: boolean;
+  @Allow()
+  associatedRoles: UserRoleDto[];
+  @Allow()
+  roles: AppRole[];
 }

@@ -104,7 +104,7 @@ export class UserAuthService implements OnApplicationBootstrap {
     });
   }
 
-  async login(loginDto: LoginDto): Promise<LoginResponseDto> {
+  async login(loginDto: LoginDto) {
     const { email, password } = loginDto;
     const user = await this.findUser({
       where: {
@@ -129,8 +129,10 @@ export class UserAuthService implements OnApplicationBootstrap {
       email: user.email,
     });
     return {
-      user,
-      ...tokensDto,
+      data: {
+        ...user.toJSON(),
+        ...tokensDto,
+      },
     };
   }
 

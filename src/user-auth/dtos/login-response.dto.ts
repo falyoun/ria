@@ -1,6 +1,9 @@
 import { UserDto } from '@app/user';
-import { TokensDto } from '@app/spa';
+import { IsString } from 'class-validator';
 
-export class LoginResponseDto extends TokensDto {
-  user: UserDto;
+export class LoginResponseDto extends UserDto {
+  @IsString()
+  accessToken: string;
+  @IsString()
+  refreshToken: string;
 }
