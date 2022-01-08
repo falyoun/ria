@@ -1,56 +1,27 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post,
-  Put,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, Put } from '@nestjs/common';
 import { UserService } from '../services';
 import { CreateUserDto, UpdateUserDto, UserDto } from '../dtos';
-import {
-  ApiPaginatedDto,
-  ApiRiaDto,
-  SequelizePaginationDto,
-} from '@app/shared';
+import { ApiRiaDto } from '@app/shared';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
+import { User } from '@app/user';
+import { RequestUser } from '@app/spa';
 @ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto)
 @ApiTags('User')
 @Controller('/user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
-
   @ApiRiaDto(UserDto)
-  @Post()
-  createUser(@Body() createUserDto: CreateUserDto) {
-    return this.userService.createOne(createUserDto);
-  }
-  @ApiPaginatedDto(UserDto)
-  @Get()
-  findAllUsers(@Query() query: SequelizePaginationDto) {
-    return this.userService.findAll({}, query);
+  @Get('me')
+  getMe(@RequestUser() user: User) {
+    return { data: user };
   }
   @ApiRiaDto(UserDto)
-  @Get(':id')
-  findUser(@Param('id', ParseIntPipe) id: number) {
-    return this.userService.findOne({
-      where: {
-        id,
-      },
-    });
-  }
-  @ApiRiaDto(UserDto)
-  @Put(':id')
-  updateUser(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateUserDto: UpdateUserDto,
-  ) {
+  @Put('me')
+  updateUser(@RequestUser() user: User, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateOne(
       {
         where: {
-          id,
+          id: user.id,
         },
       },
       updateUserDto,

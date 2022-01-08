@@ -1,10 +1,10 @@
 useAuth:
   useAccessToken:
     secretKey: R!@_SECRET_KEY
-    expiration: 30min
+    expiration: 10d
   useRefreshToken:
     secretKey: R!@_SECRET_KEY
-    expiration: 30min
+    expiration: 30d
 server:
   port: 3000
   apiPrefix: api/v1

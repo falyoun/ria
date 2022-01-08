@@ -24,6 +24,7 @@ export class UserAuthForAdminsController {
   constructor(
     private readonly userAuthForAdminService: UserAuthForAdminService,
   ) {}
+
   @HttpCode(HttpStatus.OK)
   @Post('/change-user-password')
   async changePasswordForUser(
