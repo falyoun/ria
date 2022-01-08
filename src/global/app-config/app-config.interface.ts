@@ -1,4 +1,4 @@
-import { ISwagger } from '@app/app-swagger';
+import { ISwagger } from '../app-swagger';
 import { SequelizeModuleOptions } from '@nestjs/sequelize/dist/interfaces/sequelize-options.interface';
 
 export interface IAuth {

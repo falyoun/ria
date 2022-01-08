@@ -19,10 +19,10 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@app/app-config": ["src/app-config"],
-      "@app/app-swagger": ["src/app-swagger"],
+      "@app/app-config": ["src/global/app-config"],
+      "@app/app-swagger": ["src/global/app-swagger"],
       "@app/spa": ["src/spa-authentication"],
-      "@app/app-database": ["src/app-database"],
+      "@app/app-database": ["src/global/app-database"],
       "@app/shared": ["src/shared"],
       "@app/user": ["src/user"],
       "@app/database": ["src/database"],

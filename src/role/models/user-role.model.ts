@@ -7,14 +7,14 @@ import {
 } from 'sequelize-typescript';
 import { Role } from './role.model';
 import { Optional } from 'sequelize';
-import { UserModel } from '@app/user';
+import { User } from '@app/user';
 
 export interface UserRoleAttributes {
   id: number;
   roleId: number;
   role?: Role;
   userId: number;
-  user?: UserModel;
+  user?: User;
 }
 export type UserRoleCreationAttributes = Optional<UserRoleAttributes, 'id'>;
 
@@ -44,8 +44,8 @@ export class UserRole
   })
   id: number;
 
-  @BelongsTo(() => UserModel, 'userId')
-  user: UserModel;
+  @BelongsTo(() => User, 'userId')
+  user: User;
 
   @Column({
     type: DataType.INTEGER,

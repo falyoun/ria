@@ -17,7 +17,7 @@ import {
   BadLoginCredentialsException,
   CreateUserDto,
   UserAlreadyExistsException,
-  UserModel,
+  User,
 } from '@app/user';
 import { LoginDto } from '../dtos/login.dto';
 import { SpaAuthService } from '@app/spa';
@@ -25,7 +25,7 @@ import { SpaAuthService } from '@app/spa';
 @Injectable()
 export class UserAuthService {
   constructor(
-    @InjectModel(UserModel) private readonly userModel: typeof UserModel,
+    @InjectModel(User) private readonly userModel: typeof User,
     private readonly configService: ConfigService,
     private readonly spaAuthService: SpaAuthService,
   ) {}
@@ -33,7 +33,7 @@ export class UserAuthService {
   createUser(createUserDto: CreateUserDto) {
     return this.userModel.create(createUserDto);
   }
-  async findUser(findOptions: FindOptions): Promise<UserModel> {
+  async findUser(findOptions: FindOptions): Promise<User> {
     const user = await this.userModel.findOne(findOptions);
     if (!user) {
       throw new AccountNotFoundException();

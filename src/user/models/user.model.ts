@@ -7,9 +7,11 @@ import {
   PrimaryKey,
   Table,
   Unique,
+  HasMany,
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import bcrypt from 'bcrypt';
+import { AppRole, UserRole } from '@app/role';
 export interface UserAttributes {
   id: number;
   email: string;
@@ -20,11 +22,37 @@ export interface UserAttributes {
   phoneNumber?: string;
   isActive?: boolean;
   isVerified?: boolean;
+  roles?: AppRole[];
+  associatedRoles?: UserRole[];
 }
 
 export type UserCreationAttributes = Optional<UserAttributes, 'id'>;
-@Table
-export class UserModel
+
+export const UserModelScopes = {
+  JOIN_USER_ROLE_TABLES: 'join_user_role_tables',
+};
+export const UserModelAliases = {
+  USER_ROLE: 'associatedRoles',
+};
+
+@Table({
+  defaultScope: {
+    attributes: {
+      exclude: ['password'],
+    },
+  },
+  scopes: {
+    [UserModelScopes.JOIN_USER_ROLE_TABLES]: {
+      include: [
+        {
+          model: UserRole,
+          as: UserModelAliases.USER_ROLE,
+        },
+      ],
+    },
+  },
+})
+export class User
   extends Model<UserAttributes, UserCreationAttributes>
   implements UserAttributes
 {
@@ -58,7 +86,7 @@ export class UserModel
 
   @Column({
     type: DataType.VIRTUAL(DataType.STRING),
-    get(this: UserModel) {
+    get(this: User) {
       return `${this.firstName} ${this.lastName}`;
     },
   })
@@ -84,8 +112,24 @@ export class UserModel
   })
   isVerified: boolean;
 
+  @Column({
+    type: DataType.VIRTUAL(DataType.ARRAY),
+    get(this: User) {
+      return Array.isArray(this.associatedRoles)
+        ? this.associatedRoles.map((r) => r.role.name)
+        : [];
+    },
+  })
+  roles: AppRole[];
+
+  @HasMany(() => UserRole, {
+    foreignKey: 'userId',
+    as: UserModelAliases.USER_ROLE,
+  })
+  associatedRoles: UserRole[];
+
   @BeforeSave({})
-  static async hashPassword(user: UserModel) {
+  static async hashPassword(user: User) {
     if (user.changed('password')) {
       const hashedP = await bcrypt.hash(user.password, 10);
       user.set('password', hashedP);

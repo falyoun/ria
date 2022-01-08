@@ -5,7 +5,7 @@ import { SpaAuthenticationModule, JwtStrategy } from '@app/spa';
 import { ConfigService } from '@nestjs/config';
 import { IAppConfig, IAuth } from '@app/app-config';
 import { JwtModule } from '@nestjs/jwt';
-import { UserModule, UserModel } from '@app/user';
+import { UserModule, User } from '@app/user';
 import { DatabaseConnectionService } from '@app/app-database';
 
 @Module({
@@ -42,7 +42,7 @@ import { DatabaseConnectionService } from '@app/app-database';
           sequelizeConnection: {
             sequelizeInstance:
               databaseConnectionService.getDatabaseActiveConnection(),
-            model: UserModel,
+            model: User,
           },
         };
       },

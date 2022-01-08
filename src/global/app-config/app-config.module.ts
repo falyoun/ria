@@ -5,11 +5,11 @@ import { JoiSchema } from './joi-schema';
 const getConfig = () => {
   switch (process.env.NODE_ENV) {
     case 'development':
-      return generateAppConfigFactory('../config/development.yaml');
+      return generateAppConfigFactory('../../config/development.yaml');
     case 'staging':
-      return generateAppConfigFactory('../config/staging.yaml');
+      return generateAppConfigFactory('../../config/staging.yaml');
     case 'production':
-      return generateAppConfigFactory('../config/production.yaml');
+      return generateAppConfigFactory('../../config/production.yaml');
   }
 };
 @Module({
