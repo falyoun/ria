@@ -5,7 +5,7 @@ import { StrategiesNames } from '../shared';
 import { Socket } from 'socket.io';
 
 @Injectable()
-export class WsJwtAuthGuard extends AuthGuard(StrategiesNames.ALPHA_WS_JWT) {
+export class WsJwtAuthGuard extends AuthGuard(StrategiesNames.ITE_WS_JWT) {
   canActivate(context: ExecutionContext) {
     // Add your custom authentication logic here
     // for example, call super.logIn(request) to establish a session.
@@ -15,7 +15,7 @@ export class WsJwtAuthGuard extends AuthGuard(StrategiesNames.ALPHA_WS_JWT) {
   handleRequest(err: any, user: any, _info: any) {
     // You can throw an exception based on either "info" or "err" arguments
     if (err || !user) {
-      throw err || new WsException('Cookies required');
+      throw err || new WsException('Token is required');
     }
     return user;
   }

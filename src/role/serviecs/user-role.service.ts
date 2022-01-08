@@ -6,7 +6,6 @@ import { CreateUserRoleDto } from '../dtos';
 import { CreateOptions, FindOptions } from 'sequelize';
 import { firstValueFrom } from 'rxjs';
 import {
-  RoleNotFoundException,
   RolesNotLoadedCorrectlyException,
   UserDoesNotOwnTheRoleException,
   UserOwnsTheRoleException,
@@ -38,7 +37,7 @@ export class UserRoleService {
       throw e;
     }
   }
-  async createOrUpdateUserRole(
+  async createUserRole(
     createUserRoleDto: CreateUserRoleDto,
     options?: CreateOptions,
   ) {

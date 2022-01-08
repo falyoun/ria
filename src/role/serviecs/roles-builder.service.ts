@@ -17,7 +17,7 @@ export class RolesBuilderService {
   private createForAdmin() {
     this.rolesBuilder
       .grant(AppRole.ADMIN)
-      .extend(AppRole.TEAM_MEMBER)
+      .extend(AppRole.HR_MANAGER)
       .createAny(JunoResources.ACCOUNT)
       .deleteAny(JunoResources.ACCOUNT)
       .updateAny(JunoResources.ACCOUNT)
@@ -26,8 +26,8 @@ export class RolesBuilderService {
 
   private createForManager() {
     this.rolesBuilder
-      .grant(AppRole.MANAGER)
-      .extend(AppRole.TEAM_MEMBER)
+      .grant(AppRole.HR_MANAGER)
+      .extend(AppRole.MANAGER)
       .createAny(JunoResources.INVOICE)
       .readAny(JunoResources.INVOICE)
       .updateAny(JunoResources.INVOICE)
@@ -35,8 +35,8 @@ export class RolesBuilderService {
   }
   private createForTeamMember() {
     this.rolesBuilder
-      .grant(AppRole.TEAM_MEMBER)
-      .extend('user')
+      .grant(AppRole.MANAGER)
+      .extend(AppRole.USER)
       .createOwn(JunoResources.INVOICE)
       .readOwn(JunoResources.INVOICE)
       .updateOwn(JunoResources.INVOICE)
@@ -44,7 +44,7 @@ export class RolesBuilderService {
   }
   private createForUser() {
     this.rolesBuilder
-      .grant('user')
+      .grant(AppRole.USER)
       .createAny(JunoResources.ORGANIZATION)
       .readOwn(JunoResources.ORGANIZATION)
       .createAny(JunoResources.ACCOUNT)

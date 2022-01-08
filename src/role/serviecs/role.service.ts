@@ -17,13 +17,13 @@ export class RoleService implements OnApplicationBootstrap {
         name: AppRole.ADMIN,
       },
       {
-        name: AppRole.TEAM_MEMBER,
-      },
-      {
-        name: AppRole.PAYER,
+        name: AppRole.HR_MANAGER,
       },
       {
         name: AppRole.MANAGER,
+      },
+      {
+        name: AppRole.USER,
       },
     ]);
   }

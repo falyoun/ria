@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { FindOptions } from 'sequelize';
 import {
@@ -16,24 +16,55 @@ import {
   AccountNotFoundException,
   BadLoginCredentialsException,
   CreateUserDto,
-  UserAlreadyExistsException,
   User,
+  UserAlreadyExistsException,
 } from '@app/user';
 import { LoginDto } from '../dtos/login.dto';
 import { SpaAuthService } from '@app/spa';
+import { Sequelize } from 'sequelize-typescript';
+import { AppRole, UserRoleService } from '@app/role';
 
 @Injectable()
-export class UserAuthService {
+export class UserAuthService implements OnApplicationBootstrap {
   constructor(
     @InjectModel(User) private readonly userModel: typeof User,
     private readonly configService: ConfigService,
     private readonly spaAuthService: SpaAuthService,
+    private readonly sequelize: Sequelize,
+    private readonly userRoleService: UserRoleService,
   ) {}
+
+  async onApplicationBootstrap() {
+    try {
+      await this.findUser({
+        where: {
+          email: 'ria@ria.com',
+        },
+      });
+    } catch (e) {
+      if (e instanceof AccountNotFoundException) {
+        await this.sequelize.transaction(async (transaction) => {
+          const superAdmin = await this.userModel.create({
+            firstName: 'ria',
+            lastName: 'ria',
+            email: 'ria@ria.com',
+            password: 'ria@123',
+            isActive: true,
+            isVerified: true,
+          });
+          await this.userRoleService.createUserRole({
+            userId: superAdmin.id,
+            requiredRole: AppRole.SUPER_ADMIN,
+          });
+        });
+      }
+    }
+  }
 
   createUser(createUserDto: CreateUserDto) {
     return this.userModel.create(createUserDto);
   }
-  async findUser(findOptions: FindOptions): Promise<User> {
+  async findUser(findOptions: FindOptions<User>): Promise<User> {
     const user = await this.userModel.findOne(findOptions);
     if (!user) {
       throw new AccountNotFoundException();
@@ -57,11 +88,17 @@ export class UserAuthService {
     if (user) {
       throw new UserAlreadyExistsException();
     }
-    await this.createUser(createUserDto);
-    return {
-      message:
-        'Signed up successfully, please wait until your request is approved by admin',
-    };
+    return await this.sequelize.transaction(async (transaction) => {
+      const createdUser = await this.createUser(createUserDto);
+      await this.userRoleService.createUserRole({
+        userId: createdUser.id,
+        requiredRole: AppRole.USER,
+      });
+      return {
+        message:
+          'Signed up successfully, please wait until your request is approved by admin',
+      };
+    });
   }
 
   async login(loginDto: LoginDto): Promise<LoginResponseDto> {

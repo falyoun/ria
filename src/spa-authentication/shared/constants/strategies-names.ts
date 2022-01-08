@@ -1,4 +1,4 @@
 export const StrategiesNames = {
-  ALPHA_JWT: 'alpha-jwt',
-  ALPHA_WS_JWT: 'alpha-ws-jwt',
+  ITE_JWT: 'ite-jwt',
+  ITE_WS_JWT: 'ite-ws-jwt',
 };

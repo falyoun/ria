@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { User } from '../models';
+import { User, UserModelScopes } from '../models';
 import { CreateUserDto, UpdateUserDto } from '../dtos';
 import { FindOptions } from 'sequelize';
 import { AccountNotFoundException } from '../exceptions';
@@ -15,7 +15,9 @@ export class UserService {
   }
 
   async findOne(findOptions: FindOptions<User>) {
-    const user = await this.userModel.findOne(findOptions);
+    const user = await this.userModel
+      .scope(UserModelScopes.JOIN_USER_ROLE_TABLES)
+      .findOne(findOptions);
     if (!user) {
       throw new AccountNotFoundException();
     }
@@ -28,6 +30,26 @@ export class UserService {
     return this.findOne(findOptions);
   }
 
+  async verifyUser(findOptions: FindOptions<User>) {
+    const user = await this.findOne(findOptions);
+    return user.update({
+      isVerified: true,
+    });
+  }
+
+  async activateUser(findOptions: FindOptions<User>) {
+    const user = await this.findOne(findOptions);
+    return user.update({
+      isActive: true,
+    });
+  }
+
+  activateAndVerifyUserByRef(user: User) {
+    return user.update({
+      isActive: true,
+      isVerified: true,
+    });
+  }
   findAll(
     findOptions: FindOptions,
     sequelizePaginationQuery?: SequelizePaginationDto,

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { UserAuthService } from './services';
+import { UserAuthForAdminService, UserAuthService } from './services';
 import { UserAuthController, UserAuthForAdminsController } from './controllers';
 import { SpaAuthenticationModule, JwtStrategy } from '@app/spa';
 import { ConfigService } from '@nestjs/config';
@@ -50,8 +50,8 @@ import { DatabaseConnectionService } from '@app/app-database';
       extraProviders: [JwtStrategy],
     }),
   ],
-  providers: [UserAuthService],
+  providers: [UserAuthService, UserAuthForAdminService],
   controllers: [UserAuthController, UserAuthForAdminsController],
-  exports: [UserAuthService, UserModule],
+  exports: [UserAuthService, UserAuthForAdminService, UserModule],
 })
 export class UserAuthModule {}

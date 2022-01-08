@@ -1,15 +1,38 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import { UserAuthService } from '../services';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
+import { UserAuthForAdminService } from '../services';
 import { ChangePasswordForUserDto } from '../dtos';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '@app/spa';
+import { AppRole, RoleGuard } from '@app/role';
+import { ApiRiaDto } from '@app/shared';
+import { UserDto } from '@app/user';
 
+@ApiExtraModels(ApiRiaDto, UserDto)
+@UseGuards(JwtAuthGuard, RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN))
 @ApiTags('Auth For Admin')
 @Controller('auth-for-admin')
 export class UserAuthForAdminsController {
-  constructor(private readonly userAuthService: UserAuthService) {}
+  constructor(
+    private readonly userAuthForAdminService: UserAuthForAdminService,
+  ) {}
   @HttpCode(HttpStatus.OK)
   @Post('/change-user-password')
   async changePasswordForUser(
     @Body() changePasswordForUserDto: ChangePasswordForUserDto,
   ) {}
+
+  @ApiRiaDto(UserDto)
+  @Post('/approve-user/:id')
+  async approveUser(@Param('id', ParseIntPipe) id: number) {
+    return this.userAuthForAdminService.approveUserToJoinTheSystem(id);
+  }
 }
