@@ -14,10 +14,12 @@ import { ApiRiaDto, MessageResponseDto } from '@app/shared';
 import {
   ChangePasswordDto,
   ForgotPasswordRequestDto,
+  GenerateRefreshTokenDto,
   LoginResponseDto,
 } from '../dtos';
 import { LoginDto } from '../dtos/login.dto';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
+import { MalformedJwtPayload } from '../exceptions';
 
 @ApiExtraModels(LoginResponseDto)
 @ApiTags('Auth')
@@ -43,9 +45,19 @@ export class UserAuthController {
   }
 
   @Get('/refresh')
-  async refreshToken(@Query('token') token: string): Promise<TokensDto> {
-    const payload = this.spaAuthService.verifyRefreshToken(token);
-    return this.spaAuthService.generateTokens(payload);
+  async refreshToken(
+    @Query() generateRefreshTokenDto: GenerateRefreshTokenDto,
+  ): Promise<TokensDto> {
+    const payload = this.spaAuthService.verifyRefreshToken(
+      generateRefreshTokenDto.token,
+    );
+    if (!payload.email && !payload.id) {
+      throw new MalformedJwtPayload();
+    }
+    return this.spaAuthService.generateTokens({
+      email: payload['email'],
+      id: payload['id'],
+    });
   }
 
   @HttpCode(HttpStatus.OK)
