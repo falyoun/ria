@@ -10,8 +10,8 @@
     "npm": "8.x"
   },
   "scripts": {
-    "prebuild": "rimraf dist",
-    "build": "npm i && nest build",
+    "prebuild": "npm i && rimraf dist",
+    "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "npm run build && npm run start:production",
     "start:dev": "export NODE_ENV=development; nest start --watch",
