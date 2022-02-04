@@ -1,0 +1,8 @@
+-- ADD COLUMN
+ALTER TABLE users ADD COLUMN avatar_id INTEGER;
+
+-- DROP COLUMN
+ALTER TABLE users DROP COLUMN avatar;
+
+-- TABLE INFO
+\d users;
