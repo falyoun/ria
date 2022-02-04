@@ -6,6 +6,7 @@ useAuth:
     secretKey: R!@_SECRET_KEY
     expiration: 30d
 server:
+  url: http://localhost:3000/api/v1
   port: 3000
   apiPrefix: api/v1
   swagger:
@@ -25,7 +26,7 @@ sequelizeOptions:
   password: iteria
   sync:
     force: false
-    alter: true
+    alter: false
   define:
     underscored: true
     paranoid: true

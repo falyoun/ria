@@ -15,6 +15,7 @@ export interface IAuth {
   };
 }
 export interface IServer {
+  url: string;
   port: number;
   apiPrefix: string;
   swagger: ISwagger;

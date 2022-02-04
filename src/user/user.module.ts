@@ -9,9 +9,15 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from './models';
 import { RoleModule } from '@app/role';
 import { FinancialModule } from '@app/departments';
+import { AppFileModule } from '../global/app-file/app-file.module';
 
 @Module({
-  imports: [FinancialModule, RoleModule, SequelizeModule.forFeature([User])],
+  imports: [
+    FinancialModule,
+    RoleModule,
+    SequelizeModule.forFeature([User]),
+    AppFileModule,
+  ],
   controllers: [
     UserController,
     UserForAdminController,

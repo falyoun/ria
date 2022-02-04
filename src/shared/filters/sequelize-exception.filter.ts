@@ -7,7 +7,8 @@ import {
 import { Response } from 'express';
 import { BaseError, UniqueConstraintError } from 'sequelize';
 import { ForeignKeyConstraintError } from 'sequelize';
-
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 @Catch(BaseError)
 export class SequelizeExceptionFilter implements ExceptionFilter {
   catch(exception: BaseError, host: ArgumentsHost) {

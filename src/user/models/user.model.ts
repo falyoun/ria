@@ -8,15 +8,21 @@ import {
   Table,
   Unique,
   HasMany,
+  HasOne,
+  ForeignKey,
+  BelongsTo,
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import bcrypt from 'bcrypt';
 import { AppRole, UserRole } from '@app/role';
 import { Receipt } from '@app/departments';
+import { AppFile } from '../../global';
 export interface UserAttributes {
   id: number;
   email: string;
   password: string;
+  avatar?: AppFile;
+  avatarId?: number;
   firstName?: string;
   lastName?: string;
   name?: string;
@@ -49,6 +55,10 @@ export const UserModelAliases = {
         {
           model: UserRole,
           as: UserModelAliases.USER_ROLE,
+        },
+        {
+          model: AppFile,
+          as: 'avatar',
         },
       ],
     },
@@ -99,6 +109,18 @@ export class User
     type: DataType.STRING,
   })
   phoneNumber: string;
+
+  @Column({
+    allowNull: true,
+    type: DataType.INTEGER,
+  })
+  @ForeignKey(() => AppFile)
+  avatarId: number;
+  @BelongsTo(() => AppFile, {
+    foreignKey: 'avatarId',
+    as: 'avatar',
+  })
+  avatar: AppFile;
 
   @Column({
     type: DataType.BOOLEAN,
