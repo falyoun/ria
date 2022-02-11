@@ -24,4 +24,15 @@ export class UserAuthForAdminService {
       isActive: true,
     });
   }
+  async rejectUser(userId: number) {
+    const user = await this.userService.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    return user.update({
+      isVerified: false,
+      isActive: false,
+    });
+  }
 }

@@ -36,4 +36,9 @@ export class UserAuthForAdminsController {
   async approveUser(@Param('id', ParseIntPipe) id: number) {
     return this.userAuthForAdminService.approveUserToJoinTheSystem(id);
   }
+  @ApiRiaDto(UserDto)
+  @Post('/reject-user/:id')
+  async rejectUser(@Param('id', ParseIntPipe) id: number) {
+    return this.userAuthForAdminService.rejectUser(id);
+  }
 }
