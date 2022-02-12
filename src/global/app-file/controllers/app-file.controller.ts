@@ -40,6 +40,9 @@ export class AppFileController {
         destination: pathToUploadedAvatars,
         filename: editFileName,
       }),
+      limits: {
+        fieldSize: 5,
+      },
       fileFilter: imageFileFilter,
     }),
   )
