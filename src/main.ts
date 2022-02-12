@@ -6,6 +6,7 @@ import { IAppConfig, IServer } from '@app/app-config';
 import { CrudConfigService } from '@nestjsx/crud';
 import { json, urlencoded } from 'body-parser';
 import {
+  AllExceptionsFilter,
   CodedExceptionFilter,
   DataResponseInterceptor,
   SequelizeExceptionFilter,
@@ -92,6 +93,7 @@ async function bootstrap() {
   swaggerGenerator.load(app);
   app.setGlobalPrefix(apiPrefix);
   app.useGlobalFilters(
+    new AllExceptionsFilter(),
     new CodedExceptionFilter(),
     new SequelizeExceptionFilter(),
   );
