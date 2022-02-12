@@ -17,7 +17,7 @@ import { User } from '../models';
   JwtAuthGuard,
   RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN, AppRole.HR_MANAGER),
 )
-@Controller('/user/financial')
+@Controller('/users/financial')
 export class UserFinancialController {
   constructor(
     private readonly receiptService: ReceiptService,

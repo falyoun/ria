@@ -29,7 +29,7 @@ import {
 @ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto, ReceiptDto)
 @ApiTags(`Users' endpoints for admin`)
 @UseGuards(JwtAuthGuard, RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN))
-@Controller('user/for-admin')
+@Controller('users/for-admin')
 export class UserForAdminController {
   constructor(
     private readonly userService: UserService,
