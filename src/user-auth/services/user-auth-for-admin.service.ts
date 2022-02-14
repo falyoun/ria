@@ -31,8 +31,9 @@ export class UserAuthForAdminService {
       },
     });
 
-    return user.destroy({
-      force: true,
-    });
+    await user.destroy();
+    return {
+      message: 'deleted',
+    };
   }
 }
