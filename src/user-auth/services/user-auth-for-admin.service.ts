@@ -30,9 +30,9 @@ export class UserAuthForAdminService {
         id: userId,
       },
     });
-    return user.update({
-      isVerified: false,
-      isActive: false,
+
+    return user.destroy({
+      force: true,
     });
   }
 }
