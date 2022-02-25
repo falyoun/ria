@@ -1,4 +1,3 @@
-import { SequelizePaginationDto } from '@app/shared';
 import {
   IsEmail,
   IsNumber,
@@ -7,6 +6,7 @@ import {
   Min,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { SequelizePaginationDto } from '@app/shared/dtos/sequelize-pagination.dto';
 
 export class FindAllReceiptDto extends SequelizePaginationDto {
   @IsOptional()

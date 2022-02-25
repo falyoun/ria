@@ -6,7 +6,7 @@ import {
   UserAttributes,
   UserCreationAttributes,
   UserModelScopes,
-} from '@app/user';
+} from '@app/user/models/user.model';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(

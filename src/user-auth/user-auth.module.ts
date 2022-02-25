@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
-import { UserAuthForAdminService, UserAuthService } from './services';
-import { UserAuthController, UserAuthForAdminsController } from './controllers';
-import { SpaAuthenticationModule, JwtStrategy } from '@app/spa';
 import { ConfigService } from '@nestjs/config';
-import { IAppConfig, IAuth } from '@app/app-config';
 import { JwtModule } from '@nestjs/jwt';
-import { UserModule, User } from '@app/user';
-import { DatabaseConnectionService } from '@app/app-database';
+import { UserModule } from '@app/user/user.module';
+import { JwtStrategy, SpaAuthenticationModule } from '@app/spa-authentication';
+import { IAppConfig, IAuth } from '@app/global/app-config/app-config.interface';
+import { DatabaseConnectionService } from '@app/global/app-database/database-connection.service';
+import { User } from '@app/user/models/user.model';
+import { UserAuthService } from '@app/user-auth/services/user-auth.service';
+import { UserAuthForAdminsController } from '@app/user-auth/controllers/user-auth-for-admins.controller';
+import { UserAuthController } from '@app/user-auth/controllers/user-auth.controller';
+import { UserAuthForAdminService } from '@app/user-auth/services/user-auth-for-admin.service';
 
 @Module({
   imports: [

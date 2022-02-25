@@ -1,5 +1,5 @@
 import { IsEnum, IsPositive } from 'class-validator';
-import { AppRole } from '@app/role';
+import { AppRole } from '@app/role/enums/app-role.enum';
 
 export class RoleDto {
   @IsPositive()

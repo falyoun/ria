@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { User, UserModelScopes } from '../models';
-import { UpdateUserDto } from '../dtos';
 import { FindOptions } from 'sequelize';
 import { AccountNotFoundException } from '../exceptions';
-import { AppFileService } from '../../global/app-file/services';
+import { User, UserModelScopes } from '@app/user/models/user.model';
+import { AppFileService } from '@app/global/app-file/services/app-file.service';
+import { UpdateUserDto } from '@app/user/dtos/update-user.dto';
 
 @Injectable()
 export class UserService {

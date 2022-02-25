@@ -7,7 +7,7 @@ import {
 } from 'sequelize-typescript';
 import { Role } from './role.model';
 import { Optional } from 'sequelize';
-import { User } from '@app/user';
+import { User } from '@app/user/models/user.model';
 
 export interface UserRoleAttributes {
   id: number;

@@ -8,13 +8,14 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { UserAuthForAdminService } from '../services';
-import { ChangePasswordForUserDto } from '../dtos';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '@app/spa';
-import { AppRole, RoleGuard } from '@app/role';
-import { ApiRiaDto } from '@app/shared';
-import { UserDto } from '@app/user';
+import { ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
+import { AppRole } from '@app/role/enums/app-role.enum';
+import { RoleGuard } from '@app/role/guards/role.guard';
+import { JwtAuthGuard } from '@app/spa-authentication';
+import { UserDto } from '@app/user/dtos/user.dto';
+import { UserAuthForAdminService } from '@app/user-auth/services/user-auth-for-admin.service';
+import { ChangePasswordForUserDto } from '@app/user-auth/dtos/for-admin/change-password-for-user.dto';
 
 @ApiExtraModels(ApiRiaDto, UserDto)
 @UseGuards(JwtAuthGuard, RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN))

@@ -1,6 +1,6 @@
-import { SequelizePaginationDto } from '@app/shared';
 import { IsBoolean, IsOptional, IsString } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { SequelizePaginationDto } from '@app/shared/dtos/sequelize-pagination.dto';
 
 export class FindSystemUsersDto extends SequelizePaginationDto {
   @IsString()

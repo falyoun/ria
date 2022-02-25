@@ -9,22 +9,22 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
-  CreateUserDto,
-  FindSystemUsersDto,
-  UpdateUserDto,
-  UserDto,
-} from '../dtos';
-import { ApiPaginatedDto, ApiRiaDto } from '@app/shared';
-import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard, RequestUser } from '@app/spa';
-import { User } from '@app/user';
-import { UserService, UserForAdminService } from '../services';
-import { AppRole, RoleGuard } from '@app/role';
-import {
   FindAllReceiptDto,
   ReceiptDto,
   ReceiptService,
 } from '@app/departments';
+import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
+import { UpdateUserDto } from '@app/user/dtos/update-user.dto';
+import { UserDto } from '@app/user/dtos/user.dto';
+import { CreateUserDto } from '@app/user/dtos/create-user.dto';
+import { JwtAuthGuard, RequestUser } from '@app/spa-authentication';
+import { RoleGuard } from '@app/role/guards/role.guard';
+import { AppRole } from '@app/role/enums/app-role.enum';
+import { UserService } from '@app/user/services/user.service';
+import { UserForAdminService } from '@app/user/services/user-for-admin.service';
+import { User } from '@app/user/models/user.model';
+import { ApiPaginatedDto, ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
+import { FindSystemUsersDto } from '@app/user/dtos/for-admin/find-system-users.dto';
 
 @ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto, ReceiptDto)
 @ApiTags(`Users' endpoints for admin`)

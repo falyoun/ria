@@ -7,19 +7,18 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { UserAuthService } from '../services';
-import { CreateUserDto } from '@app/user';
-import { SpaAuthService, TokensDto } from '@app/spa';
-import { ApiRiaDto, MessageResponseDto } from '@app/shared';
-import {
-  ChangePasswordDto,
-  ForgotPasswordRequestDto,
-  GenerateRefreshTokenDto,
-  LoginResponseDto,
-} from '../dtos';
 import { LoginDto } from '../dtos/login.dto';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
-import { MalformedJwtPayload } from '../exceptions';
+import { LoginResponseDto } from '@app/user-auth/dtos/login-response.dto';
+import { UserAuthService } from '@app/user-auth/services/user-auth.service';
+import { SpaAuthService, TokensDto } from '@app/spa-authentication';
+import { ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
+import { CreateUserDto } from '@app/user/dtos/create-user.dto';
+import { MessageResponseDto } from '@app/shared/dtos/message-response.dto';
+import { GenerateRefreshTokenDto } from '@app/user-auth/dtos/generate-refresh-token.dto';
+import { ChangePasswordDto } from '@app/user-auth/dtos/change-password.dto';
+import { ForgotPasswordRequestDto } from '@app/user-auth/dtos/forgot-password-request.dto';
+import { MalformedJwtPayload } from '@app/user-auth/exceptions/exceptions';
 
 @ApiExtraModels(LoginResponseDto)
 @ApiTags('Auth')

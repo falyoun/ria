@@ -1,6 +1,6 @@
-import { AppRole } from '@app/role';
 import { CanActivate, ExecutionContext, mixin, Type } from '@nestjs/common';
-import { JwtAuthGuard } from '@app/spa';
+import { AppRole } from '@app/role/enums/app-role.enum';
+import { JwtAuthGuard } from '@app/spa-authentication';
 
 export const RoleGuard = (...args: AppRole[]): Type<CanActivate> => {
   class RoleGuardMixin extends JwtAuthGuard {

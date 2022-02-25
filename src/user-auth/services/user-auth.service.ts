@@ -1,25 +1,27 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { FindOptions } from 'sequelize';
+import { ConfigService } from '@nestjs/config';
+
+import { LoginDto } from '../dtos/login.dto';
+import { Sequelize } from 'sequelize-typescript';
+import { User, UserModelScopes } from '@app/user/models/user.model';
+import { SpaAuthService } from '@app/spa-authentication';
+import { UserRoleService } from '@app/role/serviecs/user-role.service';
+import {
+  AccountNotFoundException,
+  BadLoginCredentialsException,
+  UserAlreadyExistsException,
+} from '@app/user/exceptions';
+import { AppRole } from '@app/role/enums/app-role.enum';
+import { CreateUserDto } from '@app/user/dtos/create-user.dto';
 import {
   InactiveUserException,
   SamePasswordException,
   UnverifiedUserException,
-} from '../exceptions';
-import { ChangePasswordDto, ForgotPasswordRequestDto } from '../dtos';
-import { ConfigService } from '@nestjs/config';
-import {
-  AccountNotFoundException,
-  BadLoginCredentialsException,
-  CreateUserDto,
-  User,
-  UserAlreadyExistsException,
-  UserModelScopes,
-} from '@app/user';
-import { LoginDto } from '../dtos/login.dto';
-import { SpaAuthService } from '@app/spa';
-import { Sequelize } from 'sequelize-typescript';
-import { AppRole, UserRoleService } from '@app/role';
+} from '@app/user-auth/exceptions/exceptions';
+import { ChangePasswordDto } from '@app/user-auth/dtos/change-password.dto';
+import { ForgotPasswordRequestDto } from '@app/user-auth/dtos/forgot-password-request.dto';
 
 @Injectable()
 export class UserAuthService implements OnApplicationBootstrap {

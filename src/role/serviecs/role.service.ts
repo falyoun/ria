@@ -1,8 +1,8 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Role } from '../models';
 import { ReplaySubject } from 'rxjs';
-import { AppRole } from '../enums';
+import { Role } from '@app/role/models/role.model';
+import { AppRole } from '@app/role/enums/app-role.enum';
 
 @Injectable()
 export class RoleService implements OnApplicationBootstrap {

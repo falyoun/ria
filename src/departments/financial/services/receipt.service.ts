@@ -6,9 +6,9 @@ import { FindOptions, Op, WhereOptions } from 'sequelize';
 import { SalaryService } from './salary.service';
 import { DeductionService } from './deduction.service';
 import { Sequelize } from 'sequelize-typescript';
-import { RiaUtils } from '@app/shared';
-import { User } from '@app/user';
 import { ReceiptNotFoundException } from '../exceptions';
+import { User } from '@app/user/models/user.model';
+import { RiaUtils } from '@app/shared/utils';
 
 @Injectable()
 export class ReceiptService {

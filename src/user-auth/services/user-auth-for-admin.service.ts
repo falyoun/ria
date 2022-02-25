@@ -1,8 +1,9 @@
 import { InjectModel } from '@nestjs/sequelize';
-import { User, UserService } from '@app/user';
 import { ConfigService } from '@nestjs/config';
 import { Injectable } from '@nestjs/common';
 import { UserAuthService } from './user-auth.service';
+import { User } from '@app/user/models/user.model';
+import { UserService } from '@app/user/services/user.service';
 
 @Injectable()
 export class UserAuthForAdminService {

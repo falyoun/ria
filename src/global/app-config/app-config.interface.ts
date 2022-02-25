@@ -1,5 +1,5 @@
-import { ISwagger } from '../app-swagger';
 import { SequelizeModuleOptions } from '@nestjs/sequelize/dist/interfaces/sequelize-options.interface';
+import { ISwagger } from '@app/global/app-swagger/swagger-config.interface';
 
 export interface IAuth {
   useCookies: {

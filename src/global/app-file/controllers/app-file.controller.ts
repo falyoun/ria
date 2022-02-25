@@ -8,15 +8,16 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { AppFileService } from '../services';
-import { AppRole, RoleGuard } from '@app/role';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
-import { AppFileDto } from '../dtos';
-import { ApiRiaDto } from '@app/shared';
 import { pathToUploadedAvatars } from '../constants';
 import { editFileName, imageFileFilter } from '../utils';
+import { RoleGuard } from '@app/role/guards/role.guard';
+import { AppRole } from '@app/role/enums/app-role.enum';
+import { AppFileDto } from '@app/global/app-file/dtos/app-file.dto';
+import { AppFileService } from '@app/global/app-file/services/app-file.service';
+import { ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
 
 @UseGuards(
   RoleGuard(

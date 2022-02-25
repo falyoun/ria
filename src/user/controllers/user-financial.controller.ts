@@ -1,16 +1,19 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto, UpdateUserDto, UserDto } from '../dtos';
 import {
   CreateReceiptDto,
   ReceiptDto,
   ReceiptService,
   RequestNewReceipt,
 } from '@app/departments';
-import { JwtAuthGuard, RequestUser } from '@app/spa';
-import { AppRole, RoleGuard } from '@app/role';
-import { UserService } from '../services';
-import { User } from '../models';
+import { UserDto } from '@app/user/dtos/user.dto';
+import { UpdateUserDto } from '@app/user/dtos/update-user.dto';
+import { CreateUserDto } from '@app/user/dtos/create-user.dto';
+import { JwtAuthGuard, RequestUser } from '@app/spa-authentication';
+import { RoleGuard } from '@app/role/guards/role.guard';
+import { AppRole } from '@app/role/enums/app-role.enum';
+import { UserService } from '@app/user/services/user.service';
+import { User } from '@app/user/models/user.model';
 @ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto, ReceiptDto)
 @ApiTags(`Users' financial endpoints`)
 @UseGuards(

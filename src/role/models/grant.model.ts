@@ -9,8 +9,8 @@ import {
 } from 'sequelize-typescript';
 import { DataTypes, Optional } from 'sequelize';
 import { Model } from 'sequelize-typescript';
-import { ActionTypes, possessionTypes } from '../enums';
 import { Role } from './role.model';
+import { ActionTypes, possessionTypes } from '@app/role/enums/grant-action.eum';
 
 export interface GrantAttributes {
   id: number;

@@ -14,9 +14,10 @@ import {
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import bcrypt from 'bcrypt';
-import { AppRole, UserRole } from '@app/role';
 import { Receipt } from '@app/departments';
-import { AppFile } from '../../global';
+import { AppFile } from '@app/global/app-file/models/app-file.model';
+import { AppRole } from '@app/role/enums/app-role.enum';
+import { UserRole } from '@app/role/models/user-role.model';
 export interface UserAttributes {
   id: number;
   email: string;

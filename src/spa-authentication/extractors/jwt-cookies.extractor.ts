@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import { SpaAuthConstants } from '@app/spa';
+import { SpaAuthConstants } from '@app/spa-authentication';
 
 export function extractJWTFromCookies(req: Request): string | null {
   if (!req.cookies) {

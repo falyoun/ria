@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { User, UserModelScopes } from '../models';
-import { FindSystemUsersDto } from '../dtos';
 import { FindOptions, Op, WhereOptions } from 'sequelize';
-import { RiaUtils } from '@app/shared';
 import { InjectModel } from '@nestjs/sequelize';
+import { User, UserModelScopes } from '@app/user/models/user.model';
+import { FindSystemUsersDto } from '@app/user/dtos/for-admin/find-system-users.dto';
+import { RiaUtils } from '@app/shared/utils';
 
 @Injectable()
 export class UserForAdminService {

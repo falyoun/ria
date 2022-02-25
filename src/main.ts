@@ -2,19 +2,20 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { IAppConfig, IServer } from '@app/app-config';
 import { CrudConfigService } from '@nestjsx/crud';
 import { json, urlencoded } from 'body-parser';
-import {
-  AllExceptionsFilter,
-  CodedExceptionFilter,
-  DataResponseInterceptor,
-  SequelizeExceptionFilter,
-} from './shared';
 import { createNamespace } from 'cls-hooked';
 import { Sequelize } from 'sequelize';
 import cookieParser from 'cookie-parser';
-import { SwaggerGenerator } from '@app/app-swagger';
+import {
+  IAppConfig,
+  IServer,
+} from '@app/global/app-config/app-config.interface';
+import { SwaggerGenerator } from '@app/global/app-swagger/swagger-generator';
+import { AllExceptionsFilter } from '@app/shared/filters/all-exceptions.filter';
+import { CodedExceptionFilter } from '@app/shared/filters/coded-exception.filter';
+import { SequelizeExceptionFilter } from '@app/shared/filters/sequelize-exception.filter';
+import { DataResponseInterceptor } from '@app/shared/interceptors/data-response.interceptor';
 
 const namespace = createNamespace('ria-transactional-namespace');
 Sequelize.useCLS(namespace);

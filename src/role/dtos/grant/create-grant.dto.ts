@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsPositive, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { ActionTypes, possessionTypes } from '../../enums';
+import { ActionTypes, possessionTypes } from '@app/role/enums/grant-action.eum';
 
 export class CreateGrantDto {
   @ApiProperty({ type: String })

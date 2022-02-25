@@ -1,5 +1,5 @@
 import { FindOptions } from 'sequelize';
-import { SequelizePaginationDto } from '../dtos';
+import { SequelizePaginationDto } from '@app/shared/dtos/sequelize-pagination.dto';
 
 export const RiaUtils = {
   applyPagination: <TAttribute = any>(

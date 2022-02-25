@@ -1,5 +1,8 @@
-import { CodedException, ResourceNotFoundException } from '@app/shared';
 import { HttpStatus } from '@nestjs/common';
+import {
+  CodedException,
+  ResourceNotFoundException,
+} from '@app/shared/exceptions/coded-exception';
 
 export class AccountNotFoundException extends ResourceNotFoundException {
   constructor() {

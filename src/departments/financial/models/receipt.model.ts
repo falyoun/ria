@@ -13,7 +13,7 @@ import {
 import { Optional } from 'sequelize';
 import { Salary } from './salary.model';
 import { Deduction } from './deduction.model';
-import { User } from '@app/user';
+import { User } from '@app/user/models/user.model';
 
 export interface ReceiptAttributes {
   id: number;

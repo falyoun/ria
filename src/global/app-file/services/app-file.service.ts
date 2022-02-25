@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { AppFile } from '../models';
-import { CreateAppFileDto } from '../dtos';
-import { v4 as uuidv4 } from 'uuid';
 import { FindOptions } from 'sequelize';
 import { FileNotFoundException } from '../exceptions';
 import { ConfigService } from '@nestjs/config';
-import { IAppConfig, IServer } from '@app/app-config';
+import { AppFile } from '@app/global/app-file/models/app-file.model';
+import {
+  IAppConfig,
+  IServer,
+} from '@app/global/app-config/app-config.interface';
+import { CreateAppFileDto } from '@app/global/app-file/dtos/create-app-file.dto';
 
 @Injectable()
 export class AppFileService {

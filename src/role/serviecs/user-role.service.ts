@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { RoleService } from './role.service';
-import { UserRole } from '../models';
-import { CreateUserRoleDto } from '../dtos';
 import { CreateOptions, FindOptions } from 'sequelize';
 import { firstValueFrom } from 'rxjs';
 import {
@@ -10,6 +8,8 @@ import {
   UserDoesNotOwnTheRoleException,
   UserOwnsTheRoleException,
 } from '../exceptions';
+import { UserRole } from '@app/role/models/user-role.model';
+import { CreateUserRoleDto } from '@app/role/dtos/create-user-role.dto';
 
 @Injectable()
 export class UserRoleService {

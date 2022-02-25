@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AppConfigModule } from '@app/app-config';
-import { AppDatabaseModule } from '@app/app-database';
-import { UserAuthModule } from '@app/user-auth';
 import { DepartmentsModule } from '@app/departments';
 import { join } from 'path';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { AppDatabaseModule } from '@app/global/app-database/app-database.module';
+import { AppConfigModule } from '@app/global/app-config/app-config.module';
+import { UserAuthModule } from '@app/user-auth/user-auth.module';
 console.log(join(__dirname, '../', 'public/avatars'));
 @Module({
   imports: [

@@ -1,6 +1,6 @@
 import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { Response } from 'express';
-import { CodedException } from '../exceptions';
+import { CodedException } from '@app/shared/exceptions/coded-exception';
 export function handleCodedException(
   exception: CodedException,
   host: ArgumentsHost,

@@ -1,9 +1,9 @@
 import { Optional } from 'sequelize';
 import { Column, DataType, HasMany, Table } from 'sequelize-typescript';
 import { Model } from 'sequelize-typescript';
-import { AppRole } from '../enums';
 import { UserRole } from './user-role.model';
 import { Grant } from './grant.model';
+import { AppRole } from '@app/role/enums/app-role.enum';
 export interface RoleAttributes {
   id: number;
   name: AppRole;

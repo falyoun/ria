@@ -1,5 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
-import { CodedException } from '@app/shared';
+import { CodedException } from '@app/shared/exceptions/coded-exception';
 
 export class InvalidToken extends CodedException {
   constructor() {

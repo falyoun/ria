@@ -1,16 +1,19 @@
 import { Body, Controller, Get, Put, Query, UseGuards } from '@nestjs/common';
-import { UserService } from '../services';
-import { CreateUserDto, UpdateUserDto, UserDto } from '../dtos';
-import { ApiPaginatedDto, ApiRiaDto } from '@app/shared';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
-import { User } from '@app/user';
-import { JwtAuthGuard, RequestUser } from '@app/spa';
-import { AppRole, RoleGuard } from '@app/role';
 import {
   FindAllReceiptDto,
   ReceiptDto,
   ReceiptService,
 } from '@app/departments';
+import { JwtAuthGuard, RequestUser } from '@app/spa-authentication';
+import { UpdateUserDto } from '@app/user/dtos/update-user.dto';
+import { CreateUserDto } from '@app/user/dtos/create-user.dto';
+import { UserDto } from '@app/user/dtos/user.dto';
+import { RoleGuard } from '@app/role/guards/role.guard';
+import { AppRole } from '@app/role/enums/app-role.enum';
+import { UserService } from '@app/user/services/user.service';
+import { ApiPaginatedDto, ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
+import { User } from '@app/user/models/user.model';
 
 @ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto, ReceiptDto)
 @ApiTags('Users')
