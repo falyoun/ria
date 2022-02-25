@@ -21,8 +21,6 @@ import { User } from '@app/user/models/user.model';
 import { ApiPaginatedDto, ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
 import { FindSystemUsersDto } from '@app/user/dtos/for-admin/find-system-users.dto';
 import { ReceiptDto } from '@app/departments/financial/dtos/receipt/receipt.dto';
-import { ReceiptService } from '@app/departments/financial/services/receipt.service';
-import { FindAllReceiptDto } from '@app/departments/financial/dtos/receipt/find-all-receipt.dto';
 
 @ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto, ReceiptDto)
 @ApiTags(`Users' endpoints for admin`)
@@ -32,17 +30,7 @@ export class UserForAdminController {
   constructor(
     private readonly userService: UserService,
     private readonly userForAdminService: UserForAdminService,
-    private readonly receiptService: ReceiptService,
   ) {}
-
-  @ApiPaginatedDto(ReceiptDto)
-  @Get('all-receipts')
-  getUsersReceipts(
-    @RequestUser() admin: User,
-    @Query() findAllReceiptDto: FindAllReceiptDto,
-  ) {
-    return this.receiptService.findAllReceipts(findAllReceiptDto);
-  }
 
   @ApiPaginatedDto(UserDto)
   @Get()

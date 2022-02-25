@@ -5,23 +5,12 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { User } from '@app/user/models/user.model';
 import { UserController } from '@app/user/controllers/user.controller';
 import { UserForAdminController } from '@app/user/controllers/user-for-admin.controller';
-import { UserFinancialController } from '@app/user/controllers/user-financial.controller';
 import { UserService } from '@app/user/services/user.service';
 import { UserForAdminService } from '@app/user/services/user-for-admin.service';
-import { FinancialModule } from '@app/departments/financial/financial.module';
 
 @Module({
-  imports: [
-    FinancialModule,
-    RoleModule,
-    SequelizeModule.forFeature([User]),
-    AppFileModule,
-  ],
-  controllers: [
-    UserController,
-    UserForAdminController,
-    UserFinancialController,
-  ],
+  imports: [RoleModule, SequelizeModule.forFeature([User]), AppFileModule],
+  controllers: [UserController, UserForAdminController],
   providers: [UserService, UserForAdminService],
   exports: [
     UserService,

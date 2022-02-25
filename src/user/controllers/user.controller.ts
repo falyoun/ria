@@ -7,11 +7,9 @@ import { UserDto } from '@app/user/dtos/user.dto';
 import { RoleGuard } from '@app/role/guards/role.guard';
 import { AppRole } from '@app/role/enums/app-role.enum';
 import { UserService } from '@app/user/services/user.service';
-import { ApiPaginatedDto, ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
+import { ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
 import { User } from '@app/user/models/user.model';
 import { ReceiptDto } from '@app/departments/financial/dtos/receipt/receipt.dto';
-import { FindAllReceiptDto } from '@app/departments/financial/dtos/receipt/find-all-receipt.dto';
-import { ReceiptService } from '@app/departments/financial/services/receipt.service';
 
 @ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto, ReceiptDto)
 @ApiTags('Users')
@@ -27,27 +25,13 @@ import { ReceiptService } from '@app/departments/financial/services/receipt.serv
 )
 @Controller('/users')
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-    private readonly receiptService: ReceiptService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
   @ApiRiaDto(UserDto)
   @Get('me')
   getMe(@RequestUser() user: User) {
     return user;
   }
 
-  @ApiPaginatedDto(ReceiptDto)
-  @Get('my-receipts')
-  getUsersReceipts(
-    @RequestUser() user: User,
-    @Query() findAllReceiptDto: FindAllReceiptDto,
-  ) {
-    return this.receiptService.findAllReceipts({
-      ...findAllReceiptDto,
-      email: user.email,
-    });
-  }
   @ApiRiaDto(UserDto)
   @Put('me')
   updateUser(@RequestUser() user: User, @Body() updateUserDto: UpdateUserDto) {

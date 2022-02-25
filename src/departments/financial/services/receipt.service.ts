@@ -1,41 +1,51 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { FindOptions, Op, WhereOptions } from 'sequelize';
+import {
+  FindOptions,
+  InstanceDestroyOptions,
+  Op,
+  WhereOptions,
+} from 'sequelize';
 import { SalaryService } from './salary.service';
 import { DeductionService } from './deduction.service';
 import { Sequelize } from 'sequelize-typescript';
 import { ReceiptNotFoundException } from '../exceptions';
 import { User } from '@app/user/models/user.model';
 import { RiaUtils } from '@app/shared/utils';
-import {
-  Receipt,
-  ReceiptModelScopes,
-} from '@app/departments/financial/models/receipt.model';
-import { CreateReceiptDto } from '@app/departments/financial/dtos/receipt/create-receipt.dto';
+import { Receipt } from '@app/departments/financial/models/receipt.model';
+import { RequestNewReceipt } from '@app/departments/financial/dtos/receipt/create-receipt.dto';
 import { FindAllReceiptDto } from '@app/departments/financial/dtos/receipt/find-all-receipt.dto';
 import { Salary } from '@app/departments/financial/models/salary.model';
 import { Deduction } from '@app/departments/financial/models/deduction.model';
+import { UserService } from '@app/user/services/user.service';
 
 @Injectable()
 export class ReceiptService {
   constructor(
     @InjectModel(Receipt) private readonly receiptModel: typeof Receipt,
+    private readonly userService: UserService,
+
     private readonly salaryService: SalaryService,
     private readonly deductionService: DeductionService,
     private readonly sequelize: Sequelize,
   ) {}
-  async createOne(user: User, createReceiptDto: CreateReceiptDto) {
+  async createOne(admin: User, requestNewReceipt: RequestNewReceipt) {
     return await this.sequelize.transaction(async (transaction) => {
+      const user = await this.userService.findOne({
+        where: {
+          id: requestNewReceipt.userId,
+        },
+      });
       const createdReceipt = await this.receiptModel.create({
         userId: user.id,
       });
-      const { salary } = createReceiptDto;
+      const { salary } = requestNewReceipt;
       await this.salaryService.createOne({
         ...salary,
         receiptId: createdReceipt.id,
       });
-      if (createReceiptDto.deductions) {
-        const { deductions } = createReceiptDto;
+      if (requestNewReceipt.deductions) {
+        const { deductions } = requestNewReceipt;
         await this.deductionService.bulkCreate(
           deductions.map((aDeduction) => ({
             ...aDeduction,
@@ -47,6 +57,14 @@ export class ReceiptService {
         where: {
           id: createdReceipt.id,
         },
+        include: [
+          {
+            model: Salary,
+          },
+          {
+            model: Deduction,
+          },
+        ],
       });
     });
   }
@@ -84,6 +102,8 @@ export class ReceiptService {
           [Op.and]: [
             {
               [Op.gte]: findAllReceiptDto.salaryLow,
+            },
+            {
               [Op.lte]: findAllReceiptDto.salaryHigh,
             },
           ],
@@ -116,14 +136,22 @@ export class ReceiptService {
       count: await this.receiptModel.count(findOptions),
     };
   }
-  async findOne(findOptions?: FindOptions<Receipt>) {
-    const receipt = await this.receiptModel
-      .scope(ReceiptModelScopes.JOIN_USER_SALARY_AND_DEDUCTIONS_TABLES)
-      .findOne(findOptions);
-
+  async findOne(findOptions: FindOptions<Receipt>) {
+    const receipt = await this.receiptModel.findOne(findOptions);
     if (!receipt) {
       throw new ReceiptNotFoundException();
     }
     return receipt;
+  }
+
+  async deleteOne(
+    findOptions?: FindOptions<Receipt>,
+    instanceDestroyOptions?: InstanceDestroyOptions,
+  ) {
+    const instance = await this.findOne(findOptions);
+    await instance.destroy(instanceDestroyOptions);
+    return {
+      message: 'deleted successfully',
+    };
   }
 }
