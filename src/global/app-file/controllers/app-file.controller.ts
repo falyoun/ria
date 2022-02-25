@@ -41,7 +41,7 @@ export class AppFileController {
         filename: editFileName,
       }),
       limits: {
-        fieldSize: 5,
+        fieldSize: 25,
       },
       fileFilter: imageFileFilter,
     }),
