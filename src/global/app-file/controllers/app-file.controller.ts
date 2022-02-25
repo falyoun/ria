@@ -42,12 +42,15 @@ export class AppFileController {
         filename: editFileName,
       }),
       limits: {
-        fieldSize: 25,
+        fieldSize: 25000000,
       },
       fileFilter: imageFileFilter,
     }),
   )
   createOne(@UploadedFile() file: Express.Multer.File) {
+    console.log(
+      `Uploading file: ${file.filename} || original name: ${file.originalname}`,
+    );
     return this.appFileService.createFile({
       mimetype: file.mimetype,
       path: file.path,

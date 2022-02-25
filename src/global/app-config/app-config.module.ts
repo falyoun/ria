@@ -12,6 +12,8 @@ const getConfig = () => {
       return generateAppConfigFactory('../../config/production.yaml');
   }
 };
+
+console.log('App configurations: ', getConfig()());
 @Module({
   imports: [
     ConfigModule.forRoot({

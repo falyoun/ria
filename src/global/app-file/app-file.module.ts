@@ -11,7 +11,7 @@ import { AppFileService } from '@app/global/app-file/services/app-file.service';
     SequelizeModule.forFeature([AppFile]),
     MulterModule.register({
       dest: pathToUploadedAvatars,
-      limits: { fileSize: 2097152000 },
+      // limits: { fileSize: 2097152000 },
     }),
   ],
   providers: [AppFileService],
