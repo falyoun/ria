@@ -1,5 +1,5 @@
 import { Allow, IsDate, IsNumber, IsPositive } from 'class-validator';
-import { ReceiptDto } from '../receipt';
+import { ReceiptDto } from '@app/departments/financial/dtos/receipt/receipt.dto';
 
 export class SalaryDto {
   @IsPositive()

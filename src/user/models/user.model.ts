@@ -8,16 +8,15 @@ import {
   Table,
   Unique,
   HasMany,
-  HasOne,
   ForeignKey,
   BelongsTo,
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import bcrypt from 'bcrypt';
-import { Receipt } from '@app/departments';
 import { AppFile } from '@app/global/app-file/models/app-file.model';
 import { AppRole } from '@app/role/enums/app-role.enum';
 import { UserRole } from '@app/role/models/user-role.model';
+import { Receipt } from '@app/departments/financial/models/receipt.model';
 export interface UserAttributes {
   id: number;
   email: string;

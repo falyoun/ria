@@ -6,9 +6,9 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { CreateReceiptSalaryDto } from '../salary';
-import { CreateDeductionDto, CreateReceiptDeductionDto } from '../deduction';
 import { PickType } from '@nestjs/swagger';
+import { CreateReceiptSalaryDto } from '@app/departments/financial/dtos/salary/create-salary.dto';
+import { CreateReceiptDeductionDto } from '@app/departments/financial/dtos/deduction/create-deduction.dto';
 export class RequestNewReceipt {
   @IsPositive()
   userId: number;

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { FinancialModule } from './financial';
-import { HrModule } from './hr';
+import { FinancialModule } from '@app/departments/financial/financial.module';
+import { HrModule } from '@app/departments/hr/hr.module';
 
 @Module({
   imports: [FinancialModule, HrModule],

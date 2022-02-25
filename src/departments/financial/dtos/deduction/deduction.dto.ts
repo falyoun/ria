@@ -1,4 +1,3 @@
-import { DeductionTypeEnum } from '../../enums';
 import {
   IsEnum,
   IsNotEmpty,
@@ -7,6 +6,7 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
+import { DeductionTypeEnum } from '@app/departments/financial/enums/deduction-type.enum';
 
 export class DeductionDto {
   @IsNumber()

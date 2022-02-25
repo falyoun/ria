@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Deduction } from '../models';
-import { CreateDeductionDto } from '../dtos';
 import { FindOptions } from 'sequelize';
+import { CreateDeductionDto } from '@app/departments/financial/dtos/deduction/create-deduction.dto';
+import { Deduction } from '@app/departments/financial/models/deduction.model';
 
 @Injectable()
 export class DeductionService {

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Salary } from '../models';
-import { CreateSalaryDto } from '../dtos';
 import { FindOptions } from 'sequelize';
+import { Salary } from '@app/departments/financial/models/salary.model';
+import { CreateSalaryDto } from '@app/departments/financial/dtos/salary/create-salary.dto';
 
 @Injectable()
 export class SalaryService {

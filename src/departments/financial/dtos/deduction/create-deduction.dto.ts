@@ -7,7 +7,7 @@ import {
   Min,
   MinLength,
 } from 'class-validator';
-import { DeductionTypeEnum } from '../../enums';
+import { DeductionTypeEnum } from '@app/departments/financial/enums/deduction-type.enum';
 export class CreateReceiptDeductionDto {
   @IsNumber()
   @Min(0)

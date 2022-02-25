@@ -1,8 +1,8 @@
 import { Allow, IsArray, IsPositive, ValidateNested } from 'class-validator';
-import { SalaryDto } from '../salary';
-import { DeductionDto } from '../deduction';
 import { Type } from 'class-transformer';
 import { UserDto } from '@app/user/dtos/user.dto';
+import { SalaryDto } from '@app/departments/financial/dtos/salary/salary.dto';
+import { DeductionDto } from '@app/departments/financial/dtos/deduction/deduction.dto';
 
 export class ReceiptDto {
   @IsPositive()

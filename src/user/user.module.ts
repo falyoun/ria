@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { FinancialModule } from '@app/departments';
 import { AppFileModule } from '../global/app-file/app-file.module';
 import { RoleModule } from '@app/role/role.module';
 import { SequelizeModule } from '@nestjs/sequelize';
@@ -9,6 +8,7 @@ import { UserForAdminController } from '@app/user/controllers/user-for-admin.con
 import { UserFinancialController } from '@app/user/controllers/user-financial.controller';
 import { UserService } from '@app/user/services/user.service';
 import { UserForAdminService } from '@app/user/services/user-for-admin.service';
+import { FinancialModule } from '@app/departments/financial/financial.module';
 
 @Module({
   imports: [

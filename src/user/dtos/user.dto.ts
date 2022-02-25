@@ -1,7 +1,7 @@
 import { Allow, IsBoolean, IsEmail, IsString } from 'class-validator';
-import { ReceiptDto } from '@app/departments';
 import { UserRoleDto } from '@app/role/dtos/user-role.dto';
 import { AppRole } from '@app/role/enums/app-role.enum';
+import { ReceiptDto } from '@app/departments/financial/dtos/receipt/receipt.dto';
 
 export class UserDto {
   @IsEmail()

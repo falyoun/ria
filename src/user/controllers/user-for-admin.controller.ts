@@ -8,11 +8,6 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import {
-  FindAllReceiptDto,
-  ReceiptDto,
-  ReceiptService,
-} from '@app/departments';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { UpdateUserDto } from '@app/user/dtos/update-user.dto';
 import { UserDto } from '@app/user/dtos/user.dto';
@@ -25,6 +20,9 @@ import { UserForAdminService } from '@app/user/services/user-for-admin.service';
 import { User } from '@app/user/models/user.model';
 import { ApiPaginatedDto, ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
 import { FindSystemUsersDto } from '@app/user/dtos/for-admin/find-system-users.dto';
+import { ReceiptDto } from '@app/departments/financial/dtos/receipt/receipt.dto';
+import { ReceiptService } from '@app/departments/financial/services/receipt.service';
+import { FindAllReceiptDto } from '@app/departments/financial/dtos/receipt/find-all-receipt.dto';
 
 @ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto, ReceiptDto)
 @ApiTags(`Users' endpoints for admin`)

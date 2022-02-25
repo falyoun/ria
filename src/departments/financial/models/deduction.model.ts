@@ -9,8 +9,8 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
-import { DeductionTypeEnum } from '../enums';
 import { Receipt } from './receipt.model';
+import { DeductionTypeEnum } from '@app/departments/financial/enums/deduction-type.enum';
 
 export interface DeductionAttributes {
   id: number;

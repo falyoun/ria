@@ -1,7 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Deduction, Receipt, ReceiptModelScopes, Salary } from '../models';
-import { CreateReceiptDto, FindAllReceiptDto } from '../dtos';
 import { FindOptions, Op, WhereOptions } from 'sequelize';
 import { SalaryService } from './salary.service';
 import { DeductionService } from './deduction.service';
@@ -9,6 +7,14 @@ import { Sequelize } from 'sequelize-typescript';
 import { ReceiptNotFoundException } from '../exceptions';
 import { User } from '@app/user/models/user.model';
 import { RiaUtils } from '@app/shared/utils';
+import {
+  Receipt,
+  ReceiptModelScopes,
+} from '@app/departments/financial/models/receipt.model';
+import { CreateReceiptDto } from '@app/departments/financial/dtos/receipt/create-receipt.dto';
+import { FindAllReceiptDto } from '@app/departments/financial/dtos/receipt/find-all-receipt.dto';
+import { Salary } from '@app/departments/financial/models/salary.model';
+import { Deduction } from '@app/departments/financial/models/deduction.model';
 
 @Injectable()
 export class ReceiptService {
