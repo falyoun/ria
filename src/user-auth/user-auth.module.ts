@@ -22,6 +22,9 @@ import { UserAuthForAdminService } from '@app/user-auth/services/user-auth-for-a
             const { useAccessToken } = useAuth;
             return {
               secret: useAccessToken.secretKey,
+              signOptions: {
+                expiresIn: useAccessToken.expiration,
+              },
             };
           },
           inject: [ConfigService],
