@@ -36,32 +36,19 @@ export interface UserAttributes {
 
 export type UserCreationAttributes = Optional<UserAttributes, 'id'>;
 
-export const UserModelScopes = {
-  JOIN_USER_ROLE_TABLES: 'join_user_role_tables',
-};
-export const UserModelAliases = {
-  USER_ROLE: 'associatedRoles',
-};
-
 @Table({
   defaultScope: {
     attributes: {
       exclude: ['password'],
     },
-  },
-  scopes: {
-    [UserModelScopes.JOIN_USER_ROLE_TABLES]: {
-      include: [
-        {
-          model: UserRole,
-          as: UserModelAliases.USER_ROLE,
-        },
-        {
-          model: AppFile,
-          as: 'avatar',
-        },
-      ],
-    },
+    include: [
+      {
+        association: 'associatedRoles',
+      },
+      {
+        association: 'avatar',
+      },
+    ],
   },
 })
 export class User
@@ -146,10 +133,7 @@ export class User
   })
   roles: AppRole[];
 
-  @HasMany(() => UserRole, {
-    foreignKey: 'userId',
-    as: UserModelAliases.USER_ROLE,
-  })
+  @HasMany(() => UserRole, 'userId')
   associatedRoles: UserRole[];
 
   @HasMany(() => Receipt, {

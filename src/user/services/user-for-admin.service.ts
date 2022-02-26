@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { FindOptions, Op, WhereOptions } from 'sequelize';
 import { InjectModel } from '@nestjs/sequelize';
-import { User, UserModelScopes } from '@app/user/models/user.model';
+import { User } from '@app/user/models/user.model';
 import { FindSystemUsersDto } from '@app/user/dtos/for-admin/find-system-users.dto';
 import { RiaUtils } from '@app/shared/utils';
 
@@ -45,9 +45,7 @@ export class UserForAdminService {
       });
     }
     return {
-      data: await this.userModel
-        .scope(UserModelScopes.JOIN_USER_ROLE_TABLES)
-        .findAll(findOptions),
+      data: await this.userModel.findAll(findOptions),
       count: await this.userModel.count(findOptions),
     };
   }

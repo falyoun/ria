@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { LoginDto } from '../dtos/login.dto';
 import { Sequelize } from 'sequelize-typescript';
-import { User, UserModelScopes } from '@app/user/models/user.model';
+import { User } from '@app/user/models/user.model';
 import { SpaAuthService } from '@app/spa-authentication';
 import { UserRoleService } from '@app/role/serviecs/user-role.service';
 import {
@@ -64,9 +64,7 @@ export class UserAuthService implements OnApplicationBootstrap {
     return this.userModel.create(createUserDto);
   }
   async findUser(findOptions: FindOptions<User>): Promise<User> {
-    const user = await this.userModel
-      .scope(UserModelScopes.JOIN_USER_ROLE_TABLES)
-      .findOne(findOptions);
+    const user = await this.userModel.findOne(findOptions);
     if (!user) {
       throw new AccountNotFoundException();
     }

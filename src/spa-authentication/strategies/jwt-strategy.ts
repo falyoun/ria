@@ -5,7 +5,6 @@ import { SpaAuthConstants, SpaAuthOptions, StrategiesNames } from '../shared';
 import {
   UserAttributes,
   UserCreationAttributes,
-  UserModelScopes,
 } from '@app/user/models/user.model';
 
 @Injectable()
@@ -33,16 +32,14 @@ export class JwtStrategy extends PassportStrategy(
       UserCreationAttributes,
       UserAttributes
     >(model);
-    const user = await userCtor
-      .scope(UserModelScopes.JOIN_USER_ROLE_TABLES)
-      .findOne({
-        where: {
-          id: payload.id,
-          email: payload.email,
-          isActive: true,
-          isVerified: true,
-        },
-      });
+    const user = await userCtor.findOne({
+      where: {
+        id: payload.id,
+        email: payload.email,
+        isActive: true,
+        isVerified: true,
+      },
+    });
     if (!user) throw new UnauthorizedException();
     return user;
   }

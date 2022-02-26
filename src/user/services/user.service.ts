@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { FindOptions } from 'sequelize';
 import { AccountNotFoundException } from '../exceptions';
-import { User, UserModelScopes } from '@app/user/models/user.model';
+import { User } from '@app/user/models/user.model';
 import { AppFileService } from '@app/global/app-file/services/app-file.service';
 import { UpdateUserDto } from '@app/user/dtos/update-user.dto';
 
@@ -14,9 +14,7 @@ export class UserService {
   ) {}
 
   async findOne(findOptions: FindOptions<User>) {
-    const user = await this.userModel
-      .scope(UserModelScopes.JOIN_USER_ROLE_TABLES)
-      .findOne(findOptions);
+    const user = await this.userModel.findOne(findOptions);
     if (!user) {
       throw new AccountNotFoundException();
     }
