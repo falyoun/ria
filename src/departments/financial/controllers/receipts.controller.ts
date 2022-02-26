@@ -59,6 +59,18 @@ export class ReceiptsController {
       },
     });
   }
+  @UseGuards(
+    JwtAuthGuard,
+    RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN, AppRole.HR_MANAGER),
+  )
+  @ApiPaginatedDto(ReceiptDto)
+  @Get('/by-admin')
+  getUsersReceipts(
+    @RequestUser() admin: User,
+    @Query() findAllReceiptDto: FindAllReceiptDto,
+  ) {
+    return this.receiptService.findAllReceipts(findAllReceiptDto);
+  }
 
   @UseGuards(
     JwtAuthGuard,
@@ -111,18 +123,5 @@ export class ReceiptsController {
       ...findAllReceiptDto,
       email: user.email,
     });
-  }
-
-  @UseGuards(
-    JwtAuthGuard,
-    RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN, AppRole.HR_MANAGER),
-  )
-  @ApiPaginatedDto(ReceiptDto)
-  @Get('/by-admin')
-  getUsersReceipts(
-    @RequestUser() admin: User,
-    @Query() findAllReceiptDto: FindAllReceiptDto,
-  ) {
-    return this.receiptService.findAllReceipts(findAllReceiptDto);
   }
 }
