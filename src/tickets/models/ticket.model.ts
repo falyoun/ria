@@ -25,6 +25,17 @@ export type TicketCreationAttributes = Optional<TicketAttributes, 'id'>;
     include: [
       {
         association: 'user',
+        attributes: ['first_name', 'last_name', 'email'],
+        include: [
+          {
+            association: 'associatedRoles',
+            attributes: [],
+          },
+          {
+            association: 'avatar',
+            attributes: ['url'],
+          },
+        ],
       },
     ],
   },
@@ -56,6 +67,7 @@ export class Ticket
 
   @Column({
     type: DataType.ENUM(...Object.values(TicketStatusEnum)),
+    defaultValue: TicketStatusEnum.OPEN,
   })
   status: TicketStatusEnum;
 

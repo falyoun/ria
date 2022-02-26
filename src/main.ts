@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { HttpStatus, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CrudConfigService } from '@nestjsx/crud';
 import { json, urlencoded } from 'body-parser';
@@ -16,6 +16,7 @@ import { AllExceptionsFilter } from '@app/shared/filters/all-exceptions.filter';
 import { CodedExceptionFilter } from '@app/shared/filters/coded-exception.filter';
 import { SequelizeExceptionFilter } from '@app/shared/filters/sequelize-exception.filter';
 import { DataResponseInterceptor } from '@app/shared/interceptors/data-response.interceptor';
+import { ClassValidatorException } from '@app/shared/exceptions/coded-exception';
 
 const namespace = createNamespace('ria-transactional-namespace');
 Sequelize.useCLS(namespace);
@@ -103,6 +104,14 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
+      exceptionFactory: (errors) => {
+        console.log(errors);
+        return new ClassValidatorException(
+          'CLASS_VALIDATOR',
+          HttpStatus.BAD_REQUEST,
+          `${errors.map((e) => `Invalid field '${e.property}'`).join(', ')}`,
+        );
+      },
     }),
   );
 

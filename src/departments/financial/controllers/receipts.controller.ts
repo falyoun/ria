@@ -118,7 +118,7 @@ export class ReceiptsController {
     RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN, AppRole.HR_MANAGER),
   )
   @ApiPaginatedDto(ReceiptDto)
-  @Get('/all/for-admin')
+  @Get('/by-admin')
   getUsersReceipts(
     @RequestUser() admin: User,
     @Query() findAllReceiptDto: FindAllReceiptDto,

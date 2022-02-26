@@ -4,7 +4,12 @@ import { Ticket } from '@app/tickets/models/ticket.model';
 import { User } from '@app/user/models/user.model';
 import { CreateTicketDto } from '@app/tickets/dtos/create-ticket.dto';
 import { UpdateTicketDto } from '@app/tickets/dtos/update-ticket.dto';
-import { FindOptions, Op, WhereOptions } from 'sequelize';
+import {
+  FindOptions,
+  InstanceDestroyOptions,
+  Op,
+  WhereOptions,
+} from 'sequelize';
 import {
   ActionOnTicketException,
   TicketNotFound,
@@ -83,7 +88,7 @@ export class TicketsService {
     return this.ticketModel.findAll(findOptions);
   }
   async findSystemTickets(user: User, findTicketsDto: FindTicketsDto) {
-    if (!isUserInCoreTeam(user) || !isUserInManagementTeam(user)) {
+    if (!isUserInCoreTeam(user) && !isUserInManagementTeam(user)) {
       throw new ActionOnTicketException('GET');
     }
     let whereOptions: WhereOptions<Ticket> = {};
@@ -100,5 +105,31 @@ export class TicketsService {
     };
     RiaUtils.applyPagination<Ticket>(findOptions, findTicketsDto);
     return this.ticketModel.findAll(findOptions);
+  }
+
+  async deleteOne(
+    findOptions: FindOptions<Ticket>,
+    instanceDestroyOptions?: InstanceDestroyOptions,
+  ) {
+    const instance = await this.findTicket(findOptions);
+    await instance.destroy(instanceDestroyOptions);
+    return {
+      message: 'Deleted successfully!.',
+    };
+  }
+
+  async deleteOneByAdmin(
+    user: User,
+    findOptions: FindOptions<Ticket>,
+    instanceDestroyOptions?: InstanceDestroyOptions,
+  ) {
+    if (!isUserInCoreTeam(user) && !isUserInManagementTeam(user)) {
+      throw new ActionOnTicketException('DELETE');
+    }
+    const instance = await this.findTicket(findOptions);
+    await instance.destroy(instanceDestroyOptions);
+    return {
+      message: 'Deleted successfully!.',
+    };
   }
 }

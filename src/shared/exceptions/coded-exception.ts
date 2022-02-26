@@ -42,3 +42,5 @@ export class UnhandledException extends CodedException {
     super(`500`, HttpStatus.INTERNAL_SERVER_ERROR, `Internal server error`);
   }
 }
+
+export class ClassValidatorException extends CodedException {}
