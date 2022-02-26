@@ -20,7 +20,7 @@ server:
 sequelizeOptions:
   database: ria
   autoLoadModels: true
-  synchronize: false
+  synchronize: true
   dialect: postgres
   username: ite_ria
   password: iteria
