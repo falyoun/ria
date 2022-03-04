@@ -110,6 +110,7 @@ async function bootstrap() {
           'CLASS_VALIDATOR',
           HttpStatus.BAD_REQUEST,
           `${errors.map((e) => `Invalid field '${e.property}'`).join(', ')}`,
+          errors,
         );
       },
     }),
