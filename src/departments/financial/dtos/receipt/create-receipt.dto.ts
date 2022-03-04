@@ -24,7 +24,7 @@ export class RequestNewReceipt {
   @Type(() => CreateReceiptDeductionDto)
   deductions?: CreateReceiptDeductionDto[];
 }
-export class CreateReceiptDto extends PickType<
-  RequestNewReceipt,
-  'salary' | 'deductions'
->(RequestNewReceipt, ['salary', 'deductions'] as const) {}
+export class CreateReceiptDto extends PickType(RequestNewReceipt, [
+  'salary',
+  'deductions',
+] as const) {}

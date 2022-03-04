@@ -18,6 +18,7 @@ import { FindAllReceiptDto } from '@app/departments/financial/dtos/receipt/find-
 import { Salary } from '@app/departments/financial/models/salary.model';
 import { Deduction } from '@app/departments/financial/models/deduction.model';
 import { UserService } from '@app/user/services/user.service';
+import { UpdateReceiptDto } from '@app/departments/financial/dtos/receipt/update-receipt.dto';
 
 @Injectable()
 export class ReceiptService {
@@ -29,8 +30,8 @@ export class ReceiptService {
     private readonly deductionService: DeductionService,
     private readonly sequelize: Sequelize,
   ) {}
-  async createOne(admin: User, requestNewReceipt: RequestNewReceipt) {
-    return await this.sequelize.transaction(async (transaction) => {
+  createOne(admin: User, requestNewReceipt: RequestNewReceipt) {
+    return this.sequelize.transaction(async (transaction) => {
       const user = await this.userService.findOne({
         where: {
           id: requestNewReceipt.userId,
@@ -153,5 +154,27 @@ export class ReceiptService {
     return {
       message: 'deleted successfully',
     };
+  }
+
+  async updateOne(id: number, updateReceiptDto: UpdateReceiptDto) {
+    const receipt = await this.findOne({
+      where: {
+        id,
+      },
+    });
+    return this.sequelize.transaction(async (transaction) => {
+      const { salary } = updateReceiptDto;
+      await this.salaryService.upsert({ ...salary, receiptId: receipt.id });
+      if (updateReceiptDto.deductions) {
+        await Promise.all(
+          updateReceiptDto.deductions.map((aDeduction) =>
+            this.deductionService.upsert({
+              ...aDeduction,
+              receiptId: receipt.id,
+            }),
+          ),
+        );
+      }
+    });
   }
 }

@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -24,6 +25,7 @@ import { ApiPaginatedDto, ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
 import { FindAllReceiptDto } from '@app/departments/financial/dtos/receipt/find-all-receipt.dto';
 import { Salary } from '@app/departments/financial/models/salary.model';
 import { Deduction } from '@app/departments/financial/models/deduction.model';
+import { UpdateReceiptDto } from '@app/departments/financial/dtos/receipt/update-receipt.dto';
 
 @ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto, ReceiptDto)
 @ApiTags(`Financial`)
@@ -36,11 +38,19 @@ export class ReceiptsController {
   )
   @ApiRiaDto(ReceiptDto)
   @Post()
-  async createReceipt(
+  createReceipt(
     @RequestUser() admin: User,
     @Body() requestNewReceipt: RequestNewReceipt,
   ) {
     return this.receiptService.createOne(admin, requestNewReceipt);
+  }
+
+  @Put(':id')
+  updateReceipt(
+    @Body() body: UpdateReceiptDto,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.receiptService.updateOne(id, body);
   }
 
   @UseGuards(
