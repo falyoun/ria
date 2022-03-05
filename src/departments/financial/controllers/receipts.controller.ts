@@ -26,12 +26,20 @@ import { FindAllReceiptDto } from '@app/departments/financial/dtos/receipt/find-
 import { Salary } from '@app/departments/financial/models/salary.model';
 import { Deduction } from '@app/departments/financial/models/deduction.model';
 import { UpdateReceiptDto } from '@app/departments/financial/dtos/receipt/update-receipt.dto';
+import { UpdateDeductionDto } from '@app/departments/financial/dtos/deduction/update-deduction.dto';
+import { DeductionService } from '@app/departments/financial/services/deduction.service';
+import { SalaryService } from '@app/departments/financial/services/salary.service';
+import { UpdateSalaryDto } from '@app/departments/financial/dtos/salary/update-salary.dto';
 
 @ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto, ReceiptDto)
 @ApiTags(`Financial`)
 @Controller('/financial/receipts')
 export class ReceiptsController {
-  constructor(private readonly receiptService: ReceiptService) {}
+  constructor(
+    private readonly receiptService: ReceiptService,
+    private readonly deductionsService: DeductionService,
+    private readonly salariesService: SalaryService,
+  ) {}
   @UseGuards(
     JwtAuthGuard,
     RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN, AppRole.HR_MANAGER),
@@ -43,6 +51,48 @@ export class ReceiptsController {
     @Body() requestNewReceipt: RequestNewReceipt,
   ) {
     return this.receiptService.createOne(admin, requestNewReceipt);
+  }
+
+  @Put(':receiptId/deductions/:id')
+  updateDeduction(
+    @Param('receiptId', ParseIntPipe) receiptId: number,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateDeductionDto: UpdateDeductionDto,
+  ) {
+    return this.deductionsService.updateOne(receiptId, id, updateDeductionDto);
+  }
+  @Delete(':receiptId/deductions/:id')
+  deleteDeduction(
+    @Param('receiptId', ParseIntPipe) receiptId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.deductionsService.deleteOne({
+      where: {
+        id,
+        receiptId,
+      },
+    });
+  }
+
+  @Put(':receiptId/salaries/:id')
+  updateSalary(
+    @Param('receiptId', ParseIntPipe) receiptId: number,
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateSalaryDto: UpdateSalaryDto,
+  ) {
+    return this.salariesService.updateOne(receiptId, id, updateSalaryDto);
+  }
+  @Delete(':receiptId/salaries/:id')
+  deleteSalary(
+    @Param('receiptId', ParseIntPipe) receiptId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.salariesService.deleteOne({
+      where: {
+        id,
+        receiptId,
+      },
+    });
   }
 
   @Put(':id')

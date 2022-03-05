@@ -10,3 +10,19 @@ export class ReceiptNotFoundException extends CodedException {
     );
   }
 }
+
+export class DeductionNotFoundException extends CodedException {
+  constructor() {
+    super(
+      'DEDUCTION_NOT_FOUND',
+      HttpStatus.NOT_FOUND,
+      'Deduction does not exist',
+    );
+  }
+}
+
+export class SalaryNotFoundException extends CodedException {
+  constructor() {
+    super('SALARY_NOT_FOUND', HttpStatus.NOT_FOUND, 'Salary does not exist');
+  }
+}

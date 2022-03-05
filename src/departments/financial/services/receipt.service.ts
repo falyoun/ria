@@ -126,6 +126,7 @@ export class ReceiptService {
         },
       ],
     };
+    const count = await this.receiptModel.count(findOptions);
     if (findAllReceiptDto.page || findAllReceiptDto.limit) {
       RiaUtils.applyPagination(findOptions, {
         page: findAllReceiptDto.page,
@@ -134,7 +135,7 @@ export class ReceiptService {
     }
     return {
       data: await this.receiptModel.findAll(findOptions),
-      count: await this.receiptModel.count(findOptions),
+      count,
     };
   }
   async findOne(findOptions: FindOptions<Receipt>) {
@@ -166,6 +167,16 @@ export class ReceiptService {
       const { salary } = updateReceiptDto;
       await this.salaryService.upsert({ ...salary, receiptId: receipt.id });
       if (updateReceiptDto.deductions) {
+        await this.deductionService.deleteMany(
+          {
+            where: {
+              receiptId: receipt.id,
+            },
+          },
+          {
+            force: true,
+          },
+        );
         await Promise.all(
           updateReceiptDto.deductions.map((aDeduction) =>
             this.deductionService.upsert({

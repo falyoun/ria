@@ -7,12 +7,15 @@ import {
   DeductionAttributes,
   DeductionCreationAttributes,
 } from '@app/departments/financial/models/deduction.model';
-import { find } from 'rxjs';
+import { Sequelize } from 'sequelize-typescript';
+import { DeductionNotFoundException } from '@app/departments/financial/exceptions';
+import { UpdateDeductionDto } from '@app/departments/financial/dtos/deduction/update-deduction.dto';
 
 @Injectable()
 export class DeductionService {
   constructor(
     @InjectModel(Deduction) private readonly deductionModel: typeof Deduction,
+    private readonly sequelize: Sequelize,
   ) {}
   createOne(createDeductionDto: CreateDeductionDto) {
     return this.deductionModel.create(createDeductionDto);
@@ -20,11 +23,13 @@ export class DeductionService {
   bulkCreate(createDeductionDtos: CreateDeductionDto[]) {
     return this.deductionModel.bulkCreate(createDeductionDtos);
   }
-  findAll() {
-    return this.deductionModel.findAll();
+  findAll(findOptions?: FindOptions<Deduction>) {
+    return this.deductionModel.findAll(findOptions);
   }
-  findOne(findOptions?: FindOptions<Deduction>) {
-    return this.deductionModel.findOne(findOptions);
+  async findOne(findOptions?: FindOptions<Deduction>) {
+    const instance = await this.deductionModel.findOne(findOptions);
+    if (!instance) throw new DeductionNotFoundException();
+    return instance;
   }
   async upsert(
     deductionCreationAttrs: DeductionCreationAttributes,
@@ -39,5 +44,32 @@ export class DeductionService {
     const instance = await this.findOne(findOptions);
     return instance.destroy(instanceDestroyOptions);
   }
-  async deleteMany() {}
+  async deleteMany(
+    findOptions?: FindOptions<Deduction>,
+    instanceDestroyOptions?: InstanceDestroyOptions,
+  ) {
+    const deductions = await this.deductionModel.findAll(findOptions);
+    return this.sequelize.transaction(async (transaction) => {
+      await Promise.all(
+        deductions.map((d) => d.destroy(instanceDestroyOptions)),
+      );
+      return {
+        message: 'Deleted deductions',
+      };
+    });
+  }
+
+  async updateOne(
+    receiptId: number,
+    id: number,
+    updateDeductionDto: UpdateDeductionDto,
+  ) {
+    const instance = await this.findOne({
+      where: {
+        receiptId,
+        id,
+      },
+    });
+    return instance.update(updateDeductionDto);
+  }
 }
