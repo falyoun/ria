@@ -66,12 +66,34 @@ export class ReceiptsController {
     @Param('receiptId', ParseIntPipe) receiptId: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return this.deductionsService.deleteOne({
-      where: {
-        id,
-        receiptId,
+    return this.deductionsService.deleteOne(
+      {
+        where: {
+          id,
+          receiptId,
+        },
       },
-    });
+      {
+        force: true,
+      },
+    );
+  }
+  @Delete(':receiptId/deductions')
+  deleteMultipleDeduction(
+    @Param('receiptId', ParseIntPipe) receiptId: number,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.deductionsService.deleteMany(
+      {
+        where: {
+          id,
+          receiptId,
+        },
+      },
+      {
+        force: true,
+      },
+    );
   }
 
   @Put(':receiptId/salaries/:id')
@@ -87,12 +109,17 @@ export class ReceiptsController {
     @Param('receiptId', ParseIntPipe) receiptId: number,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return this.salariesService.deleteOne({
-      where: {
-        id,
-        receiptId,
+    return this.salariesService.deleteOne(
+      {
+        where: {
+          id,
+          receiptId,
+        },
       },
-    });
+      {
+        force: true,
+      },
+    );
   }
 
   @Put(':id')
@@ -113,11 +140,16 @@ export class ReceiptsController {
     @RequestUser() admin: User,
     @Param('id', ParseIntPipe) id: number,
   ) {
-    return this.receiptService.deleteOne({
-      where: {
-        id,
+    return this.receiptService.deleteOne(
+      {
+        where: {
+          id,
+        },
       },
-    });
+      {
+        force: true,
+      },
+    );
   }
   @UseGuards(
     JwtAuthGuard,
