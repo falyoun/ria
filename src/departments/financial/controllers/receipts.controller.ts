@@ -30,6 +30,10 @@ import { UpdateDeductionDto } from '@app/departments/financial/dtos/deduction/up
 import { DeductionService } from '@app/departments/financial/services/deduction.service';
 import { SalaryService } from '@app/departments/financial/services/salary.service';
 import { UpdateSalaryDto } from '@app/departments/financial/dtos/salary/update-salary.dto';
+import { DeleteManyDeductionsDto } from '@app/departments/financial/dtos/deduction/delete-many-deductions.dto';
+import { Op } from 'sequelize';
+import { DeleteManySalariesDto } from '@app/departments/financial/dtos/salary/delete-many-salaries.dto';
+import { DeleteManyReceiptsDto } from '@app/departments/financial/dtos/receipt/delete-many-receipts.dto';
 
 @ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto, ReceiptDto)
 @ApiTags(`Financial`)
@@ -81,12 +85,14 @@ export class ReceiptsController {
   @Delete(':receiptId/deductions')
   deleteMultipleDeduction(
     @Param('receiptId', ParseIntPipe) receiptId: number,
-    @Param('id', ParseIntPipe) id: number,
+    @Body() deleteManyDeductionsDto: DeleteManyDeductionsDto,
   ) {
     return this.deductionsService.deleteMany(
       {
         where: {
-          id,
+          id: {
+            [Op.in]: deleteManyDeductionsDto.ids,
+          },
           receiptId,
         },
       },
@@ -104,6 +110,27 @@ export class ReceiptsController {
   ) {
     return this.salariesService.updateOne(receiptId, id, updateSalaryDto);
   }
+
+  @Delete(':receiptId/salaries')
+  deleteManySalaries(
+    @Param('receiptId', ParseIntPipe) receiptId: number,
+    @Body() deleteManySalariesDto: DeleteManySalariesDto,
+  ) {
+    return this.salariesService.deleteMany(
+      {
+        where: {
+          id: {
+            [Op.in]: deleteManySalariesDto.ids,
+          },
+          receiptId,
+        },
+      },
+      {
+        force: true,
+      },
+    );
+  }
+
   @Delete(':receiptId/salaries/:id')
   deleteSalary(
     @Param('receiptId', ParseIntPipe) receiptId: number,
@@ -144,6 +171,23 @@ export class ReceiptsController {
       {
         where: {
           id,
+        },
+      },
+      {
+        force: true,
+      },
+    );
+  }
+  @Delete(':id')
+  async deleteManyReceipt(
+    @Body() deleteManyReceiptsDto: DeleteManyReceiptsDto,
+  ) {
+    return this.receiptService.deleteManyReceipts(
+      {
+        where: {
+          id: {
+            [Op.in]: deleteManyReceiptsDto.ids,
+          },
         },
       },
       {

@@ -9,13 +9,14 @@ import {
 import { CreateSalaryDto } from '@app/departments/financial/dtos/salary/create-salary.dto';
 import { SalaryNotFoundException } from '@app/departments/financial/exceptions';
 import { Deduction } from '@app/departments/financial/models/deduction.model';
-import { UpdateDeductionDto } from '@app/departments/financial/dtos/deduction/update-deduction.dto';
 import { UpdateSalaryDto } from '@app/departments/financial/dtos/salary/update-salary.dto';
+import { Sequelize } from 'sequelize-typescript';
 
 @Injectable()
 export class SalaryService {
   constructor(
     @InjectModel(Salary) private readonly salaryModel: typeof Salary,
+    private readonly sequelize: Sequelize,
   ) {}
   createOne(createSalaryDto: CreateSalaryDto) {
     return this.salaryModel.create(createSalaryDto);
@@ -43,6 +44,20 @@ export class SalaryService {
   ) {
     const instance = await this.findOne(findOptions);
     return instance.destroy(instanceDestroyOptions);
+  }
+  async deleteMany(
+    findOptions?: FindOptions<Salary>,
+    instanceDestroyOptions?: InstanceDestroyOptions,
+  ) {
+    const instances = await this.salaryModel.findAll(findOptions);
+    return this.sequelize.transaction(async (transaction) => {
+      await Promise.all(
+        instances.map((i) => i.destroy(instanceDestroyOptions)),
+      );
+    });
+    return {
+      message: 'Deleted successfully.!',
+    };
   }
 
   async updateOne(

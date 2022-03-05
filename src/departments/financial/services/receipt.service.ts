@@ -188,4 +188,19 @@ export class ReceiptService {
       }
     });
   }
+
+  async deleteManyReceipts(
+    findOptions?: FindOptions<Salary>,
+    instanceDestroyOptions?: InstanceDestroyOptions,
+  ) {
+    const instances = await this.receiptModel.findAll(findOptions);
+    return this.sequelize.transaction(async (transaction) => {
+      await Promise.all(
+        instances.map((i) => i.destroy(instanceDestroyOptions)),
+      );
+      return {
+        message: 'Deleted successfully.!',
+      };
+    });
+  }
 }
