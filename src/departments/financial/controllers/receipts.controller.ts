@@ -178,7 +178,7 @@ export class ReceiptsController {
       },
     );
   }
-  @Delete(':id')
+  @Delete()
   async deleteManyReceipt(
     @Body() deleteManyReceiptsDto: DeleteManyReceiptsDto,
   ) {
