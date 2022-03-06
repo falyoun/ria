@@ -44,9 +44,9 @@ export class Receipt
   @BelongsTo(() => User, 'userId')
   user: User;
 
-  @HasOne(() => Salary, 'receiptId')
+  @HasOne(() => Salary, { foreignKey: 'receiptId', onDelete: 'CASCADE' })
   salary: Salary;
 
-  @HasMany(() => Deduction, 'receiptId')
+  @HasMany(() => Deduction, { foreignKey: 'receiptId', onDelete: 'CASCADE' })
   deductions: Deduction[];
 }

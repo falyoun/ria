@@ -38,7 +38,7 @@ export class Deduction
   })
   receiptId: number;
 
-  @BelongsTo(() => Receipt, { foreignKey: 'receiptId', onDelete: 'CASCADE' })
+  @BelongsTo(() => Receipt, { foreignKey: 'receiptId' })
   receipt: Receipt;
 
   @Column({
