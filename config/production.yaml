@@ -31,7 +31,7 @@ sequelizeOptions:
   host: ec2-34-230-133-163.compute-1.amazonaws.com
   port: 5432
   sync:
-    force: false
+    force: true
   define:
     underscored: true
     paranoid: true

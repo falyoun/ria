@@ -54,10 +54,11 @@ export class SalaryService {
       await Promise.all(
         instances.map((i) => i.destroy(instanceDestroyOptions)),
       );
+      return {
+        message: 'Deleted successfully.!',
+      };
     });
-    return {
-      message: 'Deleted successfully.!',
-    };
+    
   }
 
   async updateOne(
