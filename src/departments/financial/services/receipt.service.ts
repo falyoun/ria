@@ -165,7 +165,7 @@ export class ReceiptService {
     });
     return this.sequelize.transaction(async (transaction) => {
       const { salary } = updateReceiptDto;
-      if(salary) {
+      if (salary) {
         await this.salaryService.upsert({ ...salary, receiptId: receipt.id });
       }
       if (updateReceiptDto.deductions) {
@@ -188,6 +188,12 @@ export class ReceiptService {
           ),
         );
       }
+      return this.findOne({
+        where: {
+          id,
+        },
+        include: [User, Deduction, Salary],
+      });
     });
   }
 
