@@ -165,7 +165,9 @@ export class ReceiptService {
     });
     return this.sequelize.transaction(async (transaction) => {
       const { salary } = updateReceiptDto;
-      await this.salaryService.upsert({ ...salary, receiptId: receipt.id });
+      if(salary) {
+        await this.salaryService.upsert({ ...salary, receiptId: receipt.id });
+      }
       if (updateReceiptDto.deductions) {
         await this.deductionService.deleteMany(
           {

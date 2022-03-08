@@ -42,7 +42,10 @@ export class DeductionService {
     instanceDestroyOptions?: InstanceDestroyOptions,
   ) {
     const instance = await this.findOne(findOptions);
-    return instance.destroy(instanceDestroyOptions);
+    await instance.destroy(instanceDestroyOptions);
+    return {
+      message: 'deleted successfully.!'
+    }
   }
   async deleteMany(
     findOptions?: FindOptions<Deduction>,
