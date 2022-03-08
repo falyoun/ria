@@ -4,10 +4,16 @@ import { Response } from 'express';
 export function handleException(exception: any, host: ArgumentsHost) {
   const ctx = host.switchToHttp();
   const response = ctx.getResponse<Response>();
+  let statusCode;
+  try {
+    statusCode = exception.getStatus();
+  } catch(e) {
+    statusCode = 500;
+  }
   console.log('global error: ', exception);
-  response.status(exception.getStatus()).json({
-    statusCode: exception.getStatus(),
-    code: exception.code || exception.getStatus(),
+  response.status(statusCode).json({
+    statusCode: statusCode,
+    code: exception.code || statusCode,
     args: exception.args,
     message: exception.message,
   });
