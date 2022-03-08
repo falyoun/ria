@@ -236,6 +236,9 @@ export class ReceiptsController {
         {
           model: Deduction,
         },
+        {
+          model: User
+        }
       ],
     });
   }
