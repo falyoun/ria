@@ -20,7 +20,7 @@ server:
 sequelizeOptions:
   database: d25oiofqa43g2f
   autoLoadModels: true
-  synchronize: true
+  synchronize: false
   dialect: postgres
   dialectOptions:
     ssl:
@@ -31,7 +31,7 @@ sequelizeOptions:
   host: ec2-34-230-133-163.compute-1.amazonaws.com
   port: 5432
   sync:
-    force: true
+    force: false
   define:
     underscored: true
     paranoid: true
