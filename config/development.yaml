@@ -25,8 +25,8 @@ sequelizeOptions:
   username: ite_ria
   password: iteria
   sync:
-    force: true
-    alter: true
+    force: false
+    alter: false
   define:
     underscored: true
     paranoid: true
