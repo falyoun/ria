@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard, RequestUser } from '@app/spa-authentication';
 import { UpdateUserDto } from '@app/user/dtos/update-user.dto';

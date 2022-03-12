@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Put,
   Query,
   UseGuards,
@@ -21,6 +22,7 @@ import { User } from '@app/user/models/user.model';
 import { ApiPaginatedDto, ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
 import { FindSystemUsersDto } from '@app/user/dtos/for-admin/find-system-users.dto';
 import { ReceiptDto } from '@app/departments/financial/dtos/receipt/receipt.dto';
+import { AssignJobToUserDto } from '@app/user/dtos/for-admin/assign-job-to-user.dto';
 
 @ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto, ReceiptDto)
 @ApiTags(`Users' endpoints for admin`)
@@ -49,6 +51,16 @@ export class UserForAdminController {
       },
     });
   }
+
+  @ApiRiaDto(UserDto)
+  @Patch(':id/assign-job')
+  assignJobToUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() assignJobToUserDto: AssignJobToUserDto,
+  ) {
+    return this.userForAdminService.assignJobToUser(id, assignJobToUserDto);
+  }
+
   @ApiRiaDto(UserDto)
   @Put(':id')
   updateUser(

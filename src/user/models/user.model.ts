@@ -10,6 +10,7 @@ import {
   HasMany,
   ForeignKey,
   BelongsTo,
+  HasOne,
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import bcrypt from 'bcrypt';
@@ -17,6 +18,8 @@ import { AppFile } from '@app/global/app-file/models/app-file.model';
 import { AppRole } from '@app/role/enums/app-role.enum';
 import { UserRole } from '@app/role/models/user-role.model';
 import { Receipt } from '@app/departments/financial/models/receipt.model';
+import { EmployeeLevelEnum } from '@app/salary-scale/enums/employee-level.enum';
+import { Job } from '@app/salary-scale/job/job.model';
 export interface UserAttributes {
   id: number;
   email: string;
@@ -29,6 +32,9 @@ export interface UserAttributes {
   phoneNumber?: string;
   isActive?: boolean;
   isVerified?: boolean;
+  jobId?: number;
+  job?: Job;
+  level?: EmployeeLevelEnum;
   roles?: AppRole[];
   associatedRoles?: UserRole[];
   receipts?: Receipt[];
@@ -108,6 +114,20 @@ export class User
     as: 'avatar',
   })
   avatar: AppFile;
+
+  @Column({
+    type: DataType.INTEGER,
+  })
+  @ForeignKey(() => Job)
+  jobId: number;
+
+  @HasOne(() => Job, 'jobId')
+  job: Job;
+
+  @Column({
+    type: DataType.ENUM(...Object.values(EmployeeLevelEnum)),
+  })
+  level: EmployeeLevelEnum;
 
   @Column({
     type: DataType.BOOLEAN,
