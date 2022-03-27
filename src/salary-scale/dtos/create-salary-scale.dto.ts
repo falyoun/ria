@@ -1,7 +1,9 @@
 import {
+  ArrayMinSize,
   IsArray,
   IsEnum,
   IsPositive,
+  Min,
   MinLength,
   ValidateNested,
 } from 'class-validator';
@@ -24,6 +26,6 @@ export class CreateSalaryScaleDto {
   @ValidateNested({
     each: true,
   })
-  @MinLength(1)
+  @ArrayMinSize(1)
   entities: CreateSalaryScaleSingleEntityDto[];
 }
