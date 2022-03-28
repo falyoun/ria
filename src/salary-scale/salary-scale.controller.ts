@@ -19,6 +19,7 @@ import { ApiPaginatedDto, ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
 import { MessageResponseDto } from '@app/shared/dtos/message-response.dto';
 import { CreateSalaryScaleDto } from '@app/salary-scale/dtos/create-salary-scale.dto';
 import { FindSalaryScalesDto } from '@app/salary-scale/dtos/find-salary-scales.dto';
+import { SalaryScaleJob } from '@app/salary-scale/models/salary-scale-job.model';
 
 @ApiExtraModels(SalaryScaleDto, MessageResponseDto)
 @ApiTags('Salary Scale')
@@ -40,6 +41,7 @@ export class SalaryScaleController {
       where: {
         id,
       },
+      include: [SalaryScaleJob],
     });
   }
 

@@ -105,7 +105,9 @@ export class SalaryScaleService {
     });
   }
   async findAll(findSalaryScalesDto: FindSalaryScalesDto) {
-    const findOptions = {};
+    const findOptions: FindOptions<SalaryScale> = {
+      include: [SalaryScaleJob],
+    };
     const count = await this.salaryScaleModel.count(findOptions);
     RiaUtils.applyPagination(findOptions, findSalaryScalesDto);
     return {
