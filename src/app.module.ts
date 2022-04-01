@@ -7,6 +7,7 @@ import { UserAuthModule } from '@app/user-auth/user-auth.module';
 import { DepartmentsModule } from '@app/departments/departments.module';
 import { TicketsModule } from '@app/tickets/tickets.module';
 import { SalaryScaleModule } from '@app/departments/financial/salary-scale/salary-scale.module';
+import { InvoiceModule } from '@app/invoice/invoice.module';
 console.log(join(__dirname, '../', 'public/avatars'));
 @Module({
   imports: [
@@ -15,6 +16,7 @@ console.log(join(__dirname, '../', 'public/avatars'));
     UserAuthModule,
     SalaryScaleModule,
     DepartmentsModule,
+    InvoiceModule,
     TicketsModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../', 'public/avatars'),
