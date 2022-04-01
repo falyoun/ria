@@ -10,10 +10,10 @@ const getConfig = () => {
       return generateAppConfigFactory('../../config/staging.yaml');
     case 'production':
       return generateAppConfigFactory('../../config/production.yaml');
+    default:
+      return generateAppConfigFactory('../../config/development.yaml');
   }
 };
-
-console.log('App configurations: ', getConfig()());
 @Module({
   imports: [
     ConfigModule.forRoot({

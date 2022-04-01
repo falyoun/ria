@@ -12,7 +12,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { pathToUploadedAvatars } from '../constants';
-import { editFileName, imageFileFilter } from '../utils';
+import { editFileName, fileFilter } from '../utils';
 import { RoleGuard } from '@app/role/guards/role.guard';
 import { AppRole } from '@app/role/enums/app-role.enum';
 import { AppFileDto } from '@app/global/app-file/dtos/app-file.dto';
@@ -44,7 +44,7 @@ export class AppFileController {
       limits: {
         fieldSize: 25000000,
       },
-      fileFilter: imageFileFilter,
+      fileFilter: fileFilter(),
     }),
   )
   createOne(@UploadedFile() file: Express.Multer.File) {

@@ -16,8 +16,11 @@ import { InvoiceDto } from '@app/invoice/dtos/invoice.dto';
 import { ApiPaginatedDto, ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { pathToUploadedAvatars } from '@app/global/app-file/constants';
-import { editFileName, imageFileFilter } from '@app/global/app-file/utils';
+import {
+  pathToUploadedAvatars,
+  pathToUploadedInvoices,
+} from '@app/global/app-file/constants';
+import { editFileName, fileFilter } from '@app/global/app-file/utils';
 import { RequestUser } from '@app/spa-authentication';
 import { User } from '@app/user/models/user.model';
 import { AppFile } from '@app/global/app-file/models/app-file.model';
@@ -33,13 +36,13 @@ export class InvoiceCrudController {
   @UseInterceptors(
     FileInterceptor('invoice', {
       storage: diskStorage({
-        destination: pathToUploadedAvatars,
+        destination: pathToUploadedInvoices,
         filename: editFileName,
       }),
       limits: {
         fieldSize: 25000000,
       },
-      fileFilter: imageFileFilter,
+      fileFilter: fileFilter(/\.(PDF|pdf)$/),
     }),
   )
   createOne(
