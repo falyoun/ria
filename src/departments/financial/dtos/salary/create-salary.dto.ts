@@ -11,9 +11,6 @@ export class CreateReceiptSalaryDto {
   workEndDate: Date;
 
   @IsNumber()
-  amount: number;
-
-  @IsNumber()
   @IsOptional()
   bonus?: number;
 
@@ -24,4 +21,6 @@ export class CreateReceiptSalaryDto {
 export class CreateSalaryDto extends CreateReceiptSalaryDto {
   @IsPositive()
   receiptId: number;
+  @IsNumber()
+  amount: number;
 }

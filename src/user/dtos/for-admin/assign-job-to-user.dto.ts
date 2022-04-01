@@ -1,5 +1,5 @@
 import { IsEnum, IsPositive } from 'class-validator';
-import { EmployeeLevelEnum } from '@app/salary-scale/enums/employee-level.enum';
+import { EmployeeLevelEnum } from '@app/departments/financial/salary-scale/enums/employee-level.enum';
 
 export class AssignJobToUserDto {
   @IsPositive()

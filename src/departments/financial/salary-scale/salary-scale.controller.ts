@@ -11,15 +11,15 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
-import { SalaryScaleService } from '@app/salary-scale/salary-scale.service';
-import { SalaryScaleDto } from '@app/salary-scale/dtos/salary-scale.dto';
+import { SalaryScaleService } from '@app/departments/financial/salary-scale/salary-scale.service';
+import { SalaryScaleDto } from '@app/departments/financial/salary-scale/dtos/salary-scale.dto';
 import { RoleGuard } from '@app/role/guards/role.guard';
 import { AppRole } from '@app/role/enums/app-role.enum';
 import { ApiPaginatedDto, ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
 import { MessageResponseDto } from '@app/shared/dtos/message-response.dto';
-import { CreateSalaryScaleDto } from '@app/salary-scale/dtos/create-salary-scale.dto';
-import { FindSalaryScalesDto } from '@app/salary-scale/dtos/find-salary-scales.dto';
-import { SalaryScaleJob } from '@app/salary-scale/models/salary-scale-job.model';
+import { CreateSalaryScaleDto } from '@app/departments/financial/salary-scale/dtos/create-salary-scale.dto';
+import { FindSalaryScalesDto } from '@app/departments/financial/salary-scale/dtos/find-salary-scales.dto';
+import { SalaryScaleJob } from '@app/departments/financial/salary-scale/models/salary-scale-job.model';
 
 @ApiExtraModels(SalaryScaleDto, MessageResponseDto)
 @ApiTags('Salary Scale')

@@ -18,15 +18,17 @@ import { FindAllReceiptDto } from '@app/departments/financial/dtos/receipt/find-
 import { Salary } from '@app/departments/financial/models/salary.model';
 import { Deduction } from '@app/departments/financial/models/deduction.model';
 import { UserService } from '@app/user/services/user.service';
-import { UpdateReceiptDto } from '@app/departments/financial/dtos/receipt/update-receipt.dto';
+import { JobService } from '@app/departments/financial/salary-scale/job/job.service';
+import { SalaryScaleService } from '@app/departments/financial/salary-scale/salary-scale.service';
 
 @Injectable()
 export class ReceiptService {
   constructor(
     @InjectModel(Receipt) private readonly receiptModel: typeof Receipt,
     private readonly userService: UserService,
-
+    private readonly jobService: JobService,
     private readonly salaryService: SalaryService,
+    private readonly salaryScaleService: SalaryScaleService,
     private readonly deductionService: DeductionService,
     private readonly sequelize: Sequelize,
   ) {}
@@ -37,12 +39,21 @@ export class ReceiptService {
           id: requestNewReceipt.userId,
         },
       });
+      const salaryScale = await this.salaryScaleService.findOne({
+        where: {
+          isActive: true,
+        },
+      });
+      const userJob = salaryScale.salaryScaleJobs.find(
+        (ssj) => ssj.jobId === user.jobId,
+      );
       const createdReceipt = await this.receiptModel.create({
         userId: user.id,
       });
       const { salary } = requestNewReceipt;
       await this.salaryService.createOne({
         ...salary,
+        amount: userJob.amount,
         receiptId: createdReceipt.id,
       });
       if (requestNewReceipt.deductions) {
@@ -157,7 +168,7 @@ export class ReceiptService {
     };
   }
 
-  async updateOne(id: number, updateReceiptDto: UpdateReceiptDto) {
+  async updateOne(id: number, updateReceiptDto: RequestNewReceipt) {
     const receipt = await this.findOne({
       where: {
         id,
@@ -166,7 +177,11 @@ export class ReceiptService {
     return this.sequelize.transaction(async (transaction) => {
       const { salary } = updateReceiptDto;
       if (salary) {
-        await this.salaryService.upsert({ ...salary, receiptId: receipt.id });
+        await this.salaryService.upsert({
+          ...salary,
+          receiptId: receipt.id,
+          amount: 10,
+        });
       }
       if (updateReceiptDto.deductions) {
         await this.deductionService.deleteMany(

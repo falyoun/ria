@@ -1,16 +1,16 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { SalaryScale } from '@app/salary-scale/models/salary-scale.model';
-import { SalaryScaleJob } from '@app/salary-scale/models/salary-scale-job.model';
+import { SalaryScale } from '@app/departments/financial/salary-scale/models/salary-scale.model';
+import { SalaryScaleJob } from '@app/departments/financial/salary-scale/models/salary-scale-job.model';
 import { Sequelize } from 'sequelize-typescript';
-import { CreateSalaryScaleDto } from '@app/salary-scale/dtos/create-salary-scale.dto';
+import { CreateSalaryScaleDto } from '@app/departments/financial/salary-scale/dtos/create-salary-scale.dto';
 import { FindOptions, InstanceDestroyOptions } from 'sequelize';
 import {
   CodedException,
   ResourceNotFoundException,
 } from '@app/shared/exceptions/coded-exception';
-import { JobService } from '@app/salary-scale/job/job.service';
-import { FindSalaryScalesDto } from '@app/salary-scale/dtos/find-salary-scales.dto';
+import { JobService } from '@app/departments/financial/salary-scale/job/job.service';
+import { FindSalaryScalesDto } from '@app/departments/financial/salary-scale/dtos/find-salary-scales.dto';
 import { RiaUtils } from '@app/shared/utils';
 
 @Injectable()

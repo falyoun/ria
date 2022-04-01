@@ -10,12 +10,12 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
-import { JobDto } from '@app/salary-scale/job/dtos/job.dto';
-import { JobService } from '@app/salary-scale/job/job.service';
-import { CreateJobDto } from '@app/salary-scale/job/dtos/create-job.dto';
-import { FindJobsDto } from '@app/salary-scale/job/dtos/find-jobs.dto';
+import { JobDto } from '@app/departments/financial/salary-scale/job/dtos/job.dto';
+import { JobService } from '@app/departments/financial/salary-scale/job/job.service';
+import { CreateJobDto } from '@app/departments/financial/salary-scale/job/dtos/create-job.dto';
+import { FindJobsDto } from '@app/departments/financial/salary-scale/job/dtos/find-jobs.dto';
 import { ApiPaginatedDto, ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
-import { UpdateJobDto } from '@app/salary-scale/job/dtos/update-job.dto';
+import { UpdateJobDto } from '@app/departments/financial/salary-scale/job/dtos/update-job.dto';
 import { MessageResponseDto } from '@app/shared/dtos/message-response.dto';
 
 @ApiExtraModels(JobDto, MessageResponseDto)

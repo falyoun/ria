@@ -8,10 +8,12 @@ import { ReceiptService } from '@app/departments/financial/services/receipt.serv
 import { Receipt } from '@app/departments/financial/models/receipt.model';
 import { ReceiptsController } from '@app/departments/financial/controllers/receipts.controller';
 import { UserModule } from '@app/user/user.module';
+import { SalaryScaleModule } from '@app/departments/financial/salary-scale/salary-scale.module';
 
 @Module({
   imports: [
     SequelizeModule.forFeature([Salary, Deduction, Receipt]),
+    SalaryScaleModule,
     UserModule,
   ],
   controllers: [ReceiptsController],

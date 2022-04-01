@@ -151,7 +151,7 @@ export class ReceiptsController {
 
   @Put(':id')
   updateReceipt(
-    @Body() body: UpdateReceiptDto,
+    @Body() body: RequestNewReceipt,
     @Param('id', ParseIntPipe) id: number,
   ) {
     return this.receiptService.updateOne(id, body);
@@ -237,8 +237,8 @@ export class ReceiptsController {
           model: Deduction,
         },
         {
-          model: User
-        }
+          model: User,
+        },
       ],
     });
   }

@@ -18,8 +18,8 @@ import { AppFile } from '@app/global/app-file/models/app-file.model';
 import { AppRole } from '@app/role/enums/app-role.enum';
 import { UserRole } from '@app/role/models/user-role.model';
 import { Receipt } from '@app/departments/financial/models/receipt.model';
-import { EmployeeLevelEnum } from '@app/salary-scale/enums/employee-level.enum';
-import { Job } from '@app/salary-scale/job/job.model';
+import { EmployeeLevelEnum } from '@app/departments/financial/salary-scale/enums/employee-level.enum';
+import { Job } from '@app/departments/financial/salary-scale/job/job.model';
 export interface UserAttributes {
   id: number;
   email: string;

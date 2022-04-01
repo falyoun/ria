@@ -1,6 +1,6 @@
 import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
-import { SalaryScaleJob } from '@app/salary-scale/models/salary-scale-job.model';
+import { SalaryScaleJob } from '@app/departments/financial/salary-scale/models/salary-scale-job.model';
 
 export interface SalaryScaleAttributes {
   id?: number;

@@ -6,7 +6,7 @@ import { AppConfigModule } from '@app/global/app-config/app-config.module';
 import { UserAuthModule } from '@app/user-auth/user-auth.module';
 import { DepartmentsModule } from '@app/departments/departments.module';
 import { TicketsModule } from '@app/tickets/tickets.module';
-import { SalaryScaleModule } from '@app/salary-scale/salary-scale.module';
+import { SalaryScaleModule } from '@app/departments/financial/salary-scale/salary-scale.module';
 console.log(join(__dirname, '../', 'public/avatars'));
 @Module({
   imports: [

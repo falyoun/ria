@@ -5,7 +5,7 @@ import { User } from '@app/user/models/user.model';
 import { FindSystemUsersDto } from '@app/user/dtos/for-admin/find-system-users.dto';
 import { RiaUtils } from '@app/shared/utils';
 import { AssignJobToUserDto } from '@app/user/dtos/for-admin/assign-job-to-user.dto';
-import { JobService } from '@app/salary-scale/job/job.service';
+import { JobService } from '@app/departments/financial/salary-scale/job/job.service';
 
 @Injectable()
 export class UserForAdminService {

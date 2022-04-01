@@ -3,12 +3,10 @@ import {
   IsArray,
   IsEnum,
   IsPositive,
-  Min,
-  MinLength,
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { EmployeeLevelEnum } from '@app/salary-scale/enums/employee-level.enum';
+import { EmployeeLevelEnum } from '@app/departments/financial/salary-scale/enums/employee-level.enum';
 
 export class CreateSalaryScaleSingleEntityDto {
   @IsPositive()

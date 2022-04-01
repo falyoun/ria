@@ -1,5 +1,5 @@
-import { EmployeeLevelEnum } from '@app/salary-scale/enums/employee-level.enum';
-import { JobDto } from '@app/salary-scale/job/dtos/job.dto';
+import { EmployeeLevelEnum } from '@app/departments/financial/salary-scale/enums/employee-level.enum';
+import { JobDto } from '@app/departments/financial/salary-scale/job/dtos/job.dto';
 import { Allow, IsEnum, IsPositive } from 'class-validator';
 
 export class SalaryScaleJobDto {

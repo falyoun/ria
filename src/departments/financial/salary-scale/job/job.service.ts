@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { Job } from '@app/salary-scale/job/job.model';
+import { Job } from '@app/departments/financial/salary-scale/job/job.model';
 import { FindOptions, InstanceDestroyOptions } from 'sequelize';
 import { ResourceNotFoundException } from '@app/shared/exceptions/coded-exception';
-import { CreateJobDto } from '@app/salary-scale/job/dtos/create-job.dto';
-import { FindJobsDto } from '@app/salary-scale/job/dtos/find-jobs.dto';
+import { CreateJobDto } from '@app/departments/financial/salary-scale/job/dtos/create-job.dto';
+import { FindJobsDto } from '@app/departments/financial/salary-scale/job/dtos/find-jobs.dto';
 import { RiaUtils } from '@app/shared/utils';
-import { UpdateJobDto } from '@app/salary-scale/job/dtos/update-job.dto';
+import { UpdateJobDto } from '@app/departments/financial/salary-scale/job/dtos/update-job.dto';
 
 @Injectable()
 export class JobService {

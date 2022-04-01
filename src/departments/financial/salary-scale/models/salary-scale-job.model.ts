@@ -8,9 +8,9 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
-import { Job } from '@app/salary-scale/job/job.model';
-import { EmployeeLevelEnum } from '@app/salary-scale/enums/employee-level.enum';
-import { SalaryScale } from '@app/salary-scale/models/salary-scale.model';
+import { Job } from '@app/departments/financial/salary-scale/job/job.model';
+import { EmployeeLevelEnum } from '@app/departments/financial/salary-scale/enums/employee-level.enum';
+import { SalaryScale } from '@app/departments/financial/salary-scale/models/salary-scale.model';
 
 export interface SalaryScaleJobAttributes {
   id?: number;
