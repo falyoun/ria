@@ -4,13 +4,17 @@ import { FindOptions } from 'sequelize';
 import { AccountNotFoundException } from '../exceptions';
 import { User } from '@app/user/models/user.model';
 import { AppFileService } from '@app/global/app-file/services/app-file.service';
-import { UpdateUserDto } from '@app/user/dtos/update-user.dto';
+import { PatchUserDto, UpdateUserDto } from '@app/user/dtos/update-user.dto';
+import { UserRoleService } from '@app/role/serviecs/user-role.service';
+import { Sequelize } from 'sequelize-typescript';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User) private readonly userModel: typeof User,
     private readonly appFileService: AppFileService,
+    private readonly userRoleService: UserRoleService,
+    private readonly sequelize: Sequelize,
   ) {}
 
   async findOne(findOptions: FindOptions<User>) {
@@ -19,6 +23,22 @@ export class UserService {
       throw new AccountNotFoundException();
     }
     return user;
+  }
+
+  async patchOne(id: number, patchDto: PatchUserDto) {
+    const requestedUser = await this.findOne({
+      where: {
+        id,
+      },
+    });
+    if (patchDto.role) {
+      return this.sequelize.transaction(async (transaction) => {
+        await this.userRoleService.assignNewRoleToUser(id, patchDto.role);
+        patchDto['role'] = undefined;
+        return requestedUser.update(patchDto);
+      });
+    }
+    return requestedUser.update(patchDto);
   }
 
   async updateOne(findOptions: FindOptions<User>, updateDto: UpdateUserDto) {

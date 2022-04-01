@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
-import { UpdateUserDto } from '@app/user/dtos/update-user.dto';
+import { PatchUserDto, UpdateUserDto } from '@app/user/dtos/update-user.dto';
 import { UserDto } from '@app/user/dtos/user.dto';
 import { CreateUserDto } from '@app/user/dtos/create-user.dto';
 import { JwtAuthGuard, RequestUser } from '@app/spa-authentication';
@@ -59,6 +59,15 @@ export class UserForAdminController {
     @Body() assignJobToUserDto: AssignJobToUserDto,
   ) {
     return this.userForAdminService.assignJobToUser(id, assignJobToUserDto);
+  }
+
+  @ApiRiaDto(UserDto)
+  @Patch(':id')
+  patchUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() patchUserDto: PatchUserDto,
+  ) {
+    return this.userService.patchOne(id, patchUserDto);
   }
 
   @ApiRiaDto(UserDto)

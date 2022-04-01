@@ -10,6 +10,7 @@ import {
 } from '../exceptions';
 import { UserRole } from '@app/role/models/user-role.model';
 import { CreateUserRoleDto } from '@app/role/dtos/create-user-role.dto';
+import { AppRole } from '@app/role/enums/app-role.enum';
 
 @Injectable()
 export class UserRoleService {
@@ -65,5 +66,29 @@ export class UserRoleService {
         options,
       );
     }
+  }
+  async assignNewRoleToUser(userId: number, appRole: AppRole) {
+    const riaRoles = await firstValueFrom(
+      this.roleService.roleReplaySubject.asObservable(),
+    );
+    if (!riaRoles || riaRoles.length < 1) {
+      throw new RolesNotLoadedCorrectlyException();
+    }
+    const role = riaRoles.filter((jr) => jr.name === appRole)[0];
+    const userRoleEntity = await this.findOne({
+      where: {
+        userId: userId,
+        roleId: role.id,
+      },
+    });
+    if (!userRoleEntity) {
+      return this.userRole.create({
+        userId: userId,
+        roleId: role.id,
+      });
+    }
+    return userRoleEntity.update({
+      roleId: role.id,
+    });
   }
 }
