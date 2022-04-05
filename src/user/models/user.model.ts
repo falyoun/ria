@@ -121,7 +121,7 @@ export class User
   @ForeignKey(() => Job)
   jobId: number;
 
-  @HasOne(() => Job, 'jobId')
+  @BelongsTo(() => Job, 'jobId')
   job: Job;
 
   @Column({

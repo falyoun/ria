@@ -31,6 +31,7 @@ export type SalaryScaleJobCreationAttributes = Optional<
     {
       name: 'salary_scale_job_level_unique_constraint',
       fields: ['salary_scale_id', 'job_id', 'employee_level'],
+      unique: true,
     },
   ],
 })
@@ -50,7 +51,7 @@ export class SalaryScaleJob
   })
   @ForeignKey(() => Job)
   jobId: number;
-  @HasOne(() => Job, 'jobId')
+  @BelongsTo(() => Job, 'jobId')
   job: Job;
 
   @Column({

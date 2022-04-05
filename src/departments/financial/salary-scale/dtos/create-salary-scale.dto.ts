@@ -2,7 +2,6 @@ import {
   ArrayMinSize,
   IsArray,
   IsEnum,
-  IsNotEmpty,
   IsPositive,
   ValidateNested,
 } from 'class-validator';
