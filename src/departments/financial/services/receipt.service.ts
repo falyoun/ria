@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import {
   FindOptions,
@@ -20,6 +20,7 @@ import { Deduction } from '@app/departments/financial/models/deduction.model';
 import { UserService } from '@app/user/services/user.service';
 import { JobService } from '@app/departments/financial/salary-scale/job/job.service';
 import { SalaryScaleService } from '@app/departments/financial/salary-scale/salary-scale.service';
+import { ResourceNotFoundException } from '@app/shared/exceptions/coded-exception';
 
 @Injectable()
 export class ReceiptService {
@@ -32,6 +33,24 @@ export class ReceiptService {
     private readonly deductionService: DeductionService,
     private readonly sequelize: Sequelize,
   ) {}
+  private static calculateNetAmount(
+    grossAmount: number,
+    deductions: number[],
+    allowance: number,
+    bonus: number,
+  ) {
+    for (let i = 0; i < deductions.length; i++) {
+      grossAmount -= deductions[i] ? deductions[i] : 0;
+    }
+    grossAmount += bonus && bonus > 0 ? bonus * 1.5 : 0;
+    grossAmount += allowance && allowance > 0 ? allowance : 0;
+    if (grossAmount <= 0) {
+      throw new BadRequestException({
+        message: 'Net amount is below or equal zero',
+      });
+    }
+    return grossAmount;
+  }
   createOne(admin: User, requestNewReceipt: RequestNewReceipt) {
     return this.sequelize.transaction(async (transaction) => {
       const user = await this.userService.findOne({
@@ -45,15 +64,25 @@ export class ReceiptService {
         },
       });
       const userJob = salaryScale.salaryScaleJobs.find(
-        (ssj) => ssj.jobId === user.jobId,
+        (ssj) => ssj.jobId === user.jobId && ssj.employeeLevel === user.level,
       );
+      if (!userJob) {
+        throw new ResourceNotFoundException('USER_WITH_NO_JOB');
+      }
       const createdReceipt = await this.receiptModel.create({
         userId: user.id,
       });
       const { salary } = requestNewReceipt;
+      const netAmount = ReceiptService.calculateNetAmount(
+        userJob.amount,
+        requestNewReceipt.deductions.map((e) => e.amount),
+        salary.allowance,
+        salary.bonus,
+      );
       await this.salaryService.createOne({
         ...salary,
         amount: userJob.amount,
+        netAmount,
         receiptId: createdReceipt.id,
       });
       if (requestNewReceipt.deductions) {
@@ -174,13 +203,38 @@ export class ReceiptService {
         id,
       },
     });
+    const user = await this.userService.findOne({
+      where: {
+        id: updateReceiptDto.userId,
+      },
+    });
+    const salaryScale = await this.salaryScaleService.findOne({
+      where: {
+        isActive: true,
+      },
+    });
+    const userJob = salaryScale.salaryScaleJobs.find(
+      (ssj) => ssj.jobId === user.jobId && ssj.employeeLevel === user.level,
+    );
+    if (!userJob) {
+      throw new ResourceNotFoundException('USER_WITH_NO_JOB');
+    }
+    const { salary } = updateReceiptDto;
+    const netAmount = ReceiptService.calculateNetAmount(
+      userJob.amount,
+      updateReceiptDto.deductions.map((e) => e.amount),
+      salary.allowance,
+      salary.bonus,
+    );
+    console.log(netAmount);
     return this.sequelize.transaction(async (transaction) => {
       const { salary } = updateReceiptDto;
       if (salary) {
         await this.salaryService.upsert({
           ...salary,
           receiptId: receipt.id,
-          amount: 10,
+          amount: userJob.amount,
+          netAmount,
         });
       }
       if (updateReceiptDto.deductions) {

@@ -23,4 +23,6 @@ export class CreateSalaryDto extends CreateReceiptSalaryDto {
   receiptId: number;
   @IsNumber()
   amount: number;
+  @IsNumber()
+  netAmount: number;
 }

@@ -6,11 +6,14 @@ import { FindSystemUsersDto } from '@app/user/dtos/for-admin/find-system-users.d
 import { RiaUtils } from '@app/shared/utils';
 import { AssignJobToUserDto } from '@app/user/dtos/for-admin/assign-job-to-user.dto';
 import { JobService } from '@app/departments/financial/salary-scale/job/job.service';
+import { UserService } from '@app/user/services/user.service';
+import { Job } from '@app/departments/financial/salary-scale/job/job.model';
 
 @Injectable()
 export class UserForAdminService {
   constructor(
     @InjectModel(User) private readonly userModel: typeof User,
+    private readonly userService: UserService,
     private readonly jobService: JobService,
   ) {}
 
@@ -23,14 +26,20 @@ export class UserForAdminService {
         id: assignJobToUserDto.jobId,
       },
     });
-    const user = await this.userModel.findOne({
+    const user = await this.userService.findOne({
       where: {
         id: userId,
       },
     });
-    return user.update({
+    await user.update({
       jobId: job.id,
       level: assignJobToUserDto.level,
+    });
+    return this.userService.findOne({
+      where: {
+        id: userId,
+      },
+      include: [Job],
     });
   }
   async findSystemUsers(admin: User, findSystemUsersDto: FindSystemUsersDto) {

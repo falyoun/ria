@@ -17,6 +17,7 @@ export interface SalaryAttributes {
   workStartDate: Date;
   workEndDate: Date;
   amount: number;
+  netAmount: number;
   bonus?: number;
   allowance?: number;
 }
@@ -50,18 +51,21 @@ export class Salary
     allowNull: false,
   })
   amount: number;
+  @Column({
+    type: DataType.DOUBLE,
+    allowNull: false,
+  })
+  netAmount: number;
 
   @Column({
     type: DataType.DOUBLE,
     allowNull: true,
-    defaultValue: 0,
   })
   bonus: number;
 
   @Column({
     type: DataType.DOUBLE,
     allowNull: true,
-    defaultValue: 0,
   })
   allowance: number;
 
