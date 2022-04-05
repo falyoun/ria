@@ -40,28 +40,28 @@ export class SalaryScaleService {
         isActive: true,
       });
       await Promise.all(
-        createSalaryScaleDto.entities.map((anEntity) => {
-          this.jobService
-            .findOne({
-              where: {
-                id: anEntity.jobId,
-              },
-            })
-            .then((job) => {
-              return this.salaryScaleJobModel.create({
-                salaryScaleId: salaryScaleEntity.id,
-                jobId: job.id,
-                amount: anEntity.amount,
-                employeeLevel: anEntity.employeeLevel,
-              });
-            });
-        }),
+        createSalaryScaleDto.entities.map((anEntity) =>
+          this.jobService.findOne({
+            where: {
+              id: anEntity.jobId,
+            },
+          }),
+        ),
+      );
+      await Promise.all(
+        createSalaryScaleDto.entities.map((anEntity) =>
+          this.salaryScaleJobModel.create({
+            salaryScaleId: salaryScaleEntity.id,
+            jobId: anEntity.jobId,
+            amount: anEntity.amount,
+            employeeLevel: anEntity.employeeLevel,
+          }),
+        ),
       );
       return this.findOne({
         where: {
           id: salaryScaleEntity.id,
         },
-        include: [SalaryScaleJob],
       });
     });
   }

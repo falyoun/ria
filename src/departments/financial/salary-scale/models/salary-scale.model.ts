@@ -12,7 +12,15 @@ export type SalaryScaleCreationAttributes = Optional<
   'id'
 >;
 
-@Table
+@Table({
+  defaultScope: {
+    include: [
+      {
+        association: 'salaryScaleJobs',
+      },
+    ],
+  },
+})
 export class SalaryScale
   extends Model<SalaryScaleAttributes, SalaryScaleCreationAttributes>
   implements SalaryScaleAttributes
