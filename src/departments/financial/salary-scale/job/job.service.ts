@@ -11,11 +11,8 @@ import { UpdateJobDto } from '@app/departments/financial/salary-scale/job/dtos/u
 @Injectable()
 export class JobService {
   constructor(@InjectModel(Job) private readonly jobModel: typeof Job) {}
-  async createOne(createJobDto: CreateJobDto) {
-    const j = await this.jobModel.create(createJobDto);
-
-    console.log(j);
-    return j;
+  createOne(createJobDto: CreateJobDto) {
+    return this.jobModel.create(createJobDto);
   }
   async findOne(findOptions: FindOptions<Job>) {
     const instance = await this.jobModel.findOne(findOptions);
