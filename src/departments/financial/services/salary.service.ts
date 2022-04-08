@@ -58,7 +58,6 @@ export class SalaryService {
         message: 'Deleted successfully.!',
       };
     });
-    
   }
 
   async updateOne(

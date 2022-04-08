@@ -25,7 +25,6 @@ import { ApiPaginatedDto, ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
 import { FindAllReceiptDto } from '@app/departments/financial/dtos/receipt/find-all-receipt.dto';
 import { Salary } from '@app/departments/financial/models/salary.model';
 import { Deduction } from '@app/departments/financial/models/deduction.model';
-import { UpdateReceiptDto } from '@app/departments/financial/dtos/receipt/update-receipt.dto';
 import { UpdateDeductionDto } from '@app/departments/financial/dtos/deduction/update-deduction.dto';
 import { DeductionService } from '@app/departments/financial/services/deduction.service';
 import { SalaryService } from '@app/departments/financial/services/salary.service';

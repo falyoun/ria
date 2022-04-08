@@ -10,7 +10,6 @@ import {
   HasMany,
   ForeignKey,
   BelongsTo,
-  HasOne,
 } from 'sequelize-typescript';
 import { Optional } from 'sequelize';
 import bcrypt from 'bcrypt';
@@ -53,6 +52,9 @@ export type UserCreationAttributes = Optional<UserAttributes, 'id'>;
       },
       {
         association: 'avatar',
+      },
+      {
+        association: 'job',
       },
     ],
   },

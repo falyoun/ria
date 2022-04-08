@@ -7,6 +7,8 @@ import { AppFileService } from '@app/global/app-file/services/app-file.service';
 import { PatchUserDto, UpdateUserDto } from '@app/user/dtos/update-user.dto';
 import { UserRoleService } from '@app/role/serviecs/user-role.service';
 import { Sequelize } from 'sequelize-typescript';
+import { UserProfileDto } from '@app/user/dtos/user-profile.dto';
+import { SalaryScaleService } from '@app/departments/financial/salary-scale/salary-scale.service';
 
 @Injectable()
 export class UserService {
@@ -15,6 +17,7 @@ export class UserService {
     private readonly appFileService: AppFileService,
     private readonly userRoleService: UserRoleService,
     private readonly sequelize: Sequelize,
+    private readonly salaryScaleJob: SalaryScaleService,
   ) {}
 
   async findOne(findOptions: FindOptions<User>) {
@@ -23,6 +26,34 @@ export class UserService {
       throw new AccountNotFoundException();
     }
     return user;
+  }
+
+  async findUserProfile(userId: number) {
+    const user = await this.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    return this.findMyProfile(user);
+  }
+  async findMyProfile(user: User) {
+    const profile = {
+      ...user.toJSON(),
+    };
+    const salaryScale = await this.salaryScaleJob.findOne({
+      where: {
+        isActive: true,
+      },
+    });
+    if (salaryScale && salaryScale.salaryScaleJobs && user.jobId) {
+      const userJob = salaryScale.salaryScaleJobs.find(
+        (ssj) => ssj.jobId === user.jobId && ssj.employeeLevel === user.level,
+      );
+      profile['salaryScaleJob'] = userJob;
+      profile['salary'] = userJob.amount;
+    }
+
+    return profile;
   }
 
   async patchOne(id: number, patchDto: PatchUserDto) {
