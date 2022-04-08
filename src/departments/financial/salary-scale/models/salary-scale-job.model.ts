@@ -3,7 +3,6 @@ import {
   Column,
   DataType,
   ForeignKey,
-  HasOne,
   Model,
   Table,
 } from 'sequelize-typescript';
@@ -34,6 +33,13 @@ export type SalaryScaleJobCreationAttributes = Optional<
       unique: true,
     },
   ],
+  defaultScope: {
+    include: [
+      {
+        association: 'job',
+      },
+    ],
+  },
 })
 export class SalaryScaleJob
   extends Model<SalaryScaleJobAttributes, SalaryScaleJobCreationAttributes>
