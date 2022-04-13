@@ -1,17 +1,33 @@
-import { Allow } from 'class-validator';
+import {
+  Allow,
+  IsDate,
+  IsNotEmpty,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 import { UserDto } from '@app/user/dtos/user.dto';
+import { Transform } from 'class-transformer';
 
 export class InvoiceDto {
   @Allow()
   id?: number;
   @Allow()
   fileId?: number;
-  @Allow()
-  dueDate?: Date;
-  @Allow()
-  issuedAt?: Date;
-  @Allow()
-  amount?: number;
+
+  @IsPositive()
+  grossAmount: number;
+  @IsPositive()
+  netAmount: number;
+  @IsString()
+  @IsNotEmpty()
+  taxNumber: string;
+  @Transform(({ value }) => new Date(value))
+  @IsDate()
+  dueDate: Date;
+  @Transform(({ value }) => new Date(value))
+  @IsDate()
+  issueDate: Date;
+
   @Allow()
   submittedById: number;
   @Allow()

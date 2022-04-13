@@ -109,8 +109,13 @@ async function bootstrap() {
         return new ClassValidatorException(
           'CLASS_VALIDATOR',
           HttpStatus.BAD_REQUEST,
-          `${errors.map((e) => `Invalid field '${e.property}'`).join(', ')}`,
-          errors,
+          `Invalid fields -> (${errors
+            .map((e) => `'${e.property}'`)
+            .join(', ')})`,
+          errors.map((e) => {
+            const { target, children, ...otherProps } = e;
+            return otherProps;
+          }),
         );
       },
     }),

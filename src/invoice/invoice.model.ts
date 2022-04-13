@@ -13,9 +13,11 @@ import { AppFile } from '@app/global/app-file/models/app-file.model';
 export interface InvoiceAttributes {
   id?: number;
   fileId: number;
-  dueDate?: Date;
-  issuedAt?: Date;
-  amount?: number;
+  grossAmount: number;
+  netAmount: number;
+  taxNumber: string;
+  dueDate: Date;
+  issueDate: Date;
   submittedById: number;
   submittedBy?: User;
   assigneeId?: number;
@@ -27,7 +29,30 @@ export interface InvoiceAttributes {
 }
 export type InvoiceCreationAttributes = Optional<InvoiceAttributes, 'id'>;
 
-@Table
+@Table({
+  scopes: {
+    'all-users': {
+      include: [
+        {
+          association: 'submittedBy',
+          attributes: ['id', 'firstName', 'lastName', 'name', 'email'],
+        },
+        {
+          association: 'assignee',
+          attributes: ['id', 'firstName', 'lastName', 'name', 'email'],
+        },
+        {
+          association: 'reviewedBy',
+          attributes: ['id', 'firstName', 'lastName', 'name', 'email'],
+        },
+        {
+          association: 'paidBy',
+          attributes: ['id', 'firstName', 'lastName', 'name', 'email'],
+        },
+      ],
+    },
+  },
+})
 export class Invoice
   extends Model<InvoiceAttributes, InvoiceCreationAttributes>
   implements InvoiceAttributes
@@ -35,6 +60,7 @@ export class Invoice
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,
+    autoIncrement: true,
   })
   id: number;
 
@@ -43,6 +69,7 @@ export class Invoice
   })
   @ForeignKey(() => AppFile)
   fileId: number;
+
   @BelongsTo(() => AppFile, 'fileId')
   file: AppFile;
 
@@ -54,12 +81,22 @@ export class Invoice
   @Column({
     type: DataType.DATE,
   })
-  issuedAt: Date;
+  issueDate: Date;
 
   @Column({
     type: DataType.DOUBLE,
   })
-  amount: number;
+  grossAmount: number;
+
+  @Column({
+    type: DataType.DOUBLE,
+  })
+  netAmount: number;
+
+  @Column({
+    type: DataType.STRING,
+  })
+  taxNumber: string;
 
   @Column({
     type: DataType.INTEGER,
@@ -84,6 +121,7 @@ export class Invoice
   })
   @ForeignKey(() => User)
   reviewedById: number;
+
   @BelongsTo(() => User, 'reviewedById')
   reviewedBy: User;
 
@@ -92,6 +130,7 @@ export class Invoice
   })
   @ForeignKey(() => User)
   paidById: number;
+
   @BelongsTo(() => User, 'paidById')
   paidBy: User;
 }

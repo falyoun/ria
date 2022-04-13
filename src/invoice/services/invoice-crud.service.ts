@@ -8,6 +8,8 @@ import { FindOptions } from 'sequelize';
 import { ResourceNotFoundException } from '@app/shared/exceptions/coded-exception';
 import { GetManyInvoicesDto } from '@app/invoice/dtos/invoice-crud-dtos/get-many-invoices.dto';
 import { RiaUtils } from '@app/shared/utils';
+import { CreateInvoiceDto } from '@app/invoice/dtos/invoice-crud-dtos/create-invoice.dto';
+import { ScopeOptions, WhereAttributeHash } from 'sequelize/dist/lib/model';
 
 @Injectable()
 export class InvoiceCrudService {
@@ -18,22 +20,40 @@ export class InvoiceCrudService {
     private readonly sequelize: Sequelize,
   ) {}
 
-  async createOne(user: User, file: Express.Multer.File) {
+  async createOne(
+    user: User,
+    file: Express.Multer.File,
+    createInvoiceDto: CreateInvoiceDto,
+  ) {
     return this.sequelize.transaction(async (transaction) => {
       const createdFile = await this.appFileService.createFile({
         mimetype: file.mimetype,
         path: file.path,
         filename: file.filename,
       });
-      return this.invoiceModel.create({
+      const instance = await this.invoiceModel.create({
+        ...createInvoiceDto,
         submittedById: user.id,
         fileId: createdFile.id,
+      });
+      return this.findOne({
+        where: {
+          id: instance.id,
+        },
       });
     });
   }
 
-  async findOne(findOptions: FindOptions<Invoice>) {
-    const instance = await this.invoiceModel.findOne(findOptions);
+  async findOne(
+    findOptions: FindOptions<Invoice>,
+    scopesOptions:
+      | string
+      | ScopeOptions
+      | readonly (string | ScopeOptions)[] = 'all-users',
+  ) {
+    const instance = await this.invoiceModel
+      .scope(scopesOptions)
+      .findOne(findOptions);
     if (!instance) {
       throw new ResourceNotFoundException('INVOICE');
     }
@@ -45,7 +65,7 @@ export class InvoiceCrudService {
     const count = await this.invoiceModel.count(findOptions);
     RiaUtils.applyPagination(findOptions, findInvoicesDto);
     return {
-      data: await this.invoiceModel.findAll(findOptions),
+      data: await this.invoiceModel.scope('all-users').findAll(findOptions),
       count,
     };
   }
