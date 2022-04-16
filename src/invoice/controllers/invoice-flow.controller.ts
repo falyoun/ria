@@ -15,6 +15,7 @@ import { RequestUser } from '@app/spa-authentication';
 import { User } from '@app/user/models/user.model';
 import { UnAssignInvoiceFormUserDto } from '@app/invoice/dtos/invoice-flow-dtos/un-assign-invoice-form-user.dto';
 import { AssignInvoiceToUserDto } from '@app/invoice/dtos/invoice-flow-dtos/assign-invoice-to-user.dto';
+import { ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
 
 @UseGuards(RoleGuard(AppRole.MANAGER, AppRole.ADMIN, AppRole.SUPER_ADMIN))
 @ApiExtraModels(InvoiceDto)
@@ -23,6 +24,7 @@ import { AssignInvoiceToUserDto } from '@app/invoice/dtos/invoice-flow-dtos/assi
 export class InvoiceFlowController {
   constructor(private readonly invoiceFlowService: InvoiceFlowService) {}
 
+  @ApiRiaDto(InvoiceDto)
   @Post(':id/assign-to-user')
   assignInvoiceToUser(
     @Param('id', ParseIntPipe) id: number,
@@ -35,6 +37,7 @@ export class InvoiceFlowController {
     );
   }
 
+  @ApiRiaDto(InvoiceDto)
   @Post(':id/un-assign-from-user')
   unAssignInvoiceFromUser(
     @Param('id', ParseIntPipe) id: number,
@@ -47,14 +50,19 @@ export class InvoiceFlowController {
     );
   }
 
+  @ApiRiaDto(InvoiceDto)
   @Post(':id/review')
   reviewOne(@Param('id', ParseIntPipe) id: number, @RequestUser() user: User) {
     return this.invoiceFlowService.reviewInvoice(id, user);
   }
+
+  @ApiRiaDto(InvoiceDto)
   @Post(':id/approve')
   approveOne(@Param('id', ParseIntPipe) id: number, @RequestUser() user: User) {
     return this.invoiceFlowService.approveInvoice(id, user);
   }
+
+  @ApiRiaDto(InvoiceDto)
   @Post(':id/reject')
   rejectInvoice(
     @Param('id', ParseIntPipe) id: number,
@@ -62,6 +70,8 @@ export class InvoiceFlowController {
   ) {
     return this.invoiceFlowService.rejectInvoice(id, user);
   }
+
+  @ApiRiaDto(InvoiceDto)
   @Post(':id/mark-as-paid')
   markInvoiceAsPaid(
     @Param('id', ParseIntPipe) id: number,
