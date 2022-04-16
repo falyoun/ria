@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { FindOptions } from 'sequelize';
+import { FindOptions, InstanceDestroyOptions } from 'sequelize';
 import { FileNotFoundException } from '../exceptions';
 import { ConfigService } from '@nestjs/config';
 import { AppFile } from '@app/global/app-file/models/app-file.model';

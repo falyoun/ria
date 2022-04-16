@@ -1,58 +1,96 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Invoice } from '@app/invoice/invoice.model';
-import { CreateInvoiceDto } from '@app/invoice/dtos/invoice-crud-dtos/create-invoice.dto';
-import { FindOptions, InstanceDestroyOptions } from 'sequelize';
-import { InvoiceNotFoundException } from '@app/invoice/exceptions';
-import { PatchInvoiceDto } from '@app/invoice/dtos/invoice-crud-dtos/patch-invoice.dto';
-import { GetManyInvoicesDto } from '@app/invoice/dtos/invoice-crud-dtos/get-many-invoices.dto';
-import { RiaUtils } from '@app/shared/utils';
+import { InvoiceCrudService } from '@app/invoice/services/invoice-crud.service';
+import { User } from '@app/user/models/user.model';
+import { AssignInvoiceToUserDto } from '@app/invoice/dtos/invoice-flow-dtos/assign-invoice-to-user.dto';
+import { UserService } from '@app/user/services/user.service';
+import { UnAssignInvoiceFormUserDto } from '@app/invoice/dtos/invoice-flow-dtos/un-assign-invoice-form-user.dto';
 
 @Injectable()
 export class InvoiceFlowService {
   constructor(
     @InjectModel(Invoice) private readonly invoiceModel: typeof Invoice,
+    private readonly invoiceCrudService: InvoiceCrudService,
+    private readonly userService: UserService,
   ) {}
-  createOne(createInvoiceDto: CreateInvoiceDto) {
-    return this.invoiceModel.create(createInvoiceDto);
-  }
-  async findOne(findOptions: FindOptions<Invoice>) {
-    const instance = await this.invoiceModel.findOne(findOptions);
-    if (!instance) {
-      throw new InvoiceNotFoundException();
-    }
-    return instance;
-  }
-  async patchInvoice(id: number, patchInvoiceDto: PatchInvoiceDto) {
-    const invoice = await this.findOne({
+
+  async assignInvoiceToUser(
+    id: number,
+    assignInvoiceToUserDto: AssignInvoiceToUserDto,
+  ) {
+    const user = await this.userService.findOne({
+      where: {
+        id: assignInvoiceToUserDto.userId,
+      },
+    });
+    const invoice = await this.invoiceCrudService.findOne({
       where: {
         id,
       },
     });
-  }
-  async findAll(getManyInvoicesDto: GetManyInvoicesDto) {
-    const findOptions: FindOptions<Invoice> = {};
-    const count = await this.invoiceModel.count(findOptions);
-    RiaUtils.applyPagination(findOptions, getManyInvoicesDto);
-    return {
-      data: await this.invoiceModel.findAll(findOptions),
-      count,
-    };
-  }
-  async updateInvoice(id: number, patchInvoiceDto: PatchInvoiceDto) {
-    const invoice = await this.findOne({
+    await invoice.update({
+      assigneeId: user.id,
+    });
+    return this.invoiceCrudService.findOne({
       where: {
         id,
       },
     });
   }
 
-  async deleteOne(id: number, instanceDestroyOptions?: InstanceDestroyOptions) {
-    const invoice = await this.findOne({
+  async unAssignInvoiceFromUser(
+    id: number,
+    unAssignInvoiceToUserDto: UnAssignInvoiceFormUserDto,
+  ) {
+    await this.userService.findOne({
+      where: {
+        id: unAssignInvoiceToUserDto.userId,
+      },
+    });
+    const invoice = await this.invoiceCrudService.findOne({
       where: {
         id,
       },
     });
-    await invoice.destroy(instanceDestroyOptions);
+    await invoice.update({
+      assigneeId: null,
+    });
+    return this.invoiceCrudService.findOne({
+      where: {
+        id,
+      },
+    });
+  }
+  async reviewInvoice(id: number, reviewer: User) {
+    const invoice = await this.invoiceCrudService.findOne({
+      where: {
+        id,
+      },
+    });
+    await invoice.update({
+      reviewedById: reviewer.id,
+    });
+    return this.invoiceCrudService.findOne({
+      where: {
+        id,
+      },
+    });
+  }
+
+  async approveInvoice(id: number, approval: User) {
+    const invoice = await this.invoiceCrudService.findOne({
+      where: {
+        id,
+      },
+    });
+    await invoice.update({
+      approvedById: approval.id,
+    });
+    return this.invoiceCrudService.findOne({
+      where: {
+        id,
+      },
+    });
   }
 }

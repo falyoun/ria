@@ -6,9 +6,10 @@ import { InvoiceFlowController } from '@app/invoice/controllers/invoice-flow.con
 import { InvoiceCrudService } from '@app/invoice/services/invoice-crud.service';
 import { InvoiceFlowService } from '@app/invoice/services/invoice-flow.service';
 import { AppFileModule } from '@app/global/app-file/app-file.module';
+import { UserModule } from '@app/user/user.module';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Invoice]), AppFileModule],
+  imports: [SequelizeModule.forFeature([Invoice]), AppFileModule, UserModule],
   controllers: [InvoiceCrudController, InvoiceFlowController],
   providers: [InvoiceCrudService, InvoiceFlowService],
   exports: [InvoiceCrudService, InvoiceFlowService],

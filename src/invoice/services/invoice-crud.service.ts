@@ -4,12 +4,12 @@ import { Invoice } from '@app/invoice/invoice.model';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from '@app/user/models/user.model';
 import { Sequelize } from 'sequelize-typescript';
-import { FindOptions } from 'sequelize';
+import { FindOptions, InstanceDestroyOptions } from 'sequelize';
 import { ResourceNotFoundException } from '@app/shared/exceptions/coded-exception';
 import { GetManyInvoicesDto } from '@app/invoice/dtos/invoice-crud-dtos/get-many-invoices.dto';
 import { RiaUtils } from '@app/shared/utils';
 import { CreateInvoiceDto } from '@app/invoice/dtos/invoice-crud-dtos/create-invoice.dto';
-import { ScopeOptions, WhereAttributeHash } from 'sequelize/dist/lib/model';
+import { ScopeOptions } from 'sequelize/dist/lib/model';
 
 @Injectable()
 export class InvoiceCrudService {
@@ -67,6 +67,18 @@ export class InvoiceCrudService {
     return {
       data: await this.invoiceModel.scope('all-users').findAll(findOptions),
       count,
+    };
+  }
+
+  async deleteOne(id: number, instanceDestroyOptions?: InstanceDestroyOptions) {
+    const invoice = await this.findOne({
+      where: {
+        id,
+      },
+    });
+    await invoice.destroy(instanceDestroyOptions);
+    return {
+      message: 'deleted.!',
     };
   }
 }

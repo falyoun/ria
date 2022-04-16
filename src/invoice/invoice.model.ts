@@ -26,6 +26,8 @@ export interface InvoiceAttributes {
   reviewedBy?: User;
   paidById?: number;
   paidBy?: User;
+  approvedById?: number;
+  approvedBy?: User;
 }
 export type InvoiceCreationAttributes = Optional<InvoiceAttributes, 'id'>;
 
@@ -49,6 +51,11 @@ export type InvoiceCreationAttributes = Optional<InvoiceAttributes, 'id'>;
           association: 'paidBy',
           attributes: ['id', 'firstName', 'lastName', 'name', 'email'],
         },
+
+        {
+          association: 'approvedBy',
+          attributes: ['id', 'firstName', 'lastName', 'name', 'email'],
+        },
       ],
     },
   },
@@ -70,7 +77,7 @@ export class Invoice
   @ForeignKey(() => AppFile)
   fileId: number;
 
-  @BelongsTo(() => AppFile, 'fileId')
+  @BelongsTo(() => AppFile, { foreignKey: 'fileId', onDelete: 'CASCADE' })
   file: AppFile;
 
   @Column({
@@ -133,4 +140,13 @@ export class Invoice
 
   @BelongsTo(() => User, 'paidById')
   paidBy: User;
+
+  @Column({
+    type: DataType.INTEGER,
+  })
+  @ForeignKey(() => User)
+  approvedById: number;
+
+  @BelongsTo(() => User, 'paidById')
+  approvedBy: User;
 }

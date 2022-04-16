@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpStatus,
   Param,
@@ -31,6 +32,7 @@ import { RoleGuard } from '@app/role/guards/role.guard';
 import { AppRole } from '@app/role/enums/app-role.enum';
 import { Request } from 'express';
 import { CreateInvoiceDto } from '@app/invoice/dtos/invoice-crud-dtos/create-invoice.dto';
+import { MessageResponseDto } from '@app/shared/dtos/message-response.dto';
 
 @UseGuards(
   RoleGuard(
@@ -89,6 +91,12 @@ export class InvoiceCrudController {
   @Get()
   getMany(@Query() query: GetManyInvoicesDto) {
     return this.invoiceCrudService.findAll(query);
+  }
+
+  @ApiRiaDto(MessageResponseDto)
+  @Delete(':id')
+  deleteInvoice(@Param('id', ParseIntPipe) id: number) {
+    return this.invoiceCrudService.deleteOne(id, { force: true });
   }
   @Patch(':id')
   patchOne() {}
