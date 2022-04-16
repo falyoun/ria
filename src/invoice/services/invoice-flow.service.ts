@@ -6,6 +6,7 @@ import { User } from '@app/user/models/user.model';
 import { AssignInvoiceToUserDto } from '@app/invoice/dtos/invoice-flow-dtos/assign-invoice-to-user.dto';
 import { UserService } from '@app/user/services/user.service';
 import { UnAssignInvoiceFormUserDto } from '@app/invoice/dtos/invoice-flow-dtos/un-assign-invoice-form-user.dto';
+import { InvoiceStatusEnum } from '@app/invoice/enums/invoice-status.enum';
 
 @Injectable()
 export class InvoiceFlowService {
@@ -62,6 +63,39 @@ export class InvoiceFlowService {
       },
     });
   }
+
+  async markInvoiceAsPaid(id: number, user: User) {
+    const invoice = await this.invoiceCrudService.findOne({
+      where: {
+        id,
+      },
+    });
+    await invoice.update({
+      paidById: user.id,
+      status: InvoiceStatusEnum.COMPLETED,
+    });
+    return this.invoiceCrudService.findOne({
+      where: {
+        id,
+      },
+    });
+  }
+  async rejectInvoice(id: number, user: User) {
+    const invoice = await this.invoiceCrudService.findOne({
+      where: {
+        id,
+      },
+    });
+    await invoice.update({
+      rejectedById: user.id,
+      status: InvoiceStatusEnum.REJECTED,
+    });
+    return this.invoiceCrudService.findOne({
+      where: {
+        id,
+      },
+    });
+  }
   async reviewInvoice(id: number, reviewer: User) {
     const invoice = await this.invoiceCrudService.findOne({
       where: {
@@ -70,6 +104,7 @@ export class InvoiceFlowService {
     });
     await invoice.update({
       reviewedById: reviewer.id,
+      status: InvoiceStatusEnum.APPROVAL_PENDING,
     });
     return this.invoiceCrudService.findOne({
       where: {
@@ -86,6 +121,7 @@ export class InvoiceFlowService {
     });
     await invoice.update({
       approvedById: approval.id,
+      status: InvoiceStatusEnum.PAYMENT_PENDING,
     });
     return this.invoiceCrudService.findOne({
       where: {

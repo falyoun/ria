@@ -10,6 +10,7 @@ import { GetManyInvoicesDto } from '@app/invoice/dtos/invoice-crud-dtos/get-many
 import { RiaUtils } from '@app/shared/utils';
 import { CreateInvoiceDto } from '@app/invoice/dtos/invoice-crud-dtos/create-invoice.dto';
 import { ScopeOptions } from 'sequelize/dist/lib/model';
+import { InvoiceStatusEnum } from '@app/invoice/enums/invoice-status.enum';
 
 @Injectable()
 export class InvoiceCrudService {
@@ -35,6 +36,7 @@ export class InvoiceCrudService {
         ...createInvoiceDto,
         submittedById: user.id,
         fileId: createdFile.id,
+        status: InvoiceStatusEnum.PAYMENT_PENDING,
       });
       return this.findOne({
         where: {

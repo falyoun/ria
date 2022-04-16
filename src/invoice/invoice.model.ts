@@ -9,6 +9,7 @@ import {
 } from 'sequelize-typescript';
 import { User } from '@app/user/models/user.model';
 import { AppFile } from '@app/global/app-file/models/app-file.model';
+import { InvoiceStatusEnum } from '@app/invoice/enums/invoice-status.enum';
 
 export interface InvoiceAttributes {
   id?: number;
@@ -28,6 +29,11 @@ export interface InvoiceAttributes {
   paidBy?: User;
   approvedById?: number;
   approvedBy?: User;
+
+  rejectedById?: number;
+  rejectedBy?: User;
+
+  status: InvoiceStatusEnum;
 }
 export type InvoiceCreationAttributes = Optional<InvoiceAttributes, 'id'>;
 
@@ -54,6 +60,10 @@ export type InvoiceCreationAttributes = Optional<InvoiceAttributes, 'id'>;
 
         {
           association: 'approvedBy',
+          attributes: ['id', 'firstName', 'lastName', 'name', 'email'],
+        },
+        {
+          association: 'rejectedBy',
           attributes: ['id', 'firstName', 'lastName', 'name', 'email'],
         },
       ],
@@ -149,4 +159,18 @@ export class Invoice
 
   @BelongsTo(() => User, 'paidById')
   approvedBy: User;
+
+  @Column({
+    type: DataType.INTEGER,
+  })
+  @ForeignKey(() => User)
+  rejectedById: number;
+
+  @BelongsTo(() => User, 'paidById')
+  rejectedBy: User;
+
+  @Column({
+    type: DataType.ENUM(...Object.values(InvoiceStatusEnum)),
+  })
+  status: InvoiceStatusEnum;
 }

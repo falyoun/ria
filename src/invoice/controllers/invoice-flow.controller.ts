@@ -55,4 +55,18 @@ export class InvoiceFlowController {
   approveOne(@Param('id', ParseIntPipe) id: number, @RequestUser() user: User) {
     return this.invoiceFlowService.approveInvoice(id, user);
   }
+  @Post(':id/reject')
+  rejectInvoice(
+    @Param('id', ParseIntPipe) id: number,
+    @RequestUser() user: User,
+  ) {
+    return this.invoiceFlowService.rejectInvoice(id, user);
+  }
+  @Post(':id/mark-as-paid')
+  markInvoiceAsPaid(
+    @Param('id', ParseIntPipe) id: number,
+    @RequestUser() user: User,
+  ) {
+    return this.invoiceFlowService.markInvoiceAsPaid(id, user);
+  }
 }
