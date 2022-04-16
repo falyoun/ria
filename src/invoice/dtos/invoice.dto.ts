@@ -1,12 +1,14 @@
 import {
   Allow,
   IsDate,
+  IsEnum,
   IsNotEmpty,
   IsPositive,
   IsString,
 } from 'class-validator';
 import { UserDto } from '@app/user/dtos/user.dto';
 import { Transform } from 'class-transformer';
+import { InvoiceStatusEnum } from '@app/invoice/enums/invoice-status.enum';
 
 export class InvoiceDto {
   @Allow()
@@ -27,6 +29,9 @@ export class InvoiceDto {
   @Transform(({ value }) => new Date(value))
   @IsDate()
   issueDate: Date;
+
+  @IsEnum(InvoiceStatusEnum)
+  status: InvoiceStatusEnum;
 
   @Allow()
   submittedById: number;
