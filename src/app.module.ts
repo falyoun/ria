@@ -8,7 +8,6 @@ import { DepartmentsModule } from '@app/departments/departments.module';
 import { TicketsModule } from '@app/tickets/tickets.module';
 import { SalaryScaleModule } from '@app/departments/financial/salary-scale/salary-scale.module';
 import { InvoiceModule } from '@app/invoice/invoice.module';
-console.log(join(__dirname, '../', 'public/avatars'));
 @Module({
   imports: [
     AppDatabaseModule,
@@ -19,8 +18,8 @@ console.log(join(__dirname, '../', 'public/avatars'));
     InvoiceModule,
     TicketsModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../', 'public/avatars'),
-      serveRoot: '/api/v1/public/avatars',
+      rootPath: join(__dirname, '../', 'public'),
+      serveRoot: '/api/v1/public',
     }),
   ],
   controllers: [],

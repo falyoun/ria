@@ -38,6 +38,13 @@ export interface InvoiceAttributes {
 export type InvoiceCreationAttributes = Optional<InvoiceAttributes, 'id'>;
 
 @Table({
+  defaultScope: {
+    include: [
+      {
+        association: 'file',
+      },
+    ],
+  },
   scopes: {
     'all-users': {
       include: [
