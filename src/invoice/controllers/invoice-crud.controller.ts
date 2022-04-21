@@ -83,7 +83,6 @@ export class InvoiceCrudController {
       where: {
         id,
       },
-      include: [AppFile],
     });
   }
 
