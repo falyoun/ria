@@ -1,7 +1,9 @@
 # compiled output
 /dist
 /node_modules
-public/
+public/avatars
+public/invoices-files
+public/invoices
 # Logs
 logs
 *.log
