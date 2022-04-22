@@ -11,7 +11,9 @@ import { RiaUtils } from '@app/shared/utils';
 import { CreateInvoiceDto } from '@app/invoice/dtos/invoice-crud-dtos/create-invoice.dto';
 import { ScopeOptions } from 'sequelize/dist/lib/model';
 import { InvoiceStatusEnum } from '@app/invoice/enums/invoice-status.enum';
-
+import { AppFile } from '@app/global/app-file/models/app-file.model';
+import * as fs from 'fs';
+import { join } from 'path';
 @Injectable()
 export class InvoiceCrudService {
   constructor(
@@ -42,8 +44,13 @@ export class InvoiceCrudService {
         where: {
           id: instance.id,
         },
+        include: [AppFile],
       });
     });
+  }
+
+  retrieveInvoicesNames() {
+    return fs.readdirSync(join(__dirname, '../../..', 'public/invoices-files'));
   }
 
   async findOne(

@@ -7,7 +7,7 @@ export function handleException(exception: any, host: ArgumentsHost) {
   let statusCode;
   try {
     statusCode = exception.getStatus();
-  } catch(e) {
+  } catch (e) {
     statusCode = 500;
   }
   console.log('global error: ', exception);

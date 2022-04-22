@@ -87,6 +87,11 @@ export class InvoiceCrudController {
     });
   }
 
+  @Get('stored-files-names')
+  invoicesNames() {
+    return this.invoiceCrudService.retrieveInvoicesNames();
+  }
+
   @ApiPaginatedDto(InvoiceDto)
   @Get()
   getMany(@Query() query: GetManyInvoicesDto) {
