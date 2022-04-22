@@ -76,6 +76,12 @@ export class InvoiceCrudController {
     }
     return this.invoiceCrudService.createOne(user, file, createInvoiceDto);
   }
+
+  @Get('stored-files-names')
+  invoicesNames() {
+    return this.invoiceCrudService.retrieveInvoicesNames();
+  }
+
   @ApiRiaDto(InvoiceDto)
   @Get(':id')
   getOne(@Param('id', ParseIntPipe) id: number) {
@@ -85,11 +91,6 @@ export class InvoiceCrudController {
       },
       include: [AppFile],
     });
-  }
-
-  @Get('stored-files-names')
-  invoicesNames() {
-    return this.invoiceCrudService.retrieveInvoicesNames();
   }
 
   @ApiPaginatedDto(InvoiceDto)
