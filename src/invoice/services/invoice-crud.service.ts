@@ -38,7 +38,7 @@ export class InvoiceCrudService {
         ...createInvoiceDto,
         submittedById: user.id,
         fileId: createdFile.id,
-        status: InvoiceStatusEnum.PAYMENT_PENDING,
+        status: InvoiceStatusEnum.REVIEW_PENDING,
       });
       return this.findOne({
         where: {
