@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { DepartmentDto } from '@app/departments/dtos/department.dto';
-import { ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
+import { ApiPaginatedDto, ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
 import { RoleGuard } from '@app/role/guards/role.guard';
 import { AppRole } from '@app/role/enums/app-role.enum';
 import { RequestUser } from '@app/spa-authentication';
@@ -21,12 +21,13 @@ import { FindManyDepartmentsDto } from '@app/departments/dtos/find-many-departme
 import { AddUsersToDepartmentDto } from '@app/departments/dtos/add-users-to-department.dto';
 
 @ApiTags('Departments')
-@Controller('Departments')
+@Controller('departments')
 @ApiExtraModels(DepartmentDto)
 @UseGuards(RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN))
 export class DepartmentsController {
   constructor(private readonly departmentsService: DepartmentsService) {}
 
+  @ApiRiaDto(DepartmentDto)
   @Post(':id/add-user-to-departments')
   addUsersToDepartment(
     @Param('id', ParseIntPipe) id: number,
@@ -47,6 +48,7 @@ export class DepartmentsController {
     return this.departmentsService.createOne(createDepartmentDto);
   }
 
+  @ApiRiaDto(DepartmentDto)
   @Get(':id')
   findDepartment(@Param('id', ParseIntPipe) id: number) {
     return this.departmentsService.findOne({
@@ -56,6 +58,7 @@ export class DepartmentsController {
     });
   }
 
+  @ApiPaginatedDto(DepartmentDto)
   @Get()
   findAll(@Query() findDepartmentsDto: FindManyDepartmentsDto) {
     return this.departmentsService.findAll(findDepartmentsDto);

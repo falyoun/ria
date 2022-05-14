@@ -18,7 +18,9 @@ export class DepartmentsService {
   ) {}
 
   async findOne(findOptions: FindOptions<Department>) {
-    const department = await this.departmentModel.findOne(findOptions);
+    const department = await this.departmentModel
+      .scope('all-users')
+      .findOne(findOptions);
     if (!department) {
       throw new CodedException(
         'DEPARTMENT_NOT_FOUND',
@@ -44,7 +46,7 @@ export class DepartmentsService {
     const count = await this.departmentModel.count(findOptions);
     RiaUtils.applyPagination(findOptions, findManyDepartmentsDto);
     return {
-      data: await this.departmentModel.findAll(findOptions),
+      data: await this.departmentModel.scope('all-users').findAll(findOptions),
       count,
     };
   }
@@ -77,12 +79,17 @@ export class DepartmentsService {
         'There is a user assigned to a department, you have to de-link him before',
       );
     }
-    return Promise.all(
+    await Promise.all(
       users.map((u) =>
         u.update({
           departmentId: departmentId,
         }),
       ),
     );
+    return this.findOne({
+      where: {
+        id: departmentId,
+      },
+    });
   }
 }
