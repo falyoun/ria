@@ -34,7 +34,7 @@ export class UserAuthForAdminsController {
   ) {}
 
   @ApiRiaDto(UserDto)
-  @Post('/approve-user/:id')
+  @Post('/approve-user')
   async approveUser(
     @Body() approveUserToJoinSystemDto: ApproveUserToJoinSystemDto,
   ) {
