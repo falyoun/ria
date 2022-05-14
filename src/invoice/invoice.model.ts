@@ -164,7 +164,7 @@ export class Invoice
   @ForeignKey(() => User)
   approvedById: number;
 
-  @BelongsTo(() => User, 'paidById')
+  @BelongsTo(() => User, 'approvedById')
   approvedBy: User;
 
   @Column({
@@ -173,7 +173,7 @@ export class Invoice
   @ForeignKey(() => User)
   rejectedById: number;
 
-  @BelongsTo(() => User, 'paidById')
+  @BelongsTo(() => User, 'rejectedById')
   rejectedBy: User;
 
   @Column({
