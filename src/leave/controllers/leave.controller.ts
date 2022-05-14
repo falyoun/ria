@@ -41,7 +41,7 @@ export class LeaveController {
   }
 
   @ApiRiaDto(LeaveDto)
-  @Patch(':id')
+  @Patch(':id/approve')
   approveLeave(
     @RequestUser() user: User,
     @Param('id', ParseIntPipe) id: number,
@@ -50,7 +50,7 @@ export class LeaveController {
   }
 
   @ApiRiaDto(LeaveDto)
-  @Post()
+  @Patch(':id/reject')
   rejectOne(@RequestUser() admin: User, @Param('id', ParseIntPipe) id: number) {
     return this.leaveService.rejectOne(admin, id);
   }
