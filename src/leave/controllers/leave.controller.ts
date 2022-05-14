@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   ParseIntPipe,
   Patch,
@@ -10,7 +11,7 @@ import {
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
 import { RoleGuard } from '@app/role/guards/role.guard';
 import { AppRole } from '@app/role/enums/app-role.enum';
-import { ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
+import { ApiPaginatedDto, ApiRiaDto } from '@app/shared/dtos/ria-response.dto';
 import { LeaveDto } from '@app/leave/dtos/leave.dto';
 import { CreateLeaveDto } from '@app/leave/dtos/create-leave.dto';
 import { RequestUser } from '@app/spa-authentication';
@@ -53,5 +54,21 @@ export class LeaveController {
   @Patch(':id/reject')
   rejectOne(@RequestUser() admin: User, @Param('id', ParseIntPipe) id: number) {
     return this.leaveService.rejectOne(admin, id);
+  }
+
+  @Get(':id')
+  @ApiRiaDto(LeaveDto)
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.leaveService.findOne({
+      where: {
+        id,
+      },
+    });
+  }
+
+  @Get()
+  @ApiPaginatedDto(LeaveDto)
+  findAll() {
+    return this.leaveService.findAll();
   }
 }

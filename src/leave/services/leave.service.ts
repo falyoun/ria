@@ -7,6 +7,8 @@ import { CodedException } from '@app/shared/exceptions/coded-exception';
 import { UserService } from '@app/user/services/user.service';
 import { FindOptions } from 'sequelize';
 import { LeaveStatusEnum } from '@app/leave/enums/leave-status.enum';
+import { SequelizePaginationDto } from '@app/shared/dtos/sequelize-pagination.dto';
+import { RiaUtils } from '@app/shared/utils';
 
 @Injectable()
 export class LeaveService {
@@ -25,6 +27,16 @@ export class LeaveService {
       );
     }
     return leave;
+  }
+
+  async findAll(sequelizePaginationDto?: SequelizePaginationDto) {
+    const findOptions: FindOptions<Leave> = {};
+    const count = await this.leaveModel.count(findOptions);
+    RiaUtils.applyPagination(findOptions, sequelizePaginationDto);
+    return {
+      data: this.leaveModel.findAll(findOptions),
+      count,
+    };
   }
   static checkLeavesIntersection(
     leaves: Leave[],
