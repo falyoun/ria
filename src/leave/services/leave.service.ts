@@ -1,21 +1,17 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { forwardRef, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Leave } from '@app/leave/models/leave.model';
 import { User } from '@app/user/models/user.model';
 import { CreateLeaveDto } from '@app/leave/dtos/create-leave.dto';
 import { CodedException } from '@app/shared/exceptions/coded-exception';
-import { UserService } from '@app/user/services/user.service';
-import { FindOptions } from 'sequelize';
+import { FindOptions, Op, WhereOptions } from 'sequelize';
 import { LeaveStatusEnum } from '@app/leave/enums/leave-status.enum';
-import { SequelizePaginationDto } from '@app/shared/dtos/sequelize-pagination.dto';
 import { RiaUtils } from '@app/shared/utils';
+import { FindManyLeavesDto } from '@app/leave/dtos/find-many-leaves.dto';
 
 @Injectable()
 export class LeaveService {
-  constructor(
-    @InjectModel(Leave) private readonly leaveModel: typeof Leave,
-    private readonly userService: UserService,
-  ) {}
+  constructor(@InjectModel(Leave) private readonly leaveModel: typeof Leave) {}
 
   async findOne(findOptions: FindOptions<Leave>) {
     const leave = await this.leaveModel.findOne(findOptions);
@@ -29,12 +25,23 @@ export class LeaveService {
     return leave;
   }
 
-  async findAll(sequelizePaginationDto?: SequelizePaginationDto) {
-    const findOptions: FindOptions<Leave> = {};
+  async findAll(findManyLeavesDto?: FindManyLeavesDto) {
+    let whereOptions: WhereOptions<Leave> = {};
+    if (findManyLeavesDto.ids && findManyLeavesDto.ids.length > 0) {
+      whereOptions = {
+        ...whereOptions,
+        requesterId: {
+          [Op.in]: findManyLeavesDto.ids,
+        },
+      };
+    }
+    const findOptions: FindOptions<Leave> = {
+      where: whereOptions,
+    };
     const count = await this.leaveModel.count(findOptions);
-    RiaUtils.applyPagination(findOptions, sequelizePaginationDto);
+    RiaUtils.applyPagination(findOptions, findManyLeavesDto);
     return {
-      data: this.leaveModel.findAll(findOptions),
+      data: await this.leaveModel.findAll(findOptions),
       count,
     };
   }

@@ -19,6 +19,7 @@ import { UserRole } from '@app/role/models/user-role.model';
 import { Receipt } from '@app/departments/financial/models/receipt.model';
 import { EmployeeLevelEnum } from '@app/departments/financial/salary-scale/enums/employee-level.enum';
 import { Job } from '@app/departments/financial/salary-scale/job/job.model';
+import { Department } from '@app/departments/models/department.model';
 export interface UserAttributes {
   id: number;
   email: string;
@@ -31,6 +32,10 @@ export interface UserAttributes {
   phoneNumber?: string;
   isActive?: boolean;
   isVerified?: boolean;
+
+  departmentId?: number;
+  department?: Department;
+
   jobId?: number;
   job?: Job;
   level?: EmployeeLevelEnum;
@@ -55,6 +60,9 @@ export type UserCreationAttributes = Optional<UserAttributes, 'id'>;
       },
       {
         association: 'job',
+      },
+      {
+        association: 'department',
       },
     ],
   },
@@ -116,6 +124,15 @@ export class User
     as: 'avatar',
   })
   avatar: AppFile;
+
+  @Column({
+    type: DataType.INTEGER,
+  })
+  @ForeignKey(() => Department)
+  departmentId: number;
+
+  @BelongsTo(() => Department, 'departmentId')
+  department: Department;
 
   @Column({
     type: DataType.INTEGER,

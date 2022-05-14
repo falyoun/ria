@@ -8,12 +8,14 @@ import { UserForAdminController } from '@app/user/controllers/user-for-admin.con
 import { UserService } from '@app/user/services/user.service';
 import { UserForAdminService } from '@app/user/services/user-for-admin.service';
 import { SalaryScaleModule } from '@app/departments/financial/salary-scale/salary-scale.module';
+import { LeaveModule } from '@app/leave/leave.module';
 
 @Module({
   imports: [
     RoleModule,
     SequelizeModule.forFeature([User]),
     AppFileModule,
+    LeaveModule,
     SalaryScaleModule,
   ],
   controllers: [UserController, UserForAdminController],

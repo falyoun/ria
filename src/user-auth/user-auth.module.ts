@@ -10,10 +10,12 @@ import { UserAuthService } from '@app/user-auth/services/user-auth.service';
 import { UserAuthForAdminsController } from '@app/user-auth/controllers/user-auth-for-admins.controller';
 import { UserAuthController } from '@app/user-auth/controllers/user-auth.controller';
 import { UserAuthForAdminService } from '@app/user-auth/services/user-auth-for-admin.service';
+import { DepartmentsModule } from '@app/departments/departments.module';
 
 @Module({
   imports: [
     UserModule,
+    DepartmentsModule,
     SpaAuthenticationModule.registerAsync({
       imports: [
         JwtModule.registerAsync({

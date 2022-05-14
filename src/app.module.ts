@@ -8,13 +8,12 @@ import { DepartmentsModule } from '@app/departments/departments.module';
 import { TicketsModule } from '@app/tickets/tickets.module';
 import { SalaryScaleModule } from '@app/departments/financial/salary-scale/salary-scale.module';
 import { InvoiceModule } from '@app/invoice/invoice.module';
-import { LeaveModule } from '@app/leave/leave.module';
+
 @Module({
   imports: [
     AppDatabaseModule,
     AppConfigModule,
     UserAuthModule,
-    LeaveModule,
     SalaryScaleModule,
     DepartmentsModule,
     InvoiceModule,

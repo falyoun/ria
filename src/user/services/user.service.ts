@@ -9,6 +9,7 @@ import { UserRoleService } from '@app/role/serviecs/user-role.service';
 import { Sequelize } from 'sequelize-typescript';
 import { UserProfileDto } from '@app/user/dtos/user-profile.dto';
 import { SalaryScaleService } from '@app/departments/financial/salary-scale/salary-scale.service';
+import { LeaveService } from '@app/leave/services/leave.service';
 
 @Injectable()
 export class UserService {
@@ -18,6 +19,7 @@ export class UserService {
     private readonly userRoleService: UserRoleService,
     private readonly sequelize: Sequelize,
     private readonly salaryScaleJob: SalaryScaleService,
+    private readonly leaveService: LeaveService,
   ) {}
 
   async findOne(findOptions: FindOptions<User>) {
@@ -53,6 +55,12 @@ export class UserService {
       profile['salary'] = userJob.amount;
     }
 
+    const myLeaves = await this.leaveService.findAll({
+      ids: [user.id],
+    });
+    if (myLeaves) {
+      profile['leaves'] = myLeaves.data.map((l) => l.toJSON());
+    }
     return profile;
   }
 
@@ -82,5 +90,9 @@ export class UserService {
       });
     }
     return user.update(updateDto);
+  }
+
+  findAll(findOptions: FindOptions<User>) {
+    return this.userModel.findAll(findOptions);
   }
 }

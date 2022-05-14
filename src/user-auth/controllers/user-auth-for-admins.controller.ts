@@ -16,6 +16,7 @@ import { JwtAuthGuard } from '@app/spa-authentication';
 import { UserDto } from '@app/user/dtos/user.dto';
 import { UserAuthForAdminService } from '@app/user-auth/services/user-auth-for-admin.service';
 import { ChangePasswordForUserDto } from '@app/user-auth/dtos/for-admin/change-password-for-user.dto';
+import { ApproveUserToJoinSystemDto } from '@app/user/dtos/for-admin/approve-user-to-join-system.dto';
 
 @ApiExtraModels(ApiRiaDto, UserDto)
 @UseGuards(JwtAuthGuard, RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN))
@@ -34,8 +35,12 @@ export class UserAuthForAdminsController {
 
   @ApiRiaDto(UserDto)
   @Post('/approve-user/:id')
-  async approveUser(@Param('id', ParseIntPipe) id: number) {
-    return this.userAuthForAdminService.approveUserToJoinTheSystem(id);
+  async approveUser(
+    @Body() approveUserToJoinSystemDto: ApproveUserToJoinSystemDto,
+  ) {
+    return this.userAuthForAdminService.approveUserToJoinTheSystem(
+      approveUserToJoinSystemDto,
+    );
   }
   @ApiRiaDto(UserDto)
   @Post('/reject-user/:id')
