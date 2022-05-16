@@ -14,7 +14,7 @@ export class LeaveService {
   constructor(@InjectModel(Leave) private readonly leaveModel: typeof Leave) {}
 
   async findOne(findOptions: FindOptions<Leave>) {
-    const leave = await this.leaveModel.findOne(findOptions);
+    const leave = await this.leaveModel.scope('all-users').findOne(findOptions);
     if (!leave) {
       throw new CodedException(
         'LEAVE_NOT_FOUND',
@@ -45,7 +45,7 @@ export class LeaveService {
     const count = await this.leaveModel.count(findOptions);
     RiaUtils.applyPagination(findOptions, findManyLeavesDto);
     return {
-      data: await this.leaveModel.findAll(findOptions),
+      data: await this.leaveModel.scope('all-users').findAll(findOptions),
       count,
     };
   }
