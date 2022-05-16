@@ -27,11 +27,15 @@ export class LeaveService {
 
   async findAll(findManyLeavesDto?: FindManyLeavesDto) {
     let whereOptions: WhereOptions<Leave> = {};
-    if (findManyLeavesDto.ids && findManyLeavesDto.ids.length > 0) {
+    if (
+      findManyLeavesDto &&
+      findManyLeavesDto.requestersIds &&
+      findManyLeavesDto.requestersIds.length > 0
+    ) {
       whereOptions = {
         ...whereOptions,
         requesterId: {
-          [Op.in]: findManyLeavesDto.ids,
+          [Op.in]: findManyLeavesDto.requestersIds,
         },
       };
     }

@@ -6,6 +6,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
@@ -17,6 +18,7 @@ import { CreateLeaveDto } from '@app/leave/dtos/create-leave.dto';
 import { RequestUser } from '@app/spa-authentication';
 import { User } from '@app/user/models/user.model';
 import { LeaveService } from '@app/leave/services/leave.service';
+import { FindManyLeavesDto } from '@app/leave/dtos/find-many-leaves.dto';
 
 @ApiTags('Leaves')
 @Controller('leaves')
@@ -68,7 +70,7 @@ export class LeaveController {
 
   @Get()
   @ApiPaginatedDto(LeaveDto)
-  findAll() {
-    return this.leaveService.findAll();
+  findAll(@Query() findLeavesDto?: FindManyLeavesDto) {
+    return this.leaveService.findAll(findLeavesDto);
   }
 }
