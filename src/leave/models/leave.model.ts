@@ -36,11 +36,25 @@ export type LeaveCreationAttributes = Optional<LeaveAttributes, 'id'>;
       include: [
         {
           association: 'manager',
-          attributes: ['id', 'firstName', 'lastName', 'name', 'email'],
+          attributes: [
+            'id',
+            'firstName',
+            'lastName',
+            'name',
+            'email',
+            'phoneNumber',
+          ],
         },
         {
           association: 'requester',
-          attributes: ['id', 'firstName', 'lastName', 'name', 'email'],
+          attributes: [
+            'id',
+            'firstName',
+            'lastName',
+            'name',
+            'email',
+            'phoneNumber',
+          ],
         },
       ],
     },
