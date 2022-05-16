@@ -56,7 +56,7 @@ export class UserService {
     }
 
     const myLeaves = await this.leaveService.findAll({
-      ids: [user.id],
+      requestersIds: [user.id],
     });
     if (myLeaves) {
       profile['leaves'] = myLeaves.data.map((l) => l.toJSON());
