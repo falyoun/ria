@@ -24,7 +24,14 @@ export type DepartmentCreationAttributes = Optional<DepartmentAttributes, 'id'>;
       include: [
         {
           association: 'users',
-          attributes: ['id', 'firstName', 'lastName', 'name', 'email'],
+          attributes: [
+            'id',
+            'firstName',
+            'lastName',
+            'name',
+            'email',
+            'phoneNumber',
+          ],
         },
       ],
     },
