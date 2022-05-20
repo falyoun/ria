@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsPositive, IsString } from 'class-validator';
 
 export class CreateJobDto {
   @IsString()
@@ -8,4 +8,7 @@ export class CreateJobDto {
   @IsString()
   @IsOptional()
   description?: string;
+
+  @IsPositive()
+  departmentId: number;
 }

@@ -1,20 +1,14 @@
 import { Optional } from 'sequelize';
-import {
-  BelongsTo,
-  Column,
-  DataType,
-  ForeignKey,
-  HasMany,
-  Model,
-  Table,
-} from 'sequelize-typescript';
+import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
 import { User } from '@app/user/models/user.model';
+import { Job } from '@app/departments/financial/salary-scale/job/job.model';
 
 export interface DepartmentAttributes {
   id?: number;
   title: string;
   maxNumberOfEmployees?: number;
   users?: User[];
+  jobs?: Job[];
 }
 export type DepartmentCreationAttributes = Optional<DepartmentAttributes, 'id'>;
 
@@ -32,6 +26,9 @@ export type DepartmentCreationAttributes = Optional<DepartmentAttributes, 'id'>;
             'email',
             'phoneNumber',
           ],
+        },
+        {
+          association: 'jobs',
         },
       ],
     },
@@ -62,4 +59,7 @@ export class Department
 
   @HasMany(() => User, { foreignKey: 'departmentId' })
   users: User[];
+
+  @HasMany(() => Job, { foreignKey: 'departmentId' })
+  jobs: Job[];
 }

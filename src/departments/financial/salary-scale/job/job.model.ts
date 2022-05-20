@@ -1,9 +1,19 @@
-import { Column, DataType, Model, Table } from 'sequelize-typescript';
+import {
+  BelongsTo,
+  Column,
+  DataType,
+  ForeignKey,
+  Model,
+  Table,
+} from 'sequelize-typescript';
 import { Optional } from 'sequelize';
+import { Department } from '@app/departments/models/department.model';
 
 export interface JobAttributes {
   id?: number;
   name: string;
+  departmentId?: number;
+  department?: Department;
   description?: string;
 }
 export type JobCreationAttributes = Optional<JobAttributes, 'id'>;
@@ -30,4 +40,13 @@ export class Job
     type: DataType.STRING,
   })
   description: string;
+
+  @Column({
+    type: DataType.INTEGER,
+  })
+  @ForeignKey(() => Department)
+  departmentId: number;
+
+  @BelongsTo(() => Department, 'departmentId')
+  department: Department;
 }
