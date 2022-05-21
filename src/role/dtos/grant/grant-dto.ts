@@ -1,6 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
-import { ActionTypes, possessionTypes } from '@app/role/enums/grant-action.eum';
+import { IsEnum, IsNotEmpty, IsPositive, IsString } from 'class-validator';
+import {
+  ActionTypesEnum,
+  PossessionTypesEnum,
+} from '@app/role/enums/grant-action.eum';
 
 export class GrantDto {
   @ApiProperty({ type: String })
@@ -8,13 +11,12 @@ export class GrantDto {
   @IsString({ always: true })
   resource: string;
 
-  @ApiProperty({ enum: ActionTypes })
-  @IsNotEmpty()
-  @IsString({ always: true })
-  action: ActionTypes;
+  @IsEnum(ActionTypesEnum)
+  action: ActionTypesEnum;
 
-  @ApiProperty({ enum: possessionTypes })
-  @IsNotEmpty()
-  @IsString({ always: true })
-  possession: possessionTypes;
+  @IsEnum(PossessionTypesEnum)
+  possession: PossessionTypesEnum;
+
+  @IsPositive()
+  userRoleId: number;
 }

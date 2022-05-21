@@ -35,7 +35,4 @@ export class Role
 
   @HasMany(() => UserRole, 'roleId')
   userRoles: UserRole[];
-
-  @HasMany(() => Grant, 'roleId')
-  grants: Grant[];
 }

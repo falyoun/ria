@@ -9,15 +9,18 @@ import {
 } from 'sequelize-typescript';
 import { DataTypes, Optional } from 'sequelize';
 import { Model } from 'sequelize-typescript';
-import { Role } from './role.model';
-import { ActionTypes, possessionTypes } from '@app/role/enums/grant-action.eum';
+import {
+  ActionTypesEnum,
+  PossessionTypesEnum,
+} from '@app/role/enums/grant-action.eum';
+import { UserRole } from '@app/role/models/user-role.model';
 
 export interface GrantAttributes {
   id: number;
   resource: string;
-  action: ActionTypes;
-  possession: possessionTypes;
-  roleId: number;
+  action: ActionTypesEnum;
+  possession: PossessionTypesEnum;
+  userRoleId: number;
 }
 export type GrantCreationAttributes = Optional<GrantAttributes, 'id'>;
 
@@ -26,7 +29,7 @@ export type GrantCreationAttributes = Optional<GrantAttributes, 'id'>;
   indexes: [
     {
       unique: true,
-      fields: ['resource', 'action', 'possession', 'role_id'],
+      fields: ['resource', 'action', 'possession', 'user_role_id'],
     },
   ],
 })
@@ -51,23 +54,23 @@ export class Grant
   @NotEmpty
   @NotNull
   @Column({
-    type: DataTypes.ENUM(...Object.values(ActionTypes)),
+    type: DataTypes.ENUM(...Object.values(ActionTypesEnum)),
     allowNull: false,
   })
-  action: ActionTypes;
+  action: ActionTypesEnum;
 
   @NotEmpty
   @NotNull
   @Column({
-    type: DataTypes.ENUM(...Object.values(possessionTypes)),
+    type: DataTypes.ENUM(...Object.values(PossessionTypesEnum)),
     allowNull: false,
   })
-  possession: possessionTypes;
+  possession: PossessionTypesEnum;
 
   @Column
-  @ForeignKey(() => Role)
-  roleId: number;
+  @ForeignKey(() => UserRole)
+  userRoleId: number;
 
-  @BelongsTo(() => Role, 'roleId')
-  role: Role;
+  @BelongsTo(() => UserRole, 'userRoleId')
+  userRole: UserRole;
 }
