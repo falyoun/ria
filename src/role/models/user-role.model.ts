@@ -32,13 +32,19 @@ export const UserRoleModelAliases = {
         association: UserRoleModelAliases.ROLE,
       },
       {
-        association: 'user',
-        attributes: ['id', 'name', 'email', 'phoneNumber'],
-      },
-      {
         association: 'grants',
       },
     ],
+  },
+  scopes: {
+    user: {
+      include: [
+        {
+          association: 'user',
+          attributes: ['id', 'name', 'email', 'phoneNumber'],
+        },
+      ],
+    },
   },
   timestamps: false,
   paranoid: false,

@@ -116,7 +116,7 @@ export class UserRoleService {
     const count = await this.userRole.count(findOptions);
     RiaUtils.applyPagination(findOptions, findManyUsersRolesDto);
     return {
-      data: await this.userRole.findAll(findOptions),
+      data: await this.userRole.scope('user').findAll(findOptions),
       count,
     };
   }
