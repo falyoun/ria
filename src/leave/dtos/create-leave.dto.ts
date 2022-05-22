@@ -5,4 +5,5 @@ export class CreateLeaveDto extends PickType(LeaveDto, [
   'description',
   'fromDate',
   'toDate',
+  'category',
 ] as const) {}
