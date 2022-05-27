@@ -9,7 +9,6 @@ import {
 } from 'sequelize-typescript';
 import { User } from '@app/user/models/user.model';
 import { LeaveStatusEnum } from '@app/leave/enums/leave-status.enum';
-import { LeaveCategoryEnum } from '@app/leave/enums/leave-category.enum';
 
 export interface LeaveAttributes {
   id?: number;
@@ -25,7 +24,8 @@ export interface LeaveAttributes {
   requesterId?: number;
   requester?: User;
 
-  category: LeaveCategoryEnum;
+  categoryName: string;
+  deductionAmount: number;
   status: LeaveStatusEnum;
 }
 export type LeaveCreationAttributes = Optional<LeaveAttributes, 'id'>;
@@ -109,7 +109,12 @@ export class Leave
   status: LeaveStatusEnum;
 
   @Column({
-    type: DataType.ENUM(...Object.values(LeaveCategoryEnum)),
+    type: DataType.STRING,
   })
-  category: LeaveCategoryEnum;
+  categoryName: string;
+
+  @Column({
+    type: DataType.DOUBLE,
+  })
+  deductionAmount: number;
 }

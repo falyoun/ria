@@ -7,7 +7,6 @@ import { AppFileService } from '@app/global/app-file/services/app-file.service';
 import { PatchUserDto, UpdateUserDto } from '@app/user/dtos/update-user.dto';
 import { UserRoleService } from '@app/role/serviecs/user-role.service';
 import { Sequelize } from 'sequelize-typescript';
-import { UserProfileDto } from '@app/user/dtos/user-profile.dto';
 import { SalaryScaleService } from '@app/departments/financial/salary-scale/salary-scale.service';
 import { LeaveService } from '@app/leave/services/leave.service';
 

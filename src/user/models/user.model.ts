@@ -20,6 +20,7 @@ import { Receipt } from '@app/departments/financial/models/receipt.model';
 import { EmployeeLevelEnum } from '@app/departments/financial/salary-scale/enums/employee-level.enum';
 import { Job } from '@app/departments/financial/salary-scale/job/job.model';
 import { Department } from '@app/departments/models/department.model';
+import { UserLeaveCategory } from '@app/leave/models/user-leave-category.model';
 export interface UserAttributes {
   id: number;
   email: string;
@@ -42,6 +43,8 @@ export interface UserAttributes {
   roles?: AppRole[];
   associatedRoles?: UserRole[];
   receipts?: Receipt[];
+
+  userLeaveCategories: UserLeaveCategory[];
 }
 
 export type UserCreationAttributes = Optional<UserAttributes, 'id'>;
@@ -65,6 +68,15 @@ export type UserCreationAttributes = Optional<UserAttributes, 'id'>;
         association: 'department',
       },
     ],
+  },
+  scopes: {
+    leaves: {
+      include: [
+        {
+          association: 'userLeaveCategories',
+        },
+      ],
+    },
   },
 })
 export class User
@@ -179,6 +191,11 @@ export class User
     foreignKey: 'userId',
   })
   receipts: Receipt[];
+
+  @HasMany(() => UserLeaveCategory, {
+    foreignKey: 'userId',
+  })
+  userLeaveCategories: UserLeaveCategory[];
 
   @BeforeSave({})
   static async hashPassword(user: User) {

@@ -1,7 +1,13 @@
 import { LeaveStatusEnum } from '@app/leave/enums/leave-status.enum';
-import { Allow, IsDate, IsEnum, IsPositive, IsString } from 'class-validator';
+import {
+  Allow,
+  IsDate,
+  IsEnum,
+  IsNumber,
+  IsPositive,
+  IsString,
+} from 'class-validator';
 import { UserDto } from '@app/user/dtos/user.dto';
-import { LeaveCategoryEnum } from '@app/leave/enums/leave-category.enum';
 import { Transform } from 'class-transformer';
 
 export class LeaveDto {
@@ -32,6 +38,9 @@ export class LeaveDto {
   @IsEnum(LeaveStatusEnum)
   status: LeaveStatusEnum;
 
-  @IsEnum(LeaveCategoryEnum)
-  category: LeaveCategoryEnum;
+  @IsString()
+  categoryName: string;
+
+  @IsNumber()
+  deductionAmount: number;
 }

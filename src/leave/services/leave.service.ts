@@ -1,4 +1,4 @@
-import { forwardRef, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Leave } from '@app/leave/models/leave.model';
 import { User } from '@app/user/models/user.model';
@@ -8,11 +8,52 @@ import { FindOptions, Op, WhereOptions } from 'sequelize';
 import { LeaveStatusEnum } from '@app/leave/enums/leave-status.enum';
 import { RiaUtils } from '@app/shared/utils';
 import { FindManyLeavesDto } from '@app/leave/dtos/find-many-leaves.dto';
+import { LeaveCategoriesService } from '@app/leave/services/leave-categories.service';
+import { UserLeaveCategory } from '@app/leave/models/user-leave-category.model';
+import { Sequelize } from 'sequelize-typescript';
+import { CreateUserLeaveCategoryDto } from '@app/leave/dtos/create-user-leave-category.dto';
+import { ReplaceUserLeavesCategoriesForUserDto } from '@app/user-auth/dtos/for-admin/replace-user-leaves-categories-for-user.dto';
 
 @Injectable()
 export class LeaveService {
-  constructor(@InjectModel(Leave) private readonly leaveModel: typeof Leave) {}
+  constructor(
+    @InjectModel(Leave) private readonly leaveModel: typeof Leave,
+    @InjectModel(UserLeaveCategory)
+    private readonly userLeaveCategoryModel: typeof UserLeaveCategory,
+    private readonly leaveCategoriesService: LeaveCategoriesService,
+    private readonly sequelize: Sequelize,
+  ) {}
 
+  async replaceUserLeavesCategories(
+    replaceDto: ReplaceUserLeavesCategoriesForUserDto,
+  ) {
+    return this.sequelize.transaction(async (transaction) => {
+      await this.userLeaveCategoryModel.truncate({
+        where: {
+          userId: replaceDto.userId,
+        },
+      });
+      return this.userLeaveCategoryModel.bulkCreate(
+        replaceDto.userLeavesCategories.map((m) => ({
+          ...m,
+          userId: replaceDto.userId,
+        })),
+      );
+    });
+  }
+  async bulkCreateDefaultCategoriesForANewUser(userId: number) {
+    const allCategories = await this.leaveCategoriesService.findAll();
+    allCategories.data.map((cat) =>
+      this.userLeaveCategoryModel.create({
+        userId,
+        leaveCategoryId: cat.id,
+        numberOfDaysAllowed: 4,
+      }),
+    );
+  }
+  async createUserLeaveCategoryForUser(dto: CreateUserLeaveCategoryDto) {
+    return this.userLeaveCategoryModel.create(dto);
+  }
   async findOne(findOptions: FindOptions<Leave>) {
     const leave = await this.leaveModel.scope('all-users').findOne(findOptions);
     if (!leave) {
@@ -57,7 +98,6 @@ export class LeaveService {
     // TODO (Check if there's an intersection between dates)
     return false;
   }
-
   async createOne(user: User, createLeaveDto: CreateLeaveDto) {
     const userLeaves = await this.leaveModel.findAll({
       where: {
@@ -77,10 +117,52 @@ export class LeaveService {
         'Invalid leave date',
       );
     }
-    return this.leaveModel.create({
-      ...createLeaveDto,
-      status: LeaveStatusEnum.PENDING_APPROVAL,
-      requesterId: user.id,
+
+    const leaveCategory = await this.leaveCategoriesService.findOne({
+      where: {
+        id: createLeaveDto.leaveCategoryId,
+      },
+    });
+    const userLeaveInstance = await this.userLeaveCategoryModel.findOne({
+      where: {
+        leaveCategoryId: leaveCategory.id,
+        userId: user.id,
+      },
+    });
+
+    if (!userLeaveInstance) {
+      throw new CodedException(
+        'INVALID_LEAVE_CATEGORY_FOR_USER',
+        HttpStatus.BAD_REQUEST,
+        'This type of leave is not allowed',
+      );
+    }
+    const { fromDate, toDate } = createLeaveDto;
+    const diff = fromDate.getTime() - toDate.getTime();
+    const mills = Math.abs(diff);
+    const toDeductFromDay = mills / 1000 / 60 / 60 / 24;
+
+    if (userLeaveInstance.numberOfDaysAllowed - toDeductFromDay < 0) {
+      throw new CodedException(
+        'INVALID_LEAVE_PERIOD',
+        HttpStatus.BAD_REQUEST,
+        'Leave amount is not applicable for you as you have left ' +
+          userLeaveInstance.numberOfDaysAllowed +
+          ' of this leave type, kindly contact the admin to increase it',
+      );
+    }
+    return this.sequelize.transaction(async (transaction) => {
+      await userLeaveInstance.update({
+        numberOfDaysAllowed:
+          userLeaveInstance.numberOfDaysAllowed - toDeductFromDay,
+      });
+      return this.leaveModel.create({
+        ...createLeaveDto,
+        status: LeaveStatusEnum.PENDING_APPROVAL,
+        deductionAmount: leaveCategory.deductionAmount,
+        categoryName: leaveCategory.name,
+        requesterId: user.id,
+      });
     });
   }
   async approveOne(admin: User, leaveId: number) {

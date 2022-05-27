@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   UseGuards,
 } from '@nestjs/common';
 import { ApiExtraModels, ApiTags } from '@nestjs/swagger';
@@ -17,6 +18,7 @@ import { UserDto } from '@app/user/dtos/user.dto';
 import { UserAuthForAdminService } from '@app/user-auth/services/user-auth-for-admin.service';
 import { ChangePasswordForUserDto } from '@app/user-auth/dtos/for-admin/change-password-for-user.dto';
 import { ApproveUserToJoinSystemDto } from '@app/user/dtos/for-admin/approve-user-to-join-system.dto';
+import { ReplaceUserLeavesCategoriesForUserDto } from '@app/user-auth/dtos/for-admin/replace-user-leaves-categories-for-user.dto';
 
 @ApiExtraModels(ApiRiaDto, UserDto)
 @UseGuards(JwtAuthGuard, RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN))
@@ -32,6 +34,17 @@ export class UserAuthForAdminsController {
   async changePasswordForUser(
     @Body() changePasswordForUserDto: ChangePasswordForUserDto,
   ) {}
+
+  @ApiRiaDto(UserDto)
+  @Put('/user-leaves-categories')
+  async replaceUserLeavesCategories(
+    @Body()
+    replaceUserLeavesCategoriesForUserDto: ReplaceUserLeavesCategoriesForUserDto,
+  ) {
+    return this.userAuthForAdminService.replaceUserLeavesCategoriesForUser(
+      replaceUserLeavesCategoriesForUserDto,
+    );
+  }
 
   @ApiRiaDto(UserDto)
   @Post('/approve-user')

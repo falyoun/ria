@@ -11,11 +11,13 @@ import { UserAuthForAdminsController } from '@app/user-auth/controllers/user-aut
 import { UserAuthController } from '@app/user-auth/controllers/user-auth.controller';
 import { UserAuthForAdminService } from '@app/user-auth/services/user-auth-for-admin.service';
 import { DepartmentsModule } from '@app/departments/departments.module';
+import { LeaveModule } from '@app/leave/leave.module';
 
 @Module({
   imports: [
     UserModule,
     DepartmentsModule,
+    LeaveModule,
     SpaAuthenticationModule.registerAsync({
       imports: [
         JwtModule.registerAsync({
