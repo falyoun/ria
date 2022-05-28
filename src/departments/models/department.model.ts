@@ -2,6 +2,7 @@ import { Optional } from 'sequelize';
 import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
 import { User } from '@app/user/models/user.model';
 import { Job } from '@app/departments/financial/salary-scale/job/job.model';
+import { DepartmentManager } from '@app/departments/models/department-manager.model';
 
 export interface DepartmentAttributes {
   id?: number;
@@ -29,6 +30,9 @@ export type DepartmentCreationAttributes = Optional<DepartmentAttributes, 'id'>;
         },
         {
           association: 'jobs',
+        },
+        {
+          association: 'departmentManagers',
         },
       ],
     },
@@ -62,4 +66,7 @@ export class Department
 
   @HasMany(() => Job, { foreignKey: 'departmentId' })
   jobs: Job[];
+
+  @HasMany(() => DepartmentManager, { foreignKey: 'departmentId' })
+  departmentManagers: DepartmentManager[];
 }

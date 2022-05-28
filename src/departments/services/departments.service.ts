@@ -8,14 +8,37 @@ import { UserService } from '@app/user/services/user.service';
 import { AddUsersToDepartmentDto } from '@app/departments/dtos/add-users-to-department.dto';
 import { FindManyDepartmentsDto } from '@app/departments/dtos/find-many-departments.dto';
 import { RiaUtils } from '@app/shared/utils';
+import { DepartmentManager } from '@app/departments/models/department-manager.model';
+import { Sequelize } from 'sequelize-typescript';
+import { User } from '@app/user/models/user.model';
 
 @Injectable()
 export class DepartmentsService {
   constructor(
     @InjectModel(Department)
     private readonly departmentModel: typeof Department,
+    @InjectModel(DepartmentManager)
+    private readonly departmentManagerModel: typeof DepartmentManager,
     private readonly userService: UserService,
+    private readonly sequelize: Sequelize,
   ) {}
+
+  async markUserAsManagerForADepartment(departmentId: number, userId: number) {
+    await this.userService.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    await this.findOne({
+      where: {
+        id: departmentId,
+      },
+    });
+    return this.departmentManagerModel.create({
+      departmentId,
+      userId,
+    });
+  }
 
   async findOne(findOptions: FindOptions<Department>) {
     const department = await this.departmentModel
@@ -50,8 +73,16 @@ export class DepartmentsService {
       count,
     };
   }
-  createOne(createDepartmentDto: CreateDepartmentDto) {
-    return this.departmentModel.create(createDepartmentDto);
+  createOne(user: User, createDepartmentDto: CreateDepartmentDto) {
+    return this.sequelize.transaction(async (transaction) => {
+      const createdDepartment = await this.departmentModel.create(
+        createDepartmentDto,
+      );
+      await this.departmentManagerModel.create({
+        departmentId: createdDepartment.id,
+        userId: user.id,
+      });
+    });
   }
   async addUsersToDepartment(
     departmentId: number,

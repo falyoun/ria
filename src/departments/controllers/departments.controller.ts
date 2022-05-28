@@ -19,6 +19,7 @@ import { CreateDepartmentDto } from '@app/departments/dtos/create-department.dto
 import { DepartmentsService } from '@app/departments/services/departments.service';
 import { FindManyDepartmentsDto } from '@app/departments/dtos/find-many-departments.dto';
 import { AddUsersToDepartmentDto } from '@app/departments/dtos/add-users-to-department.dto';
+import { MarkUserAsManagerForDepartmentDto } from '@app/departments/dtos/mark-user-as-manager-for-department.dto';
 
 @ApiTags('Departments')
 @Controller('departments')
@@ -40,12 +41,24 @@ export class DepartmentsController {
   }
 
   @ApiRiaDto(DepartmentDto)
+  @Post(':id/mark-user-as-manager')
+  markUserAsManager(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: MarkUserAsManagerForDepartmentDto,
+  ) {
+    return this.departmentsService.markUserAsManagerForADepartment(
+      id,
+      dto.userId,
+    );
+  }
+
+  @ApiRiaDto(DepartmentDto)
   @Post()
   createOne(
     @RequestUser() user: User,
     @Body() createDepartmentDto: CreateDepartmentDto,
   ) {
-    return this.departmentsService.createOne(createDepartmentDto);
+    return this.departmentsService.createOne(user, createDepartmentDto);
   }
 
   @ApiRiaDto(DepartmentDto)
