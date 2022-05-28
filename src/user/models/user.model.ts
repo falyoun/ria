@@ -21,6 +21,7 @@ import { EmployeeLevelEnum } from '@app/departments/financial/salary-scale/enums
 import { Job } from '@app/departments/financial/salary-scale/job/job.model';
 import { Department } from '@app/departments/models/department.model';
 import { UserLeaveCategory } from '@app/leave/models/user-leave-category.model';
+import { DepartmentManager } from '@app/departments/models/department-manager.model';
 export interface UserAttributes {
   id: number;
   email: string;
@@ -74,6 +75,9 @@ export type UserCreationAttributes = Optional<UserAttributes, 'id'>;
       include: [
         {
           association: 'userLeaveCategories',
+        },
+        {
+          association: 'departmentManagers',
         },
       ],
     },
@@ -196,6 +200,9 @@ export class User
     foreignKey: 'userId',
   })
   userLeaveCategories: UserLeaveCategory[];
+
+  @HasMany(() => DepartmentManager, { foreignKey: 'userId' })
+  departmentManagers: DepartmentManager[];
 
   @BeforeSave({})
   static async hashPassword(user: User) {
