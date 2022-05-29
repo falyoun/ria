@@ -3,13 +3,13 @@ import { IsEnum, IsNotEmpty, IsPositive, IsString } from 'class-validator';
 import {
   ActionTypesEnum,
   PossessionTypesEnum,
+  RiaResources,
 } from '@app/role/enums/grant-action.eum';
 
 export class GrantDto {
-  @ApiProperty({ type: String })
   @IsNotEmpty()
-  @IsString({ always: true })
-  resource: string;
+  @IsString()
+  resource: RiaResources;
 
   @IsEnum(ActionTypesEnum)
   action: ActionTypesEnum;

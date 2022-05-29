@@ -10,8 +10,9 @@ export enum PossessionTypesEnum {
   OWN = 'own',
 }
 
-export enum JunoResources {
-  ORGANIZATION = 'organization',
-  ACCOUNT = 'account',
-  INVOICE = 'invoice',
+export enum RiaResources {
+  DEPARTMENTS = 'departments',
+  ACCOUNTS = 'accounts',
+  INVOICES = 'invoices',
+  LEAVES = 'leaves',
 }

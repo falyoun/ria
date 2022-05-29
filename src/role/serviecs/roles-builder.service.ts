@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { AppRole } from '@app/role/enums/app-role.enum';
-import { JunoResources } from '@app/role/enums/grant-action.eum';
 
 @Injectable()
 export class RolesBuilderService {

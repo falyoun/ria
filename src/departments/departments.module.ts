@@ -6,12 +6,13 @@ import { DepartmentsService } from '@app/departments/services/departments.servic
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Department } from '@app/departments/models/department.model';
 import { UserModule } from '@app/user/user.module';
+import { DepartmentManager } from '@app/departments/models/department-manager.model';
 
 @Module({
   imports: [
     FinancialModule,
     HrModule,
-    SequelizeModule.forFeature([Department]),
+    SequelizeModule.forFeature([Department, DepartmentManager]),
     UserModule,
   ],
   controllers: [DepartmentsController],
