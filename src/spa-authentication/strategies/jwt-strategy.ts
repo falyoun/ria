@@ -32,7 +32,7 @@ export class JwtStrategy extends PassportStrategy(
       UserCreationAttributes,
       UserAttributes
     >(model);
-    const user = await userCtor.scope('leaves').findOne({
+    const user = await userCtor.findOne({
       where: {
         id: payload.id,
         email: payload.email,

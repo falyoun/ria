@@ -34,14 +34,6 @@ export class UserForAdminController {
     private readonly userForAdminService: UserForAdminService,
   ) {}
 
-  @ApiPaginatedDto(UserDto)
-  @Get()
-  getSystemUsers(
-    @RequestUser() admin: User,
-    @Query() findSystemUsersDto: FindSystemUsersDto,
-  ) {
-    return this.userForAdminService.findSystemUsers(admin, findSystemUsersDto);
-  }
   @ApiRiaDto(UserDto)
   @Get(':id')
   findUser(@Param('id', ParseIntPipe) id: number) {
@@ -50,6 +42,15 @@ export class UserForAdminController {
         id,
       },
     });
+  }
+
+  @ApiPaginatedDto(UserDto)
+  @Get()
+  getSystemUsers(
+    @RequestUser() admin: User,
+    @Query() findSystemUsersDto: FindSystemUsersDto,
+  ) {
+    return this.userForAdminService.findSystemUsers(admin, findSystemUsersDto);
   }
 
   @ApiRiaDto(UserDto)
