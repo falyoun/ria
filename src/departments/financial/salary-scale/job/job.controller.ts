@@ -33,7 +33,7 @@ export class JobController {
   @ApiRiaDto(JobDto)
   @Get(':id')
   findJob(@Param('id', ParseIntPipe) id: number) {
-    return this.jobService.findOne({
+    return this.jobService.findJobWithUsers({
       where: {
         id,
       },

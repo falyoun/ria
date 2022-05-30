@@ -18,7 +18,17 @@ export interface JobAttributes {
 }
 export type JobCreationAttributes = Optional<JobAttributes, 'id'>;
 
-@Table
+@Table({
+  scopes: {
+    department: {
+      include: [
+        {
+          association: 'department',
+        },
+      ],
+    },
+  },
+})
 export class Job
   extends Model<JobAttributes, JobCreationAttributes>
   implements JobAttributes
