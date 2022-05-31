@@ -21,17 +21,26 @@ import { MessageResponseDto } from '@app/shared/dtos/message-response.dto';
 
 @ApiTags('Leaves Categories')
 @Controller('leaves-categories')
-@UseGuards(RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN))
 @ApiExtraModels(CreateLeaveCategoryDto, LeaveCategoryDto)
 export class LeaveCategoryController {
   constructor(private readonly leaveCategoryService: LeaveCategoriesService) {}
 
+  @UseGuards(RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN))
   @ApiRiaDto(CreateLeaveCategoryDto)
   @Post()
   createCategory(@Body() createLeaveCategoryDto: CreateLeaveCategoryDto) {
     return this.leaveCategoryService.createOne(createLeaveCategoryDto);
   }
 
+  @UseGuards(
+    RoleGuard(
+      AppRole.SUPER_ADMIN,
+      AppRole.ADMIN,
+      AppRole.MANAGER,
+      AppRole.HR_MANAGER,
+      AppRole.USER,
+    ),
+  )
   @Get(':id')
   @ApiRiaDto(LeaveCategoryDto)
   findOne(@Param('id', ParseIntPipe) id: number) {
@@ -41,6 +50,8 @@ export class LeaveCategoryController {
       },
     });
   }
+
+  @UseGuards(RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN))
   @Delete(':id')
   @ApiRiaDto(MessageResponseDto)
   deleteOne(@Param('id', ParseIntPipe) id: number) {
@@ -56,6 +67,15 @@ export class LeaveCategoryController {
     );
   }
 
+  @UseGuards(
+    RoleGuard(
+      AppRole.SUPER_ADMIN,
+      AppRole.ADMIN,
+      AppRole.MANAGER,
+      AppRole.HR_MANAGER,
+      AppRole.USER,
+    ),
+  )
   @Get()
   @ApiPaginatedDto(LeaveCategoryDto)
   findAll(@Query() findLeavesDto?: SequelizePaginationDto) {
