@@ -23,17 +23,25 @@ import { SalaryScaleJob } from '@app/departments/financial/salary-scale/models/s
 
 @ApiExtraModels(SalaryScaleDto, MessageResponseDto)
 @ApiTags('Salary Scale')
-@UseGuards(RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN, AppRole.HR_MANAGER))
 @Controller('salary-scales')
 export class SalaryScaleController {
   constructor(private readonly salaryScaleService: SalaryScaleService) {}
 
+  @UseGuards(RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN))
   @ApiRiaDto(SalaryScaleDto)
   @Post()
   createSalaryScale(@Body() createSalaryScaleDto: CreateSalaryScaleDto) {
     return this.salaryScaleService.createOne(createSalaryScaleDto);
   }
 
+  @UseGuards(
+    RoleGuard(
+      AppRole.SUPER_ADMIN,
+      AppRole.ADMIN,
+      AppRole.HR_MANAGER,
+      AppRole.MANAGER,
+    ),
+  )
   @ApiRiaDto(SalaryScaleDto)
   @Get(':id')
   getSalaryScale(@Param('id', ParseIntPipe) id: number) {
@@ -45,12 +53,21 @@ export class SalaryScaleController {
     });
   }
 
+  @UseGuards(
+    RoleGuard(
+      AppRole.SUPER_ADMIN,
+      AppRole.ADMIN,
+      AppRole.HR_MANAGER,
+      AppRole.MANAGER,
+    ),
+  )
   @ApiPaginatedDto(SalaryScaleDto)
   @Get()
   getSalaryScales(@Query() findSalaryScalesDto: FindSalaryScalesDto) {
     return this.salaryScaleService.findAll(findSalaryScalesDto);
   }
 
+  @UseGuards(RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN))
   @ApiRiaDto(MessageResponseDto)
   @Delete(':id')
   deleteSalaryScale(@Param('id', ParseIntPipe) id: number) {
