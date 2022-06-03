@@ -33,31 +33,81 @@ export class UserAuthService implements OnApplicationBootstrap {
     private readonly userRoleService: UserRoleService,
   ) {}
 
-  async onApplicationBootstrap() {
+  private async createUserIfNotExist({
+    email,
+    firstName,
+    lastName,
+    password,
+    role,
+  }: {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    role: AppRole;
+  }) {
     try {
       await this.findUser({
         where: {
-          email: 'ria@ria.com',
+          email,
         },
       });
     } catch (e) {
       if (e instanceof AccountNotFoundException) {
         await this.sequelize.transaction(async (transaction) => {
           const superAdmin = await this.userModel.create({
-            firstName: 'ria',
-            lastName: 'ria',
-            email: 'ria@ria.com',
-            password: 'ria@123',
+            firstName,
+            lastName,
+            email,
+            password,
             isActive: true,
             isVerified: true,
           });
           await this.userRoleService.createUserRole({
             userId: superAdmin.id,
-            requiredRole: AppRole.SUPER_ADMIN,
+            requiredRole: role,
           });
         });
       }
     }
+  }
+  async onApplicationBootstrap() {
+    await this.createUserIfNotExist({
+      email: 'super-admin@ria.com',
+      password: 'ria@123',
+      firstName: 'ria',
+      lastName: 'ria',
+      role: AppRole.SUPER_ADMIN,
+    });
+    await this.createUserIfNotExist({
+      email: 'admin@ria.com',
+      password: 'ria@123',
+      firstName: 'Admin',
+      lastName: 'admin',
+      role: AppRole.ADMIN,
+    });
+    await this.createUserIfNotExist({
+      email: 'hr-manager@ria.com',
+      password: 'ria@123',
+      firstName: 'Hr Manager',
+      lastName: 'hr manager',
+      role: AppRole.HR_MANAGER,
+    });
+    await this.createUserIfNotExist({
+      email: 'manager@ria.com',
+      password: 'ria@123',
+      firstName: 'Manager',
+      lastName: 'manager',
+      role: AppRole.MANAGER,
+    });
+
+    await this.createUserIfNotExist({
+      email: 'user@ria.com',
+      password: 'ria@123',
+      firstName: 'User',
+      lastName: 'user',
+      role: AppRole.USER,
+    });
   }
 
   createUser(createUserDto: CreateUserDto) {

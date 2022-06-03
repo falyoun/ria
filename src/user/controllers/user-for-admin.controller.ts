@@ -26,7 +26,10 @@ import { AssignJobToUserDto } from '@app/user/dtos/for-admin/assign-job-to-user.
 
 @ApiExtraModels(UserDto, CreateUserDto, UpdateUserDto, ReceiptDto)
 @ApiTags(`Users' endpoints for admin`)
-@UseGuards(JwtAuthGuard, RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN))
+@UseGuards(
+  JwtAuthGuard,
+  RoleGuard(AppRole.SUPER_ADMIN, AppRole.ADMIN, AppRole.HR_MANAGER),
+)
 @Controller('users/for-admin')
 export class UserForAdminController {
   constructor(
