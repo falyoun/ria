@@ -1,4 +1,4 @@
-import { IsNumber, IsPositive } from 'class-validator';
+import { Allow, IsNumber, IsPositive } from 'class-validator';
 
 export class UpdateUserLeavesCategoriesForUser {
   @IsPositive()
@@ -7,6 +7,9 @@ export class UpdateUserLeavesCategoriesForUser {
   numberOfDaysAllowed: number;
 }
 export class ReplaceUserLeavesCategoriesForUserDto {
+  @IsPositive()
   userId: number;
+
+  @Allow()
   userLeavesCategories: UpdateUserLeavesCategoriesForUser[];
 }
