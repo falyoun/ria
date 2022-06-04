@@ -149,7 +149,9 @@ export class LeaveService {
         HttpStatus.BAD_REQUEST,
         'Leave amount is not applicable for you as you have left ' +
           userLeaveInstance.numberOfDaysAllowed +
-          ' of this leave type, kindly contact the admin to increase it',
+          ' of this leave type, kindly contact the admin to increase it as you have requested amount of leave: ' +
+          toDeductFromDay +
+          ' days',
       );
     }
     return this.sequelize.transaction(async (transaction) => {
