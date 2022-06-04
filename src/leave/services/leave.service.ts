@@ -28,7 +28,8 @@ export class LeaveService {
     replaceDto: ReplaceUserLeavesCategoriesForUserDto,
   ) {
     return this.sequelize.transaction(async (transaction) => {
-      await this.userLeaveCategoryModel.truncate({
+      await this.userLeaveCategoryModel.destroy({
+        force: true,
         where: {
           userId: replaceDto.userId,
         },
