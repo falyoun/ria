@@ -21,13 +21,14 @@ export class JobService {
   }
   async findJobWithUsers(findOptions: FindOptions<Job>) {
     const instance = await this.findOne(findOptions);
+    console.log(instance);
     const users = await this.userModel.findAll({
       where: {
         jobId: instance.id,
       },
     });
     return {
-      ...instance,
+      ...instance.toJSON(),
       users,
     };
   }

@@ -82,6 +82,7 @@ export class DepartmentsService {
         departmentId: createdDepartment.id,
         userId: user.id,
       });
+      return createdDepartment;
     });
   }
   async addUsersToDepartment(
