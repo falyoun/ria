@@ -14,6 +14,7 @@ import { IAppConfig } from '@app/global/app-config/app-config.interface';
           configService.get<SequelizeModuleOptions>('sequelizeOptions');
         return {
           ...sequelizeModuleOptions,
+          logging: false,
         };
       },
       inject: [ConfigService],

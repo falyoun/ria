@@ -8,12 +8,14 @@ import { DepartmentsModule } from '@app/departments/departments.module';
 import { TicketsModule } from '@app/tickets/tickets.module';
 import { SalaryScaleModule } from '@app/departments/financial/salary-scale/salary-scale.module';
 import { InvoiceModule } from '@app/invoice/invoice.module';
+import { BeneficiaryModule } from '@app/beneficiary/beneficiary.module';
 
 @Module({
   imports: [
     AppDatabaseModule,
     AppConfigModule,
     UserAuthModule,
+    BeneficiaryModule,
     SalaryScaleModule,
     DepartmentsModule,
     InvoiceModule,

@@ -10,6 +10,7 @@ import {
 import { User } from '@app/user/models/user.model';
 import { AppFile } from '@app/global/app-file/models/app-file.model';
 import { InvoiceStatusEnum } from '@app/invoice/enums/invoice-status.enum';
+import { Beneficiary } from '@app/beneficiary/models/beneficiary.model';
 
 export interface InvoiceAttributes {
   id?: number;
@@ -19,6 +20,8 @@ export interface InvoiceAttributes {
   taxNumber: string;
   dueDate: Date;
   issueDate: Date;
+  beneficiaryId?: number;
+  beneficiary?: Beneficiary;
   submittedById: number;
   submittedBy?: User;
   assigneeId?: number;
@@ -29,7 +32,6 @@ export interface InvoiceAttributes {
   paidBy?: User;
   approvedById?: number;
   approvedBy?: User;
-
   rejectedById?: number;
   rejectedBy?: User;
 
@@ -121,6 +123,12 @@ export class Invoice
     type: DataType.STRING,
   })
   taxNumber: string;
+
+  @BelongsTo(() => Beneficiary, 'beneficiaryId')
+  beneficiary: Beneficiary;
+
+  @ForeignKey(() => Beneficiary)
+  beneficiaryId: number;
 
   @Column({
     type: DataType.INTEGER,
