@@ -21,8 +21,13 @@ export interface IServer {
   swagger: ISwagger;
 }
 
+export interface ISwiftcodesapiConfig {
+  appKey: string;
+}
+
 export interface IAppConfig {
   sequelizeOptions: SequelizeModuleOptions;
   server: IServer;
   useAuth: IAuth;
+  swiftcodesapi?: ISwiftcodesapiConfig;
 }

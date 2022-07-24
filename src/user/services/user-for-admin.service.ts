@@ -71,6 +71,7 @@ export class UserForAdminService {
       };
     }
     const findOptions: FindOptions<User> = { where: whereOptions };
+    const count = await this.userModel.count(findOptions);
     if (findSystemUsersDto.page || findSystemUsersDto.limit) {
       RiaUtils.applyPagination(findOptions, {
         page: findSystemUsersDto.page,
@@ -79,7 +80,7 @@ export class UserForAdminService {
     }
     return {
       data: await this.userModel.findAll(findOptions),
-      count: await this.userModel.count(findOptions),
+      count,
     };
   }
 }

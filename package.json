@@ -41,7 +41,9 @@
     "@nestjs/swagger": "^5.1.5",
     "@nestjs/websockets": "^8.2.4",
     "@nestjsx/crud": "^5.0.0-alpha.3",
-    "alpha-nestjsx-crud": "^0.0.5",
+    "@types/multer": "^1.4.7",
+    "alpha-nestjsx-crud": "0.0.5",
+    "alpha-swiftcodesapi": "0.0.3",
     "apollo-server-core": "^3.6.1",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.1",
@@ -64,7 +66,6 @@
     "socket.io": "^4.4.0",
     "swagger-ui-express": "^4.3.0",
     "uuid": "^8.3.2",
-    "@types/multer": "^1.4.7",
     "yarn": "^1.22.17"
   },
   "devDependencies": {

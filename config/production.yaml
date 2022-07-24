@@ -40,3 +40,6 @@ sequelizeOptions:
   pool:
     min: 2
     max: 10
+
+swiftcodesapi:
+  appKey: sk_c11439de84de3efa5dae842cbe8517124ca7878f9f8bd5cdca20eebd024ff01e

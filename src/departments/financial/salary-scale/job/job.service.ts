@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Job } from '@app/departments/financial/salary-scale/job/job.model';
 import { FindOptions, InstanceDestroyOptions } from 'sequelize';
@@ -7,7 +7,6 @@ import { CreateJobDto } from '@app/departments/financial/salary-scale/job/dtos/c
 import { FindJobsDto } from '@app/departments/financial/salary-scale/job/dtos/find-jobs.dto';
 import { RiaUtils } from '@app/shared/utils';
 import { UpdateJobDto } from '@app/departments/financial/salary-scale/job/dtos/update-job.dto';
-import { UserService } from '@app/user/services/user.service';
 import { User } from '@app/user/models/user.model';
 
 @Injectable()
