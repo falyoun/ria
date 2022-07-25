@@ -15,10 +15,10 @@ import { BeneficiaryModule } from '@app/beneficiary/beneficiary.module';
     AppDatabaseModule,
     AppConfigModule,
     UserAuthModule,
-    BeneficiaryModule,
     SalaryScaleModule,
     DepartmentsModule,
     InvoiceModule,
+    BeneficiaryModule,
     TicketsModule,
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../', 'public'),

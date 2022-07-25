@@ -31,7 +31,7 @@ sequelizeOptions:
   host: ec2-34-230-133-163.compute-1.amazonaws.com
   port: 5432
   sync:
-    force: true
+    force: false
   define:
     underscored: true
     paranoid: true
@@ -43,5 +43,3 @@ sequelizeOptions:
 
 swiftcodesapi:
   appKey: sk_c11439de84de3efa5dae842cbe8517124ca7878f9f8bd5cdca20eebd024ff01e
-
-d:
