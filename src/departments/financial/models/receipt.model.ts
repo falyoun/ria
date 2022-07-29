@@ -19,6 +19,7 @@ export interface ReceiptAttributes {
   id: number;
   userId: number;
   salary?: Salary;
+  user?: User;
   deductions?: Deduction[];
 }
 export type ReceiptCreationAttributes = Optional<ReceiptAttributes, 'id'>;

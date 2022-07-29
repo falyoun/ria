@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { FindOptions } from 'sequelize';
 import { AccountNotFoundException } from '../exceptions';
@@ -9,6 +9,7 @@ import { UserRoleService } from '@app/role/serviecs/user-role.service';
 import { Sequelize } from 'sequelize-typescript';
 import { SalaryScaleService } from '@app/departments/financial/salary-scale/salary-scale.service';
 import { LeaveService } from '@app/leave/services/leave.service';
+import { ReceiptService } from '@app/departments/financial/services/receipt.service';
 
 @Injectable()
 export class UserService {
@@ -19,6 +20,8 @@ export class UserService {
     private readonly sequelize: Sequelize,
     private readonly salaryScaleJob: SalaryScaleService,
     private readonly leaveService: LeaveService,
+    @Inject(forwardRef(() => ReceiptService))
+    private readonly receiptService: ReceiptService,
   ) {}
 
   async findOne(findOptions: FindOptions<User>) {
@@ -54,6 +57,18 @@ export class UserService {
       profile['salary'] = userJob.amount;
     }
 
+    const receipts = await this.receiptService.findAllReceipts({
+      email: user.email,
+    });
+    if (receipts && receipts.data) {
+      profile['receipts'] = <any>receipts.data.map((ele) => {
+        const entry = ele.toJSON();
+        entry['user'] = undefined;
+        return entry;
+      });
+    }
+    profile['userLeavesCategories'] =
+      await this.leaveService.getUserLeavesCategories(user.id);
     const myLeaves = await this.leaveService.findAll({
       requestersIds: [user.id],
     });

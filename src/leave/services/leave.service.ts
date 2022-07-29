@@ -24,6 +24,13 @@ export class LeaveService {
     private readonly sequelize: Sequelize,
   ) {}
 
+  getUserLeavesCategories(userId: number) {
+    return this.userLeaveCategoryModel.findAll({
+      where: {
+        userId,
+      },
+    });
+  }
   async replaceUserLeavesCategories(
     replaceDto: ReplaceUserLeavesCategoriesForUserDto,
   ) {

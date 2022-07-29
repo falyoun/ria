@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import {
   FindOptions,
@@ -26,6 +31,7 @@ import { ResourceNotFoundException } from '@app/shared/exceptions/coded-exceptio
 export class ReceiptService {
   constructor(
     @InjectModel(Receipt) private readonly receiptModel: typeof Receipt,
+    @Inject(forwardRef(() => UserService))
     private readonly userService: UserService,
     private readonly jobService: JobService,
     private readonly salaryService: SalaryService,

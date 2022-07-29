@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AppFileModule } from '../global/app-file/app-file.module';
 import { RoleModule } from '@app/role/role.module';
 import { SequelizeModule } from '@nestjs/sequelize';
@@ -9,6 +9,7 @@ import { UserService } from '@app/user/services/user.service';
 import { UserForAdminService } from '@app/user/services/user-for-admin.service';
 import { SalaryScaleModule } from '@app/departments/financial/salary-scale/salary-scale.module';
 import { LeaveModule } from '@app/leave/leave.module';
+import { ReceiptModule } from '@app/departments/financial/receipt.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { LeaveModule } from '@app/leave/leave.module';
     AppFileModule,
     LeaveModule,
     SalaryScaleModule,
+    ReceiptModule,
   ],
   controllers: [UserController, UserForAdminController],
   providers: [UserService, UserForAdminService],
