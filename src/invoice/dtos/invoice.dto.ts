@@ -9,6 +9,7 @@ import {
 import { UserDto } from '@app/user/dtos/user.dto';
 import { Transform } from 'class-transformer';
 import { InvoiceStatusEnum } from '@app/invoice/enums/invoice-status.enum';
+import { DataBoxDto } from '@app/invoice/dtos/invoice-crud-dtos/data-box.dto';
 
 export class InvoiceDto {
   @Allow()
@@ -49,4 +50,7 @@ export class InvoiceDto {
   paidById?: number;
   @Allow()
   paidBy?: UserDto;
+
+  @Allow()
+  dataBoxes: DataBoxDto[];
 }

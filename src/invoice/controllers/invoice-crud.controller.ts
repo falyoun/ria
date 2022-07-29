@@ -10,7 +10,6 @@ import {
   Post,
   Put,
   Query,
-  Req,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -33,6 +32,8 @@ import { AppRole } from '@app/role/enums/app-role.enum';
 import { Request } from 'express';
 import { CreateInvoiceDto } from '@app/invoice/dtos/invoice-crud-dtos/create-invoice.dto';
 import { MessageResponseDto } from '@app/shared/dtos/message-response.dto';
+import { DataBox } from '@app/invoice/data-box.model';
+import { Beneficiary } from '@app/beneficiary/models/beneficiary.model';
 
 @UseGuards(
   RoleGuard(
@@ -89,7 +90,7 @@ export class InvoiceCrudController {
       where: {
         id,
       },
-      include: [AppFile],
+      include: [AppFile, DataBox, Beneficiary],
     });
   }
 

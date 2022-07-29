@@ -4,6 +4,7 @@ import {
   Column,
   DataType,
   ForeignKey,
+  HasMany,
   Model,
   Table,
 } from 'sequelize-typescript';
@@ -11,6 +12,9 @@ import { User } from '@app/user/models/user.model';
 import { AppFile } from '@app/global/app-file/models/app-file.model';
 import { InvoiceStatusEnum } from '@app/invoice/enums/invoice-status.enum';
 import { Beneficiary } from '@app/beneficiary/models/beneficiary.model';
+import { DataBoxDto } from '@app/invoice/dtos/invoice-crud-dtos/data-box.dto';
+import { DataBox } from '@app/invoice/data-box.model';
+import { BeneficiaryDto } from '@app/beneficiary/dtos/beneficiary.dto';
 
 export interface InvoiceAttributes {
   id?: number;
@@ -21,7 +25,7 @@ export interface InvoiceAttributes {
   dueDate: Date;
   issueDate: Date;
   beneficiaryId?: number;
-  beneficiary?: Beneficiary;
+  beneficiary?: BeneficiaryDto;
   submittedById: number;
   submittedBy?: User;
   assigneeId?: number;
@@ -34,7 +38,7 @@ export interface InvoiceAttributes {
   approvedBy?: User;
   rejectedById?: number;
   rejectedBy?: User;
-
+  dataBoxes?: DataBoxDto[];
   status: InvoiceStatusEnum;
 }
 export type InvoiceCreationAttributes = Optional<InvoiceAttributes, 'id'>;
@@ -44,6 +48,9 @@ export type InvoiceCreationAttributes = Optional<InvoiceAttributes, 'id'>;
     include: [
       {
         association: 'file',
+      },
+      {
+        association: 'dataBoxes',
       },
     ],
   },
@@ -147,6 +154,9 @@ export class Invoice
 
   @BelongsTo(() => User, 'assigneeId')
   assignee: User;
+
+  @HasMany(() => DataBox, { foreignKey: 'invoiceId' })
+  dataBoxes: DataBox[];
 
   @Column({
     type: DataType.INTEGER,

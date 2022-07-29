@@ -1,0 +1,38 @@
+od INVOICE
+= oat Jon 8 2022
+
+Payment Terms: EOM
+Beta apps LLC
+
+Cannon park, 1st Tower, Abu Dhabi TRN:  015359987612345
+P.O box! 75978
+
+‘Swift code: ARABAEADRAK Balance Due:
+IBAN: AE85026000 1015689723401
+
+AED 4,236.00
+
+Bill To:
+Mr. Tarek All
+
+Dubai, UAE
+
+RN: 0153336987 15367
+
+Website infrastructure 1 AED 500.00 AED 500.00
+Website design 1 AED 1,000.00 AED 1,000.00
+Website requirements 1 AED 2,500.00 AED 2,500.00
+Subtotal ‘AED 4,000.00
+Tax Rate (5.9%): AED 236.00
+Total: AED 4,236.00
+
+Notes:
+
+Please transfer invoice amount to the below address:
+Bank Name: ARAB BANK PLC
+
+Branch Name: RAS AL KHAIMAH BRANCH
+Currency: AED
+
+Terms
+Payment is due on 30/01/2022

@@ -7,10 +7,7 @@ import {
 } from '../models/beneficiary.model';
 import { FindOptions, Op, WhereOptions } from 'sequelize';
 import { CreateBeneficiaryDto } from '../dtos/create-beneficiary.dto';
-import {
-  AlreadyExistsException,
-  BeneficiaryNotFoundException,
-} from '../exceptions/exceptions';
+import { BeneficiaryNotFoundException } from '../exceptions/exceptions';
 import { BeneficiaryStatus } from '@app/beneficiary/enums/beneficiary-status.enum';
 import {
   IbanBaseResponse,
@@ -206,7 +203,7 @@ export class BeneficiaryService extends AlphaSequelizeCrudService<Beneficiary> {
       },
     });
     if (beneficiary) {
-      throw new AlreadyExistsException();
+      return beneficiary;
     }
     return this.beneficiaryAccountModel.create({
       ...createBeneficiaryDto,

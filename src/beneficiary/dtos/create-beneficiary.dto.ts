@@ -10,24 +10,24 @@ import { BeneficiaryTypeEnum } from '@app/beneficiary/models/beneficiary.model';
 export class CreateBeneficiaryDto {
   @IsString()
   @MaxLength(20)
-  name: string;
+  name?: string;
   @IsString()
-  swiftCode: string;
+  swiftCode?: string;
   @IsString()
-  bankName: string;
+  bankName?: string;
   @IsOptional()
   @IsString()
   accountNumber?: string;
   @IsString()
   iban: string;
   @IsString()
-  branchName: string;
+  branchName?: string;
   @IsString()
-  branchAddress: string;
+  branchAddress?: string;
   @IsString()
-  taxNumber: string;
+  taxNumber?: string;
   @IsString()
-  currencyCode: string;
+  currencyCode?: string;
   @IsNumber()
   @IsOptional()
   coolDownTimestamp?: number;
