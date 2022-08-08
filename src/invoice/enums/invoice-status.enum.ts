@@ -5,4 +5,5 @@ export enum InvoiceStatusEnum {
   FAILED = 'failed',
   COMPLETED = 'completed',
   REJECTED = 'rejected',
+  IN_ANALYZING_PROCESS = 'in_analyzing_process',
 }
