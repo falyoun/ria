@@ -11,7 +11,7 @@
   },
   "scripts": {
     "install": "yarn",
-    "prebuild": "npm i && rimraf dist",
+    "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "npm run build && npm run start:production",
