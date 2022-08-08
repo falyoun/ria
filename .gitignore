@@ -4,6 +4,8 @@
 public/avatars
 public/invoices-files
 public/invoices
+public/tmp-data
+public/tmp-images
 # Logs
 logs
 *.log
