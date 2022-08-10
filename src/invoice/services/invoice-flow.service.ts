@@ -8,12 +8,8 @@ import { UserService } from '@app/user/services/user.service';
 import { UnAssignInvoiceFormUserDto } from '@app/invoice/dtos/invoice-flow-dtos/un-assign-invoice-form-user.dto';
 import { InvoiceStatusEnum } from '@app/invoice/enums/invoice-status.enum';
 import { InvoiceDto } from '@app/invoice/dtos/invoice.dto';
-import {
-  Beneficiary,
-  BeneficiaryTypeEnum,
-} from '@app/beneficiary/models/beneficiary.model';
+import { Beneficiary } from '@app/beneficiary/models/beneficiary.model';
 import { BeneficiaryService } from '@app/beneficiary/services/beneficiary.service';
-import { BeneficiaryDto } from '@app/beneficiary/dtos/beneficiary.dto';
 import { CreateBeneficiaryDto } from '@app/beneficiary/dtos/create-beneficiary.dto';
 
 @Injectable()
@@ -130,41 +126,42 @@ export class InvoiceFlowService {
     console.log('foundBeneficiary: ', foundBeneficiary);
     if (
       invoice?.beneficiary?.swiftCode ||
-      dataBoxes.some((ele) => ele.key === 'swift_code')
+      dataBoxes.some((ele) => ele.key === 'swiftCode')
     ) {
       beneficiaryDto.swiftCode =
         invoice?.beneficiary?.swiftCode ||
-        dataBoxes.filter((ele) => ele.key === 'swift_code')[0].value;
+        dataBoxes.filter((ele) => ele.key === 'swiftCode')[0].value;
     }
 
     if (
       invoice?.beneficiary?.accountNumber ||
-      dataBoxes.some((ele) => ele.key === 'account_number')
+      dataBoxes.some((ele) => ele.key === 'accountNumber')
     ) {
       beneficiaryDto.accountNumber =
         invoice?.beneficiary?.accountNumber ||
-        dataBoxes.filter((ele) => ele.key === 'account_number')[0].value;
+        dataBoxes.filter((ele) => ele.key === 'accountNumber')[0].value;
     }
 
     if (
       invoice?.beneficiary?.bankName ||
-      dataBoxes.some((ele) => ele.key === 'bank_name')
+      dataBoxes.some((ele) => ele.key === 'bankName')
     ) {
       beneficiaryDto.bankName =
         invoice?.beneficiary?.bankName ||
-        dataBoxes.filter((ele) => ele.key === 'bank_name')[0].value;
+        dataBoxes.filter((ele) => ele.key === 'bankName')[0].value;
     }
 
     if (
       invoice?.beneficiary?.name ||
-      dataBoxes.some((ele) => ele.key === 'bill_to')
+      dataBoxes.some((ele) => ele.key === 'beneficiaryName')
     ) {
       beneficiaryDto.name =
         invoice?.beneficiary?.name ||
-        dataBoxes.filter((ele) => ele.key === 'bill_to')[0].value;
+        dataBoxes.filter((ele) => ele.key === 'beneficiaryName')[0].value;
     }
 
     if (foundBeneficiary) {
+      console.log(beneficiaryDto);
       await foundBeneficiary.update(beneficiaryDto);
       // await invoice.update({
       //   beneficiaryId: foundBeneficiary.id,
