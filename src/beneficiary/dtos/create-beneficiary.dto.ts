@@ -19,7 +19,7 @@ export class CreateBeneficiaryDto {
   @IsString()
   accountNumber?: string;
   @IsString()
-  iban: string;
+  iban?: string;
   @IsString()
   branchName?: string;
   @IsString()
@@ -35,7 +35,7 @@ export class CreateBeneficiaryDto {
   @IsOptional()
   syncedAt?: number;
   @IsEnum(BeneficiaryTypeEnum)
-  type: BeneficiaryTypeEnum;
+  type?: BeneficiaryTypeEnum;
 
   @IsString()
   @IsOptional()

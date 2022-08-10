@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { AlphaSequelizeCrudService } from 'alpha-nestjsx-crud';
 import {
@@ -20,13 +20,67 @@ import { RiaUtils } from '@app/shared/utils';
 import { BeneficiaryDto } from '@app/beneficiary/dtos/beneficiary.dto';
 
 @Injectable()
-export class BeneficiaryService extends AlphaSequelizeCrudService<Beneficiary> {
+export class BeneficiaryService
+  extends AlphaSequelizeCrudService<Beneficiary>
+  implements OnApplicationBootstrap
+{
   constructor(
     @InjectModel(Beneficiary)
     private readonly beneficiaryAccountModel: typeof Beneficiary,
     private readonly swiftcodesapiService: SwiftcodesapiService,
   ) {
     super(beneficiaryAccountModel);
+  }
+
+  onApplicationBootstrap() {
+    // try {
+    //   this.beneficiaryAccountModel
+    //     .bulkCreate([
+    //       {
+    //         iban: 'AE1234567765',
+    //         bankCode: 'AE',
+    //         bankName: 'ENBD',
+    //         swiftCode: 'AKEWDSW',
+    //         countryName: 'UAE',
+    //         status: BeneficiaryStatus.APPROVED,
+    //       },
+    //       {
+    //         iban: 'AE1234567765',
+    //         bankCode: 'AE',
+    //         bankName: 'ENBD',
+    //         swiftCode: 'AKEWDSW',
+    //         countryName: 'UAE',
+    //         status: BeneficiaryStatus.APPROVED,
+    //       },
+    //       {
+    //         iban: 'AE1234567765',
+    //         bankCode: 'AE',
+    //         bankName: 'ENBD',
+    //         swiftCode: 'AKEWDSW',
+    //         countryName: 'UAE',
+    //         status: BeneficiaryStatus.APPROVED,
+    //       },
+    //       {
+    //         iban: 'AE1234567765',
+    //         bankCode: 'AE',
+    //         bankName: 'ENBD',
+    //         swiftCode: 'AKEWDSW',
+    //         countryName: 'UAE',
+    //         status: BeneficiaryStatus.IN_PROGRESS,
+    //       },
+    //       {
+    //         iban: 'AE1234567765',
+    //         bankCode: 'AE',
+    //         bankName: 'ENBD',
+    //         swiftCode: 'AKEWDSW',
+    //         countryName: 'UAE',
+    //         status: BeneficiaryStatus.IN_PROGRESS,
+    //       },
+    //     ])
+    //     .then();
+    // } catch (e) {
+    //   console.log('e: ', e);
+    // }
   }
 
   async getBeneficiariesForMobile(

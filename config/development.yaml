@@ -6,7 +6,7 @@ useAuth:
     secretKey: R!@_SECRET_KEY
     expiration: 100d
 server:
-  url: http://localhost:3000/api/v1
+  url: http://192.168.92.5:3000/api/v1
   port: 3000
   apiPrefix: api/v1
   swagger:

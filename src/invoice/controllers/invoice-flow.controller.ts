@@ -52,8 +52,12 @@ export class InvoiceFlowController {
 
   @ApiRiaDto(InvoiceDto)
   @Post(':id/review')
-  reviewOne(@Param('id', ParseIntPipe) id: number, @RequestUser() user: User) {
-    return this.invoiceFlowService.reviewInvoice(id, user);
+  reviewOne(
+    @Param('id', ParseIntPipe) id: number,
+    @RequestUser() user: User,
+    @Body() invoiceDto: InvoiceDto,
+  ) {
+    return this.invoiceFlowService.reviewInvoice(id, user, invoiceDto);
   }
 
   @ApiRiaDto(InvoiceDto)

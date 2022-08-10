@@ -68,6 +68,8 @@ async function bootstrap() {
   app.use(json({ limit: '50mb' }));
   app.use(urlencoded({ limit: '50mb', extended: true }));
   const whitelist = ['http://localhost:3000', 'http://localhost:3001'];
+  // app.useWebSocketAdapter(new SocketIoAdapter(app));
+
   app.enableCors({
     origin: function (origin, callback) {
       if (whitelist.indexOf(origin) !== -1) {

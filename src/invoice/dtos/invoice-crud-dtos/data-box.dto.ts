@@ -10,6 +10,9 @@ export class DataBoxDto {
   @IsString()
   @IsOptional()
   value: string;
+  @IsString()
+  @IsOptional()
+  label?: 'invoice' | 'beneficiary';
 }
 
 export class CreateDataBoxDto extends OmitType(DataBoxDto, ['invoiceId']) {}

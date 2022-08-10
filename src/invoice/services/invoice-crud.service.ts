@@ -13,12 +13,10 @@ import { InvoiceStatusEnum } from '@app/invoice/enums/invoice-status.enum';
 import { AppFile } from '@app/global/app-file/models/app-file.model';
 import * as fs from 'fs';
 import { join } from 'path';
-
 import * as tesseract from 'node-tesseract-ocr';
 import { fromPath } from 'pdf2pic';
 import { DataBox } from '@app/invoice/data-box.model';
 import { CreateDataBoxDto } from '@app/invoice/dtos/invoice-crud-dtos/data-box.dto';
-import { BeneficiaryTypeEnum } from '@app/beneficiary/models/beneficiary.model';
 import { BeneficiaryService } from '@app/beneficiary/services/beneficiary.service';
 import { InvoiceGateway } from '@app/invoice/gateways/invoice-socket.gateway';
 import { CallQueue } from '@app/invoice/services/call-queue';
@@ -47,7 +45,7 @@ export class InvoiceCrudService {
     const p = new Promise((resolve) => {
       setTimeout(() => {
         resolve(true);
-      }, 5000);
+      }, 10000);
     });
     await p;
     try {
@@ -65,12 +63,10 @@ export class InvoiceCrudService {
       const storeAsImage = fromPath(invoiceFile.path, options);
       const dataBoxes = await storeAsImage()
         .then(async (res) => {
-          console.log('image: ', res);
           return tesseract.recognize(res['path'], config);
         })
         .then((text) => {
           const boxes: CreateDataBoxDto[] = [];
-          console.log('Result:', text);
           const lines = text.split('\n');
           for (let i = 0; i < lines.length; i++) {
             const line = lines[i];
@@ -79,15 +75,70 @@ export class InvoiceCrudService {
               .replace(/[^\w\/]|_/g, '')
               .toLocaleLowerCase();
 
+            console.log('normalizedLine: ', normalizedLine);
+
+            const branchNameStr = 'branchname';
+            const branchNameIdx = normalizedLine.indexOf(branchNameStr);
+            if (branchNameIdx !== -1) {
+              const branchName = lines[i].trim();
+              console.log('branchName: ', branchName);
+              boxes.push({
+                key: 'branchName',
+                value: branchName,
+                label: 'beneficiary',
+              });
+              continue;
+            }
+
+            const currencyStr = 'currency';
+            const currencyIdx = normalizedLine.indexOf(currencyStr);
+            if (currencyIdx !== -1) {
+              const currency = lines[i].trim();
+              console.log('currency: ', currency);
+              boxes.push({
+                key: 'currency',
+                value: currency,
+                label: 'beneficiary',
+              });
+              continue;
+            }
             const billToStr = 'billto';
             const billToIdx = normalizedLine.indexOf(billToStr);
             if (billToIdx !== -1) {
               const billTo = lines[i + 1].trim();
               console.log('billTo: ', billTo);
               boxes.push({
-                key: 'bill_to',
+                key: 'beneficiaryName',
                 value: billTo,
+                label: 'beneficiary',
               });
+              continue;
+            }
+
+            const subTotalStr = 'subtotal';
+            const subTotalIdx = normalizedLine.indexOf(subTotalStr);
+            if (subTotalIdx !== -1) {
+              const subTotal = lines[i].trim();
+              console.log('Sub Total Amount: ', subTotal);
+              boxes.push({
+                key: 'subTotal',
+                value: subTotal,
+                label: 'invoice',
+              });
+              continue;
+            }
+
+            const totalStr = 'total';
+            const totalIdx = normalizedLine.indexOf(totalStr);
+            if (totalIdx !== -1) {
+              const totalAmount = lines[i].trim();
+              console.log('Total Amount: ', totalAmount);
+              boxes.push({
+                key: 'total',
+                value: totalAmount,
+                label: 'invoice',
+              });
+              continue;
             }
 
             const ibanStr = 'iban';
@@ -100,7 +151,9 @@ export class InvoiceCrudService {
               boxes.push({
                 key: ibanStr,
                 value: iban,
+                label: 'beneficiary',
               });
+              continue;
             }
             const paymentDueDateStr = 'paymentisdueon';
             const paymentDueDateIdx = normalizedLine.indexOf(paymentDueDateStr);
@@ -110,9 +163,11 @@ export class InvoiceCrudService {
               );
               console.log('dueDate: ', dueDate);
               boxes.push({
-                key: 'payment_due_date',
+                key: 'dueDate',
                 value: dueDate,
+                label: 'invoice',
               });
+              continue;
             }
             const swiftCodeStr = 'swiftcode';
             const swiftIdx = normalizedLine.indexOf(swiftCodeStr);
@@ -125,8 +180,9 @@ export class InvoiceCrudService {
               console.log('swiftCode: ', swiftCode);
 
               boxes.push({
-                key: 'swift_code',
+                key: 'swiftCode',
                 value: swiftCode,
+                label: 'beneficiary',
               });
             }
           }
@@ -149,37 +205,6 @@ export class InvoiceCrudService {
         });
 
       console.log('dataBoxes after call-queue: ', dataBoxes);
-
-      if (dataBoxes && dataBoxes.length > 0) {
-        if (dataBoxes.some((ele) => ele.key === 'iban')) {
-          const iban = dataBoxes.filter((ele) => ele.key === 'iban')[0].value;
-
-          let swiftCode;
-          if (dataBoxes.some((ele) => ele.key === 'swift_code')) {
-            swiftCode = dataBoxes.filter((ele) => ele.key === 'swift_code')[0]
-              .value;
-          }
-          let beneficiaryName;
-          if (dataBoxes.some((ele) => ele.key === 'bill_to')) {
-            beneficiaryName = dataBoxes.filter(
-              (ele) => ele.key === 'bill_to',
-            )[0].value;
-          }
-          const beneficiary = await this.beneficiaryService.createBeneficiary({
-            name: beneficiaryName,
-            swiftCode,
-            bankName: 'ARAB BANK PLC',
-            branchName: 'RAS AL KHAIMAH BRANCH',
-            iban,
-            type: BeneficiaryTypeEnum.LOCAL,
-          });
-          await invoice.update({
-            beneficiaryId: beneficiary.id,
-          });
-        }
-      }
-
-      console.log('dataBoxes: ', dataBoxes);
       if (dataBoxes && dataBoxes.length > 0) {
         await Promise.all(
           dataBoxes.map((ele) =>

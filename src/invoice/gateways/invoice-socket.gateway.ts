@@ -15,21 +15,30 @@ import { InvoiceAnalyzedDto } from '@app/invoice/dtos/invoice-flow-dtos/invoice-
 type SocketWithUser = Socket & { user: User };
 
 @WebSocketGateway({
-  path: '/invoice-socket',
-  allowRequest: (req, callback) => {
-    const isOriginValid = true;
-    console.log('req.auth: ', req.headers['authorization']);
-    callback(null, isOriginValid);
-  },
+  // path: '/invoice-socket',
+  namespace: '/flutter',
+  // allowRequest: (req, callback) => {
+  //   const isOriginValid = true;
+  //   console.log('user-agent: ', req.headers['user-agent']);
+  //   console.log('req.auth: ', req.headers['authorization']);
+  //   console.log('req: ', req['headers']);
+  //   callback(null, isOriginValid);
+  // },
+  allowEIO3: true,
+  // transports: ['polling'],
+  allowUpgrades: true,
+  // transports: ['websocket', 'polling'],
   cors: {
-    allowedHeaders:
-      'X-Requested-With, x-organization-id, X-HTTP-Method-Override, Access-Control-Allow-Origin, Content-Type, Accept, Observe, Origin,X-Requested-With,Accept,Authorization,authorization,X-Forwarded-for',
-    methods: 'GET,PUT,POST,DELETE,UPDATE,OPTIONS',
-    // credentials: true,
-    origin: new RegExp('(http(s)?://)?(.+.)?(ria|localhost|127.0.0.1).*$'),
+    // allowedHeaders:
+    //   'X-Requested-With, x-organization-id, X-HTTP-Method-Override, Access-Control-Allow-Origin, Content-Type, Accept, Observe, Origin,X-Requested-With,Accept,Authorization,authorization,X-Forwarded-for',
+    // methods: 'GET,PUT,POST,DELETE,UPDATE,OPTIONS',
+    methods: ['GET', 'POST'],
+    allowedHeaders: ['Content-Type', 'authorization'],
+    credentials: true,
+    origin: /.*/, // new RegExp('(http(s)?://)?(.+.)?(ria|localhost|127.0.0.1).*$'),
   },
 })
-@UseGuards(WsJwtAuthGuard)
+// @UseGuards(WsJwtAuthGuard)
 export class InvoiceGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
@@ -45,6 +54,7 @@ export class InvoiceGateway
   private logger: Logger = new Logger('InvoiceGateway');
 
   handleDisconnect(client: Socket) {
+    console.log('disconnect: ', client.id);
     try {
       const usersEntries = this.connectedUsers.entries();
       while (!usersEntries.next().done) {
@@ -65,7 +75,11 @@ export class InvoiceGateway
   }
 
   async handleConnection(client: Socket) {
-    const token = client.handshake.headers.authorization;
+    console.log('client: ', client.handshake.headers);
+    console.log('client: ', client.handshake.auth);
+    const token =
+      client?.handshake?.headers?.authorization ||
+      client?.handshake?.auth['authorization'];
     console.log('token: ', token);
     if (!token) {
       client.disconnect(true);
@@ -86,6 +100,7 @@ export class InvoiceGateway
         this.connectedUsers.set(user.id, [client.id]);
       }
       const roomName = `${user.id}`;
+      console.log('roomName: ', roomName);
       client.join(roomName);
     } catch (error) {
       console.log('error: ', error);
@@ -95,13 +110,12 @@ export class InvoiceGateway
 
   emitInvoiceStatusChanged(invoiceStatusChangedObj: InvoiceAnalyzedDto) {
     const { userId, invoiceId, status } = invoiceStatusChangedObj;
-    this.server.sockets
-      .in(`${userId}`)
-      .emit(RiaInvoiceEvents.INVOICE_ANALYZED, {
-        data: {
-          invoiceId,
-          status,
-        },
-      });
+    // console.log('this.server.sockets: ', this.server.in);
+    this.server.in(`${userId}`).emit(RiaInvoiceEvents.INVOICE_ANALYZED, {
+      data: {
+        invoiceId,
+        status,
+      },
+    });
   }
 }

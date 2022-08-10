@@ -105,7 +105,7 @@ export class BeneficiaryController implements CrudController<Beneficiary> {
   )
   @ApiRiaDto(BeneficiaryDto)
   async getMany(@ParsedRequest() req: CrudRequest) {
-    const beneficiaries: Beneficiary[] = []; // await this.service.getMany(req);
+    const beneficiaries: Beneficiary[] = await this.service.getMany(req);
     return {
       data: beneficiaries.map((beneficiaryAccount) =>
         beneficiaryAccount.toJSON(),
